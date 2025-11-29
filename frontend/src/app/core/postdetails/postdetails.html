@@ -1,0 +1,115 @@
+<div *ngIf="!loading; else loadingTemplate" class="max-w-4xl mx-auto px-4 py-8">
+  <button routerLink="/home" class="text-gray-500 cursor-pointer text-sm mb-6 inline-block hover:underline">
+    ← Back to Posts
+  </button>
+
+  <h1 class="text-3xl sm:text-4xl font-bold mb-4 text-gray-900 leading-tight">
+    {{ post?.title }}
+  </h1>
+
+  <div class="flex items-center gap-4 mb-6">
+    <span class="font-semibold text-gray-900">{{ post?.author }}</span>
+    <span class="text-gray-500">{{ post?.date }}</span>
+  </div>
+
+  <div class="flex flex-wrap items-center gap-3 border-t border-b border-gray-300 py-4 mb-8">
+  <span class="text-black-600 font-semibold">Share: </span>
+
+  <button class="flex items-center gap-2 px-4 py-2 border border-gray-200 text-gray-800 font-semibold rounded-lg text-sm hover:bg-gray-100 transition">
+    <lucide-icon name="facebook" class="w-4 h-4 text-600"></lucide-icon>
+    Facebook
+  </button>
+
+  <button class="flex items-center gap-2 px-4 py-2 border border-gray-200 text-gray-800 font-semibold rounded-lg text-sm hover:bg-gray-100 transition">
+    <lucide-icon name="twitter" class="w-4 h-4 text-500"></lucide-icon>
+    Twitter
+  </button>
+
+  <button class="flex items-center gap-2 px-4 py-2 border border-gray-200 text-gray-800 font-semibold rounded-lg text-sm hover:bg-gray-100 transition">
+    <lucide-icon name="linkedin" class="w-4 h-4 text-700"></lucide-icon>
+    LinkedIn
+  </button>
+
+  <button class="flex items-center gap-2 px-4 py-2 border border-gray-200 text-gray-800 font-semibold rounded-lg text-sm hover:bg-gray-100 transition">
+    <lucide-icon name="message-circle" class="w-4 h-4 text-600"></lucide-icon>
+    WhatsApp
+  </button>
+
+  <button class="flex items-center gap-2 px-4 py-2 border border-gray-200 text-gray-800 font-semibold rounded-lg text-sm hover:bg-gray-100 transition">
+    <lucide-icon name="link" class="w-4 h-4 text-700"></lucide-icon>
+    Copy Link
+  </button>
+</div>
+
+
+  <img
+    *ngIf="post?.coverImage"
+    [src]="post?.coverImage"
+    [alt]="post?.title"
+    class="rounded-xl shadow-md w-full mb-6 object-cover"
+  />
+
+  <!-- Post Content -->
+  <div class="text-gray-800 leading-relaxed text-lg whitespace-pre-line mb-10 space-y-6">
+    <div class="prose prose-lg max-w-none">
+      {{ post?.content || post?.description || 'Content not available.' }}
+    </div>
+  </div>
+
+  <!-- Comments Section -->
+   <app-comment-section></app-comment-section>
+
+ <!-- Related Posts -->
+  <div *ngIf="relatedPosts.length" class="mt-2">
+      <div class="border-b border-gray-200 mt-6 mb-2"></div>
+
+    <h2 class="text-2xl font-semibold mb-5">Related Posts</h2>
+    <div class="grid sm:grid-cols-3 gap-6">
+      <div
+        *ngFor="let related of relatedPosts"
+        class="cursor-pointer bg-white border border-blue-200 rounded-xl shadow hover:shadow-lg transition-all overflow-hidden"
+        (click)="viewPost(related.id)"
+      >
+        <div class="relative">
+          <img
+            [src]="related.coverImage"
+            [alt]="related.title"
+            class="w-full h-48 mt-5 object-cover"
+          />
+          <span
+            class="absolute mb-2 mt-2 left-3 px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800"
+          >
+            {{ related.category || 'News' }}
+          </span>
+        </div>
+
+        <div class="p-4 mt-2">
+          <h2 class="font-semibold text-lg text-gray-800 mt-3 mb-2 leading-tight">
+            {{ related.title }}
+          </h2>
+          <p class="text-gray-600 text-sm mb-8 mt-10 leading-relaxed">
+            {{ related.description | slice: 0:100 }}...
+          </p>
+          <div class="border-b border-blue-200 mb-6"></div>
+
+          <div class="text-xs text-gray-500 flex mb-4 justify-between items-center">
+            <span class="font-medium">{{ related.author }}</span>
+            <span>{{ related.date }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Loading State -->
+<ng-template #loadingTemplate>
+  <div class="max-w-4xl mx-auto px-4 py-10">
+    <div class="text-center text-gray-600 py-20">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+      <p>Loading post...</p>
+    </div>
+  </div>
+</ng-template>

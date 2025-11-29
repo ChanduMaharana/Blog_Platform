@@ -1,0 +1,13 @@
+<div *ngIf="visible" class="mb-6">
+      <div class="bg-white rounded-xl p-6 shadow border">
+        <h4 class="font-semibold mb-3">{{ title }}</h4>
+
+        <form [formGroup]="form" (ngSubmit)="submit.emit()" class="space-y-3">
+          <ng-content></ng-content> <!-- 👈 custom fields here -->
+          <div class="flex gap-3 items-center justify-end">
+            <button class="px-4 py-2 bg-black text-white rounded">{{ submitLabel }}</button>
+            <button type="button" (click)="cancel.emit()" class="px-4 py-2 border rounded">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>

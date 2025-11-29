@@ -1,0 +1,18 @@
+[
+  {
+    "title": "Boost your money game",
+    "subtitle": "Get rewards on every transaction",
+    "image": "assets/ad1.png",
+    "category": "Finance & Credit Offers"
+  },
+  {
+    "title": "Tech & Gadgets",
+    "image": "assets/ad2.png",
+    "category": "Tech & Gadgets"
+  },
+  {
+    "title": "Travel & Hotel",
+    "image": "assets/ad3.png",
+    "category": "Travel & Hotel"
+  }
+]

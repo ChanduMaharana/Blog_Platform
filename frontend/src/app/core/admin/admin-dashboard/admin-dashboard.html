@@ -1,0 +1,46 @@
+<app-dashboard-header></app-dashboard-header>
+    
+    <div class="p-2 w-full bg-gradient-to-r from-blue-50 to-white mx-auto">
+      <div class="m-8 ">
+      <app-dashboard-cards></app-dashboard-cards>
+      </div>
+      <!-- Tab Navigation -->
+<div class="flex items-center mt-2
+ gap-2 mr-2 mb-6 ml-8 bg-white rounded-lg p-1 shadow-sm border w-[290px] h-10 border-gray-200">
+  <button 
+    (click)="tab = 'posts'" 
+    [class]="tab === 'posts' 
+      ? 'px-3 py-1 rounded-md text border border-gray-200 bg-white-50 font-semibold relative after:content-[\'\'] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-white-600 after:rounded transition-all duration-200' 
+      : 'px-3 py-1 rounded-md text-black-600 hover:text-black-600 hover:bg-gray-50 transition-all duration-200'">
+    Posts
+  </button>
+
+  <button 
+    (click)="tab = 'categories'" 
+    [class]="tab === 'categories' 
+      ? 'px-3 py-1 rounded-md text border border-gray-200 bg-white-50 font-semibold relative after:content-[\'\'] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-white-600 after:rounded transition-all duration-200' 
+      : 'px-3 py-1 rounded-md text-black-600 hover:text-black-600 hover:bg-gray-50 transition-all duration-200'">
+    <i class="fas fa-folder mr-1"></i>Categories
+  </button>
+
+  <button 
+    (click)="tab = 'banners'" 
+    [class]="tab === 'banners' 
+      ? 'px-3 py-1 rounded-md text border border-gray-200 bg-white-50 font-semibold relative after:content-[\'\'] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-white-600 after:rounded transition-all duration-200' 
+      : 'px-3 py-1 rounded-md text-black-600 hover:text-black-600 hover:bg-gray-50 transition-all duration-200'">
+    <i class="fas fa-image mr-1"></i>Banners
+  </button>
+</div>
+
+
+      <!-- Dynamic Content Sections -->
+      <section *ngIf="tab === 'categories'">
+        <app-categories></app-categories>
+      </section>
+      <section *ngIf="tab === 'banners'">
+        <app-banner></app-banner>
+      </section>
+      <section *ngIf="tab === 'posts'">
+        <app-post></app-post>
+      </section>
+    </div>

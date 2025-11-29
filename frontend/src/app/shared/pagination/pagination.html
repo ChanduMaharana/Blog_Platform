@@ -1,0 +1,35 @@
+<div class="flex justify-center gap-2 pt-8">
+
+  <!-- Prev -->
+  <button
+    (click)="goToPage(currentPage - 1)"
+    [disabled]="currentPage === 1"
+    class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 
+           disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+  >
+    Prev
+  </button>
+
+  <!-- Page Numbers -->
+  <button
+    *ngFor="let page of pagesArray"
+    (click)="goToPage(page)"
+    [class.bg-black]="currentPage === page"
+    [class.text-white]="currentPage === page"
+    class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-200 
+           transition-colors"
+  >
+    {{ page }}
+  </button>
+
+  <!-- Next -->
+  <button
+    (click)="goToPage(currentPage + 1)"
+    [disabled]="currentPage === totalPages"
+    class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 
+           disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+  >
+    Next
+  </button>
+
+</div>

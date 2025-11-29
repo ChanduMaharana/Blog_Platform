@@ -1,0 +1,36 @@
+<h2 class="text-2xl font-semibold mb-4">Comments ({{ comments.length }})</h2>
+
+<!-- Comment Form -->
+<div class="bg-white border p-4 rounded-lg mb-4">
+  <input [(ngModel)]="commentForm.name"
+         placeholder="Your Name"
+         class="w-full border p-2 rounded mb-3" />
+
+  <input [(ngModel)]="commentForm.email"
+         type="email"
+         placeholder="Your Email"
+         class="w-full border p-2 rounded mb-3" />
+
+  <textarea [(ngModel)]="commentForm.comment"
+            placeholder="Write your comment..."
+            rows="3"
+            class="w-full border p-2 rounded mb-3"></textarea>
+
+  <button (click)="submitComment()"
+          class="bg-black text-white px-4 py-2 rounded hover:bg-gray-800">
+    Post Comment
+  </button>
+</div>
+
+<!-- Comments List -->
+<div *ngIf="comments.length > 0; else noComments">
+  <div *ngFor="let c of comments" class="border rounded p-3 mb-3 bg-gray-50">
+    <p class="font-semibold">{{ c.name }}</p>
+    <p class="text-sm text-gray-500">{{ c.email }}</p>
+    <p class="mt-2">{{ c.comment }}</p>
+  </div>
+</div>
+
+<ng-template #noComments>
+  <p class="text-gray-500">No comments yet. Be the first to comment!</p>
+</ng-template>

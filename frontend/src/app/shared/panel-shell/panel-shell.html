@@ -1,0 +1,7 @@
+<div class="bg-white rounded-2xl shadow p-6 mb-6">
+    <div *ngIf="title" class="mb-4 flex items-center justify-between">
+      <h3 class="text-lg font-semibold">{{title}}</h3>
+      <ng-content select="[panel-actions]"></ng-content>
+    </div>
+    <div><ng-content></ng-content></div>
+  </div>

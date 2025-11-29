@@ -1,0 +1,19 @@
+<div class="p-6 mb-6">
+    <div class="flex  items-start justify-between mb-4">
+      <div>
+        <h3 class="text-xl font-semibold">{{ title }}</h3>
+        <p *ngIf="subtitle" class="text-sm text-gray-500">{{ subtitle }}</p>
+      </div>
+      <div>
+        <button (click)="create.emit()" class="bg-blue-600 text-white flex  px-3 py-2 rounded-md">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
+          {{ newLabel }}</button>
+      </div>
+    </div>
+
+    <!-- projected form area (the consumer shows/hides based on internal state) -->
+    <ng-content select="[form]"></ng-content>
+
+    <!-- list area -->
+    <ng-content select="[list]"></ng-content>
+  </div>
