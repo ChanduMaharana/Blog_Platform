@@ -1,14 +1,13 @@
-import { Sequelize } from 'sequelize';
-import dotenv from 'dotenv';
-dotenv.config();
+import { Sequelize } from "sequelize";
 
 export const sequelize = new Sequelize(
-  process.env.DB_NAME || 'blogdb',
-  process.env.DB_USER || 'root',
-  process.env.DB_PASS || '',
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
   {
-    host: process.env.DB_HOST || 'localhost',
-    dialect: process.env.DB_DIALECT || 'mysql',
-    logging: false,
+    host: process.env.DB_HOST,
+    dialect: "mysql",
+    port: process.env.DB_PORT,
+    logging: false
   }
 );
