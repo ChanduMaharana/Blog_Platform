@@ -9,17 +9,24 @@ import commentRoutes from "./routes/comment.routes.js";
 import categoryRoutes from "./routes/category.routes.js";
 import bannerRoutes from "./routes/banner.routes.js";
 
-
 dotenv.config();
 const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
-app.use(cors({ origin: 'http://localhost:4200', credentials: true }));
+app.use(
+  cors({
+    origin: [
+      'https://browser-ne7dz238c-220101120198s-projects.vercel.app',
+      'http://localhost:4200'
+    ],
+    credentials: true
+  })
+);
+
 app.use(express.json());
 
 process.on("uncaughtException", err => {
@@ -29,12 +36,9 @@ process.on("unhandledRejection", err => {
   console.error("PROMISE ERROR ->", err);
 });
 
-
-app.use("/uploads", express.static("uploads")); 
+// Routes
 app.use("/api/banners", bannerRoutes);
-
-
-app.use('/api/posts', postRoutes);
+app.use("/api/posts", postRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/posts", commentRoutes);
 
