@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/api/admin';
+  private apiUrl = 'https://blog-platform-backend.up.railway.app/api/admin';
 
   constructor(private http: HttpClient, private router: Router) {}
 

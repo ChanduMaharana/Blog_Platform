@@ -15,7 +15,7 @@ export interface Banner {
   providedIn: 'root',
 })
 export class BannerService {
-  private API = 'http://localhost:3000/api/banner';
+  private API = 'https://blog-platform-backend.up.railway.app/api/banner';
 
   constructor(private http: HttpClient) {}
 
