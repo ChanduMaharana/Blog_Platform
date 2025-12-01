@@ -11,7 +11,7 @@ export interface Category {
 
 @Injectable({ providedIn: 'root' })
 export class CategoryService {
-  private api = 'http://localhost:3000/api/categories';
+  private api = 'https://blog-platform-backend.up.railway.app/api/categories';
 
   constructor(private http: HttpClient) {}
 

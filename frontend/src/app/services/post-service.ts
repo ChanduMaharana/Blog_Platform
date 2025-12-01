@@ -31,8 +31,7 @@ export interface PostDetail extends PostSummary {
 
 @Injectable({ providedIn: 'root' })
 export class PostService {
-  private api = 'http://localhost:3000/api/posts';
-
+  private api = 'https://blog-platform-backend.up.railway.app/api/posts';
   constructor(private http: HttpClient) {}
 
   list(): Observable<PostSummary[]> {
