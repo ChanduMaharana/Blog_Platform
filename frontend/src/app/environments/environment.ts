@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiBaseUrl: 'http://localhost:3000/api'
+  apiUrl: 'https://blog-platform-backend-production.up.railway.app/api'
 };
