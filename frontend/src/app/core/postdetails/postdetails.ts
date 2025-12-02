@@ -17,6 +17,8 @@ export class Postdetails {
   relatedPosts: PostSummary[] = [];
   loading = true;
 
+  private readonly BASE_URL = "https://blog-platform-backend.up.railway.app";
+
   constructor(
     private route: ActivatedRoute,
     private postService: PostService,
@@ -24,45 +26,51 @@ export class Postdetails {
     private ngZone: NgZone
   ) {}
 
+  private getFullUrl(img: string | null | undefined): string {
+    if (!img) return "assets/default.jpg";        // fallback image
+    if (img.startsWith("http")) return img;       // already a full URL
+    const cleaned = img.replace(/^\/+/, "");      // remove leading slashes
+    return `${this.BASE_URL}/${cleaned}`;         // prepend backend URL
+  }
+
   async ngOnInit() {
-    const BASE_URL = "https://blog-platform-backend.up.railway.app/uploads";
+    try {
+      const id = Number(this.route.snapshot.paramMap.get("id"));
+      console.log("Route ID:", id);
 
-    const fullUrl = (img: string | null | undefined): string => {
-      if (!img) return "assets/default.jpg";
+      // Fetch the post
+      const fetched = await firstValueFrom(this.postService.getById(id));
+      console.log("Fetched Post:", fetched);
 
-      const file = img.replace(/^\/+/, "").replace(/^uploads\//, "");
-      return `${BASE_URL}/${file}`;
-    };
+      // Map post images
+      const mappedPost: PostDetail = {
+        ...fetched,
+        content: fetched.content ?? "",
+        coverImage: this.getFullUrl(fetched.coverImage),
+        image: this.getFullUrl(fetched.image),
+      };
 
-    const id = Number(this.route.snapshot.paramMap.get("id"));
-    console.log("Route ID:", id);
+      // Fetch all posts to get related ones
+      const allPosts = await firstValueFrom(this.postService.list());
+      const related = allPosts
+        .filter(p => p.category === fetched.category && p.id !== fetched.id)
+        .slice(0, 3)
+        .map(p => ({
+          ...p,
+          coverImage: this.getFullUrl(p.coverImage),
+          image: this.getFullUrl(p.image),
+        }));
 
-    const fetched = await firstValueFrom(this.postService.getById(id));
-    const all = await firstValueFrom(this.postService.list());
+      this.ngZone.run(() => {
+        this.post = mappedPost;
+        this.relatedPosts = related;
+        this.loading = false;
+      });
 
-    console.log("Fetched Post:", fetched);
-
-    const mappedPost: PostDetail = {
-      ...fetched,
-      content: fetched.content ?? "",
-      coverImage: fullUrl(fetched.coverImage),
-      image: fullUrl(fetched.image),
-    };
-
-    const related = all
-      .filter(p => p.category === fetched.category && p.id !== fetched.id)
-      .slice(0, 3)
-      .map(p => ({
-        ...p,
-        coverImage: fullUrl(p.coverImage),
-        image: fullUrl(p.image),
-      }));
-
-    this.ngZone.run(() => {
-      this.post = mappedPost;
-      this.relatedPosts = related;
+    } catch (error) {
+      console.error("Error loading post details:", error);
       this.loading = false;
-    });
+    }
   }
 
   viewPost(id: number) {
