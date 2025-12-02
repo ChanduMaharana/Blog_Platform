@@ -25,20 +25,25 @@ export class Postdetails {
   ) {}
 
   async ngOnInit() {
-  const id = Number(this.route.snapshot.paramMap.get('id'));
-  console.log('Route ID:', id);
+  const BASE_URL = "https://blog-platform-backend.up.railway.app";
+
+  const id = Number(this.route.snapshot.paramMap.get("id"));
+  console.log("Route ID:", id);
 
   const fetched = await firstValueFrom(this.postService.getById(id));
   const all = await firstValueFrom(this.postService.list());
 
-  console.log('Fetched Post:', fetched);
+  console.log("Fetched Post:", fetched);
 
   const mappedPost: PostDetail = {
     ...fetched,
     content: fetched.content ?? "",
     coverImage: fetched.coverImage
-      ? `http://localhost:3000/${fetched.coverImage}`
-      : 'assets/default.jpg',
+      ? `${BASE_URL}/${fetched.coverImage}`  // FIX
+      : "assets/default.jpg",
+    image: fetched.image
+      ? `${BASE_URL}/${fetched.image}`       // FIX for second field
+      : "assets/default.jpg",
   };
 
   const related = all
@@ -47,8 +52,11 @@ export class Postdetails {
     .map(p => ({
       ...p,
       coverImage: p.coverImage
-        ? `http://localhost:3000/${p.coverImage}`
-        : 'assets/default.jpg',
+        ? `${BASE_URL}/${p.coverImage}`      // FIX
+        : "assets/default.jpg",
+      image: p.image
+        ? `${BASE_URL}/${p.image}`           // FIX
+        : "assets/default.jpg",
     }));
 
   this.ngZone.run(() => {
