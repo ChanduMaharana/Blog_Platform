@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+
 
 export interface Banner {
   id: number;
@@ -15,7 +17,8 @@ export interface Banner {
   providedIn: 'root',
 })
 export class BannerService {
-  private API = 'https://blog-platform-backend.up.railway.app/api/banner';
+  private API = `${environment.apiUrl}/banner`;
+
 
   constructor(private http: HttpClient) {}
 

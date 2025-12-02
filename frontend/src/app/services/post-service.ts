@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 // import postsData from '../../../public/assets/posts.json';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface PostSummary {
   id: number;
@@ -31,7 +32,8 @@ export interface PostDetail extends PostSummary {
 
 @Injectable({ providedIn: 'root' })
 export class PostService {
-  private api = 'https://blog-platform-backend.up.railway.app/api/posts';
+  private api = `${environment.apiUrl}/posts`;
+
   constructor(private http: HttpClient) {}
 
   list(): Observable<PostSummary[]> {
@@ -59,15 +61,15 @@ export class PostService {
   }
 
 getComments(id: number) {
-  return this.http.get<any[]>(`http://localhost:3000/api/posts/${id}/comments`);
+  return this.http.get<any[]>(`${environment.apiUrl}/posts/${id}/comments`);
 }
 
 addComment(id: number, body: any) {
-  return this.http.post(`http://localhost:3000/api/posts/${id}/comments`, body);
+  return this.http.post(`${environment.apiUrl}/posts/${id}/comments`, body);
 }
 
 getPaginatedPosts(page: number, limit: number = 6) {
-  return this.http.get<any>(`http://localhost:3000/api/posts/paginated/list?page=${page}&limit=${limit}`);
+  return this.http.get<any>(`${this.api}/paginated/list?page=${page}&limit=${limit}`);
 }
 
 
