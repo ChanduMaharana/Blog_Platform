@@ -8,6 +8,7 @@ import commentRoutes from "./routes/comment.routes.js";
 import categoryRoutes from "./routes/category.routes.js";
 import bannerRoutes from "./routes/banner.routes.js";
 
+import "./models/admin.model.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
