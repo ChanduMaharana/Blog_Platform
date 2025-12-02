@@ -27,7 +27,7 @@ export class Postlist {
 
     this.posts = this.posts.map(post => ({
       ...post,
-      coverImage: post.coverImage ? `http://localhost:3000/${post.coverImage}` : 'assets/default.jpg',
+      coverImage: post.coverImage ? `https://blog-platform-backend.up.railway.app/assets/${post.coverImage}` : 'assets/default.jpg',
       category: (post as any).category || 'News',
     }));
 
