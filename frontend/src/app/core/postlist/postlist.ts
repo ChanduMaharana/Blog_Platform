@@ -22,12 +22,15 @@ export class Postlist {
 
   constructor(private postService: PostService, private router: Router) {}
 
-  async ngOnInit() {
-    this.posts = await firstValueFrom(this.postService.list());
+async ngOnInit() {
+  this.postService.list().subscribe(posts => {
+    console.log('Posts from API:', posts);
 
-    this.posts = this.posts.map(post => ({
+    this.posts = posts.map(post => ({
       ...post,
-      coverImage: post.coverImage ? `https://blog-platform-backend.up.railway.app/assets/${post.coverImage}` : 'assets/default.jpg',
+      coverImage: post.coverImage 
+        ? `https://blog-platform-backend.up.railway.app/assets/${post.coverImage}` 
+        : 'assets/default.jpg',
       category: (post as any).category || 'News',
     }));
 
@@ -39,8 +42,10 @@ export class Postlist {
 
     this.totalPages = Math.ceil(this.posts.length / this.itemsPerPage);
 
-     this.goToPage(1);
-  }
+    this.goToPage(1);
+  });
+}
+
 
   get paginatedPosts() {
     const start = (this.currentPage - 1) * this.itemsPerPage;
