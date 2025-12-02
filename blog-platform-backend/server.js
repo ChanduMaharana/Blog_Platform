@@ -22,7 +22,7 @@ app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 app.use(
   cors({
     origin: [
-      "https://browser-ne7dz238c-220101120198s-projects.vercel.app",
+      "https://blog-platform-xybron-git-master-220101120198s-projects.vercel.app/",
       "http://localhost:4200",
     ],
     credentials: true,
