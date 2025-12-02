@@ -1,13 +1,12 @@
 {
   "version": 2,
-  "builds": [
+  "framework": "angular",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/blog-platform/browser",
+  "rewrites": [
     {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "dist/blog-platform" }
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
-  ],
-  "routes": [
-    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
