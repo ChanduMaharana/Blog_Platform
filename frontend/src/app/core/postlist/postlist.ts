@@ -27,12 +27,13 @@ async ngOnInit() {
     console.log('Posts from API:', posts);
 
     this.posts = posts.map(post => ({
-      ...post,
-      coverImage: post.coverImage 
-        ? `https://blog-platform-xybron-git-master-220101120198s-projects.vercel.app/assets/${post.coverImage}` 
-        : 'assets/default.jpg',
-      category: (post as any).category || 'News',
-    }));
+  ...post,
+  coverImage: post.coverImage?.startsWith('http')
+    ? post.coverImage // already a full URL, use as-is
+    : `https://blog-platform-xybron-git-master-220101120198s-projects.vercel.app/assets/${post.coverImage}`,
+  category: (post as any).category || 'News',
+}));
+
 
     this.trendingPosts = [...this.posts]
       .sort((a, b) => (b.id ?? 0) - (a.id ?? 0))
