@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { PostService, PostDetail, PostSummary } from '../../services/post-service';
 import { LucideAngularModule } from 'lucide-angular';
 import { firstValueFrom } from 'rxjs';
-import { CommentSection } from '../../shared/comment-section/comment-section'; 
+import { CommentSection } from '../../shared/comment-section/comment-section';
 
 @Component({
   selector: 'app-postdetails',
@@ -25,49 +25,45 @@ export class Postdetails {
   ) {}
 
   async ngOnInit() {
-  const BASE_URL = "https://blog-platform-backend.up.railway.app";
+    const BASE_URL = "https://blog-platform-backend.up.railway.app/uploads";
 
-  const id = Number(this.route.snapshot.paramMap.get("id"));
-  console.log("Route ID:", id);
+    const fullUrl = (img: string | null | undefined): string => {
+      if (!img) return "assets/default.jpg";
 
-  const fetched = await firstValueFrom(this.postService.getById(id));
-  const all = await firstValueFrom(this.postService.list());
+      const file = img.replace(/^\/+/, "").replace(/^uploads\//, "");
+      return `${BASE_URL}/${file}`;
+    };
 
-  console.log("Fetched Post:", fetched);
+    const id = Number(this.route.snapshot.paramMap.get("id"));
+    console.log("Route ID:", id);
 
-  const mappedPost: PostDetail = {
-    ...fetched,
-    content: fetched.content ?? "",
-    coverImage: fetched.coverImage
-      ? `${BASE_URL}/${fetched.coverImage}`  // FIX
-      : "assets/default.jpg",
-    image: fetched.image
-      ? `${BASE_URL}/${fetched.image}`       // FIX for second field
-      : "assets/default.jpg",
-  };
+    const fetched = await firstValueFrom(this.postService.getById(id));
+    const all = await firstValueFrom(this.postService.list());
 
-  const related = all
-    .filter(p => p.category === fetched.category && p.id !== fetched.id)
-    .slice(0, 3)
-    .map(p => ({
-      ...p,
-      coverImage: p.coverImage
-        ? `${BASE_URL}/${p.coverImage}`      // FIX
-        : "assets/default.jpg",
-      image: p.image
-        ? `${BASE_URL}/${p.image}`           // FIX
-        : "assets/default.jpg",
-    }));
+    console.log("Fetched Post:", fetched);
 
-  this.ngZone.run(() => {
-    this.post = mappedPost;
-    this.relatedPosts = related;
-    this.loading = false;
-  });
-}
+    const mappedPost: PostDetail = {
+      ...fetched,
+      content: fetched.content ?? "",
+      coverImage: fullUrl(fetched.coverImage),
+      image: fullUrl(fetched.image),
+    };
 
+    const related = all
+      .filter(p => p.category === fetched.category && p.id !== fetched.id)
+      .slice(0, 3)
+      .map(p => ({
+        ...p,
+        coverImage: fullUrl(p.coverImage),
+        image: fullUrl(p.image),
+      }));
 
-  
+    this.ngZone.run(() => {
+      this.post = mappedPost;
+      this.relatedPosts = related;
+      this.loading = false;
+    });
+  }
 
   viewPost(id: number) {
     this.router.navigate(['/posts', id]).then(() => {
