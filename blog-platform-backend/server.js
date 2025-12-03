@@ -19,6 +19,7 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 app.use(
@@ -28,19 +29,14 @@ app.use(
       "http://localhost:4200",
     ],
     credentials: true,
-    methods: "GET,POST,PUT,DELETE,OPTIONS",
-    allowedHeaders: "Content-Type, Authorization",
   })
 );
-
-app.options("*", cors());
 
 app.use(express.json());
 
 process.on("uncaughtException", (err) => {
   console.error("FATAL ERROR ->", err);
 });
-
 process.on("unhandledRejection", (err) => {
   console.error("PROMISE ERROR ->", err);
 });
@@ -50,13 +46,6 @@ app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/banners", bannerRoutes);
-
-app.use((req, res) => {
-  res.status(404).json({
-    message: "Route not found",
-    path: req.originalUrl,
-  });
-});
 
 sequelize
   .sync()
