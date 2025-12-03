@@ -93,41 +93,32 @@ export class BannerComponent {
     });
   }
 
-  onSubmit() {
-    const v = this.form.value;
+onSubmit() {
+  const v = this.form.value;
 
-    if (!v.title?.trim()) {
-      alert('Title is required');
-      return;
-    }
+  const formData = new FormData();
+  formData.append("title", v.title);
+  formData.append("redirectUrl", v.redirectUrl);
+  formData.append("orderNo", v.orderNo);
+  formData.append("active", v.active);
 
-    const image = v.imageFile ? (v.imageFile as File).name : this.previewName ?? undefined;
-
-    if (this.editMode) {
-      const idx = this.banners.findIndex(x => x.id === v.id);
-      if (idx > -1) {
-        this.banners[idx] = {
-          id: v.id,
-          title: v.title,
-          redirectUrl: v.redirectUrl,
-          orderNo: +v.orderNo,
-          active: !!v.active,
-          image: image || ''
-        };
-      }
-    } else {
-      this.banners.unshift({
-        id: Math.floor(Math.random() * 100000),
-        title: v.title,
-        redirectUrl: v.redirectUrl,
-        orderNo: +v.orderNo,
-        active: !!v.active,
-        image: image || ''
-      });
-    }
-
-    this.cancel();
+  if (v.imageFile) {
+    formData.append("image", v.imageFile);
   }
+
+  if (this.editMode) {
+    this.bannerService.update(v.id, formData).subscribe(() => {
+      this.loadBanners();
+      this.cancel();
+    });
+  } else {
+    this.bannerService.create(formData).subscribe(() => {
+      this.loadBanners();
+      this.cancel();
+    });
+  }
+}
+
 
   cancel() {
     this.editMode = false;
@@ -144,10 +135,14 @@ export class BannerComponent {
     });
   }
 
-  deleteBanner(id: number) {
-    if (!confirm('Delete this banner?')) return;
-    this.banners = this.banners.filter(x => x.id !== id);
-  }
+deleteBanner(id: number) {
+  if (!confirm("Delete this banner?")) return;
+
+  this.bannerService.delete(id).subscribe(() => {
+    this.loadBanners();
+  });
+}
+
 
   trackById(i: number, item: Banner) {
     return item.id;
