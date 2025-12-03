@@ -8,6 +8,7 @@ import {
   deletePost,
   getPaginatedPosts
 } from "../controllers/post.controller.js";
+import { getComments, addComment } from "../controllers/comment.controller.js";
 
 const router = express.Router();
 
@@ -18,5 +19,8 @@ router.put("/:id", updatePost);
 router.delete("/:id", deletePost);
 router.get("/paginated/list", getPaginatedPosts);
 
+
+router.get("/:id/comments", getComments);
+router.post("/:id/comments", addComment);
 
 export default router;
