@@ -61,11 +61,11 @@ export class PostService {
   }
 
 getComments(id: number) {
-  return this.http.get<any[]>(`${environment.apiUrl}/comments?postId=${id}`);
+  return this.http.get<any[]>(`${environment.apiUrl}/posts/${id}/comments`);
 }
 
 addComment(id: number, body: any) {
-  return this.http.post(`${environment.apiUrl}/comments`, { ...body, postId: id });
+  return this.http.post(`${environment.apiUrl}/posts/${id}/comments`, body);
 }
 
 
