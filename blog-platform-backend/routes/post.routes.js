@@ -3,9 +3,9 @@ import express from "express";
 import {
   createPost,
   getPosts,
-  getPostById,
-  updatePost,
-  deletePost,
+  // getPostById,
+  // updatePost,
+  // deletePost,
   getPaginatedPosts
 } from "../controllers/post.controller.js";
 import { getComments, addComment } from "../controllers/comment.controller.js";
@@ -14,9 +14,9 @@ const router = express.Router();
 
 router.post("/", createPost);
 router.get("/", getPosts);
-router.get("/:id", getPostById);
-router.put("/:id", updatePost);
-router.delete("/:id", deletePost);
+// router.get("/:id", getPostById);
+// router.put("/:id", updatePost);
+// router.delete("/:id", deletePost);
 router.get("/paginated/list", getPaginatedPosts);
 
 
