@@ -64,11 +64,14 @@ app.use("/api/posts", postRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/banners", bannerRoutes);
 
-sequelize
-  .sync()
-  .then(() => {
-    console.log("Database synced");
-    const PORT = process.env.PORT || 8080;
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-  })
-  .catch((err) => console.error("DB sync failed", err));
+sequelize.sync({ force: true })
+
+
+// sequelize
+//   .sync()
+//   .then(() => {
+//     console.log("Database synced");
+//     const PORT = process.env.PORT || 8080;
+//     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+//   })
+//   .catch((err) => console.error("DB sync failed", err));
