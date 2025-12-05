@@ -1,32 +1,38 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
+import Category from './category.model.js';
 
 const Post = sequelize.define('Post', {
-  title: { type: DataTypes.STRING, allowNull: false },
-  category: { type: DataTypes.STRING, allowNull: false },
-  description: { type: DataTypes.TEXT, allowNull: false },
-  content: { type: DataTypes.TEXT, allowNull: false },
-  author: { type: DataTypes.STRING, allowNull: false },
-  date: { type: DataTypes.STRING, allowNull: false },
-  coverImage: { type: DataTypes.STRING, allowNull: true },
+  title: DataTypes.STRING,
+  description: DataTypes.TEXT,
+  content: DataTypes.TEXT,
+  author: DataTypes.STRING,
+  date: DataTypes.STRING,
 
-  popular: { type: DataTypes.BOOLEAN, defaultValue: false },
-  featured: { type: DataTypes.BOOLEAN, defaultValue: false },
-  trending: { type: DataTypes.BOOLEAN, defaultValue: false },
-  published: { type: DataTypes.BOOLEAN, defaultValue: false },
+  image: DataTypes.STRING,
+  coverImage: DataTypes.STRING,
 
-  views: { type: DataTypes.INTEGER, defaultValue: 0 },
+  popular: DataTypes.BOOLEAN,
+  featured: DataTypes.BOOLEAN,
+  trending: DataTypes.BOOLEAN,
+  published: DataTypes.BOOLEAN,
 
-  excerpt: { type: DataTypes.TEXT, allowNull: true },
-  metaDescription: { type: DataTypes.TEXT, allowNull: true },
-  metaKeywords: { type: DataTypes.STRING, allowNull: true },
-  ogTitle: { type: DataTypes.STRING, allowNull: true },
-  ogDescription: { type: DataTypes.TEXT, allowNull: true },
-  image: { type: DataTypes.STRING, allowNull: true }
+  views: DataTypes.INTEGER,
 
-  
+  excerpt: DataTypes.TEXT,
+  metaDescription: DataTypes.TEXT,
+  metaKeywords: DataTypes.STRING,
+  ogTitle: DataTypes.STRING,
+  ogDescription: DataTypes.TEXT,
+
+  categoryId: {               
+    type: DataTypes.INTEGER,
+    allowNull: false
+  }
 });
-sequelize.sync({ alter: true });
 
+Post.belongsTo(Category, { foreignKey: "categoryId" });
+
+sequelize.sync({ alter: true });
 
 export default Post;

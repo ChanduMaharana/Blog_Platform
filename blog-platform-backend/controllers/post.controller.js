@@ -1,22 +1,28 @@
 import Post from "../models/post.model.js";
+import Category from "../models/category.model.js";
 
 export const createPost = async (req, res) => {
   try {
     const body = { ...req.body };
 
-    body.title = body.title || "Untitled Post";
-    body.category = body.category || "General";
-    body.description = body.description || body.excerpt || "";
+    body.title = body.title || "Untitled";
+    body.description = body.description || "";
     body.content = body.content || "";
     body.author = body.author || "Unknown";
-    body.date = body.date || new Date().toDateString();
+    body.date = new Date().toDateString();
+
+    if (!body.categoryId)
+      return res.status(400).json({ message: "categoryId is required" });
 
     const post = await Post.create(body);
     res.json({ success: true, post });
+
   } catch (err) {
-    console.error("createPost error", err);
+    console.error("createPost error:", err);
     res.status(500).json({ message: err.message });
   }
+
+  
 };
 
 
@@ -24,15 +30,17 @@ export const createPost = async (req, res) => {
 // GET ALL POSTS
 export const getPosts = async (req, res) => {
   try {
-    const posts = await Post.findAll({ order: [["id", "DESC"]] });
+    const posts = await Post.findAll({
+      order: [["id", "DESC"]],
+      include: [{ model: Category }] // 🔥 JOIN
+    });
 
-    // No image mapping now
     res.json(posts);
   } catch (err) {
-    console.error("getPosts error", err);
     res.status(500).json({ message: err.message });
   }
 };
+
 
 // GET BY ID
 export const getPostById = async (req, res) => {
