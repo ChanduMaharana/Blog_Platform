@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PostService, PostSummary } from '../../../services/post-service';
 import { PostForm } from '../post-form/post-form';
 import { ManagementShell } from '../../../shared/management-shell/management-shell';
@@ -28,7 +28,7 @@ export class PostComponent {
       excerpt: [''],
       description: [''],
       content: [''],
-      category: [''],
+      categoryId: [null, Validators.required],
       author: [''],
       date: [''],
       image: [''],
