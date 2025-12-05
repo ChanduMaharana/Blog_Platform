@@ -21,7 +21,7 @@ const __dirname = path.dirname(__filename);
 app.use(
   cors({
     origin: [
-      "https://blog-platform-xybron-git-master-220101120198s-projects.vercel.app",
+      "https://blog-platform-xybron-git-master-220101120198s-projects.vercel.app/",
       "http://localhost:4200",
     ],
     methods: "GET,POST,PUT,PATCH,DELETE",
@@ -47,9 +47,9 @@ app.use((req, res, next) => {
 });
 
 
-app.get("/", (req, res) => {
-  res.send("Backend is running 🚀 Use /api/ endpoints");
-});
+// app.get("/", (req, res) => {
+//   res.send("Backend is running 🚀 Use /api/ endpoints");
+// });
 
 app.use("/api/admin", adminRoutes);
 app.use("/api/posts", postRoutes);
