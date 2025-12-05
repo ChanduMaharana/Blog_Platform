@@ -40,7 +40,7 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(
   cors({
     origin: [
-      "https://blog-platform-xybron.vercel.app",
+      "https://blog-platform-xybron-git-master-220101120198s-projects.vercel.app",
       "http://localhost:4200"
     ],
     methods: "GET,POST,PUT,PATCH,DELETE",
