@@ -1,6 +1,8 @@
 import Post from "../models/post.model.js";
 import Category from "../models/category.model.js";
 
+const BASE_URL = "https://blog-platform-backend.up.railway.app";
+
 export const createPost = async (req, res) => {
   try {
     const body = { ...req.body };
@@ -18,49 +20,62 @@ export const createPost = async (req, res) => {
       body.image = `/uploads/${req.file.filename}`;
     }
 
-    body.coverImage = body.image;
-
     const post = await Post.create(body);
 
-    res.json({ success: true, post });
+    const responsePost = {
+      ...post.dataValues,
+      image: post.image ? `${BASE_URL}${post.image}` : null,
+      coverImage: post.image ? `${BASE_URL}${post.image}` : null
+    };
+
+    res.json({ success: true, post: responsePost });
+
   } catch (err) {
     console.error("createPost error:", err);
     res.status(500).json({ message: err.message });
   }
 };
 
-
-
-
 // GET ALL POSTS
 export const getPosts = async (req, res) => {
   try {
     const posts = await Post.findAll({
       order: [["id", "DESC"]],
-      include: [{ model: Category }] // 🔥 JOIN
+      include: [{ model: Category }],
     });
 
-    res.json(posts);
+    const formatted = posts.map((p) => ({
+      ...p.dataValues,
+      image: p.image ? `${BASE_URL}${p.image}` : null,
+      coverImage: p.image ? `${BASE_URL}${p.image}` : null
+    }));
+
+    res.json(formatted);
+
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-
-// GET BY ID
 export const getPostById = async (req, res) => {
   try {
     const post = await Post.findByPk(req.params.id);
+
     if (!post) return res.status(404).json({ message: "Post not found" });
 
-    res.json(post);
+    const formatted = {
+      ...post.dataValues,
+      image: post.image ? `${BASE_URL}${post.image}` : null,
+      coverImage: post.image ? `${BASE_URL}${post.image}` : null
+    };
+
+    res.json(formatted);
+
   } catch (err) {
-    console.error("getPostById error", err);
     res.status(500).json({ message: err.message });
   }
 };
 
-// UPDATE
 export const updatePost = async (req, res) => {
   try {
     const [updated] = await Post.update(req.body, {
@@ -70,13 +85,13 @@ export const updatePost = async (req, res) => {
     if (!updated) return res.status(404).json({ message: "Post not found" });
 
     res.json({ success: true });
+
   } catch (err) {
     console.error("updatePost error", err);
     res.status(500).json({ message: err.message });
   }
 };
 
-// DELETE
 export const deletePost = async (req, res) => {
   try {
     const deleted = await Post.destroy({
@@ -86,12 +101,12 @@ export const deletePost = async (req, res) => {
     if (!deleted) return res.status(404).json({ message: "Post not found" });
 
     res.json({ success: true });
+
   } catch (err) {
     console.error("deletePost error", err);
     res.status(500).json({ message: err.message });
   }
 };
-
 
 export const getPaginatedPosts = async (req, res) => {
   try {
@@ -105,8 +120,14 @@ export const getPaginatedPosts = async (req, res) => {
       order: [["createdAt", "DESC"]],
     });
 
+    const formatted = rows.map((p) => ({
+      ...p.dataValues,
+      image: p.image ? `${BASE_URL}${p.image}` : null,
+      coverImage: p.image ? `${BASE_URL}${p.image}` : null
+    }));
+
     res.json({
-      posts: rows,
+      posts: formatted,
       totalItems: count,
       totalPages: Math.ceil(count / limit),
       currentPage: page,
@@ -116,4 +137,3 @@ export const getPaginatedPosts = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-
