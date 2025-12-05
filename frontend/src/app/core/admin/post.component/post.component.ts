@@ -47,7 +47,9 @@ selectedFile: File | null = null;
 
 onFileSelect(file: File | null) {
   this.selectedFile = file;
+  this.form.patchValue({ image: file ? file.name : '' });
 }
+
 
 
   ngOnInit() {
@@ -78,7 +80,7 @@ onFileSelect(file: File | null) {
       excerpt: '',
       description: '',
       content: '',
-      category: '',
+      categoryId: null,
       author: '',
       date: new Date().toDateString(),
       image: '',
