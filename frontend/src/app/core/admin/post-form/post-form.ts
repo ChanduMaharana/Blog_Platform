@@ -12,8 +12,10 @@ import { CategoryService, Category } from '../../../services/category-service';
 export class PostForm implements OnInit {
   @Input() form!: FormGroup;
   @Input() editMode = false;
+
   @Output() submitForm = new EventEmitter<void>();
   @Output() cancelForm = new EventEmitter<void>();
+  @Output() fileSelected = new EventEmitter<File | null>();   
 
   categories: Category[] = [];
 
@@ -29,7 +31,7 @@ export class PostForm implements OnInit {
   onCancel() { this.cancelForm.emit(); }
 
   onFile(event: any) {
-    const file = event.target.files?.[0];
-    this.form.patchValue({ image: file ? file.name : '' });
+    const file = event.target.files?.[0] || null;
+    this.fileSelected.emit(file);     // <-- Correct usage
   }
 }

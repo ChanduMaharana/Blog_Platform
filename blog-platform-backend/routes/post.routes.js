@@ -18,6 +18,7 @@ router.get("/", getPosts);
 // router.put("/:id", updatePost);
 // router.delete("/:id", deletePost);
 router.get("/paginated/list", getPaginatedPosts);
+router.post("/", upload.single("image"), createPost);
 
 
 router.get("/:id/comments", getComments);

@@ -44,13 +44,23 @@ export class PostService {
     return this.http.get<PostSummary>(`${this.api}/${id}`);
   }
 
-  create(post: PostSummary): Observable<any> {
-  post.date = post.date || new Date().toISOString();
-  post.description = post.description || post.excerpt || 'No description';
-  post.author = post.author || 'Admin';
+  create(post: PostSummary, file?: File): Observable<any> {
 
-  return this.http.post(this.api, post);
+  const formData = new FormData();
+  for (const [key, value] of Object.entries(post)) {
+    if (value !== undefined && value !== null) {
+      formData.append(key, value as any);
+    }
+  }
+
+  if (file) {
+    formData.append("image", file);
+  }
+
+  return this.http.post(this.api, formData);
 }
+
+
 
   update(id: number | undefined, post: PostSummary) {
     return this.http.put(`${this.api}/${id}`, post);

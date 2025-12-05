@@ -1,7 +1,3 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../config/db.js';
-import Category from './category.model.js';
-
 const Post = sequelize.define('Post', {
   title: DataTypes.STRING,
   description: DataTypes.TEXT,
@@ -9,8 +5,7 @@ const Post = sequelize.define('Post', {
   author: DataTypes.STRING,
   date: DataTypes.STRING,
 
-  image: DataTypes.STRING,
-  coverImage: DataTypes.STRING,
+  image: DataTypes.STRING,      // ONE SINGLE COLUMN
 
   popular: DataTypes.BOOLEAN,
   featured: DataTypes.BOOLEAN,
@@ -25,14 +20,8 @@ const Post = sequelize.define('Post', {
   ogTitle: DataTypes.STRING,
   ogDescription: DataTypes.TEXT,
 
-  categoryId: {               
+  categoryId: {
     type: DataTypes.INTEGER,
     allowNull: false
   }
 });
-
-Post.belongsTo(Category, { foreignKey: "categoryId" });
-
-sequelize.sync({ alter: true });
-
-export default Post;

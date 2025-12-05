@@ -14,16 +14,21 @@ export const createPost = async (req, res) => {
     if (!body.categoryId)
       return res.status(400).json({ message: "categoryId is required" });
 
-    const post = await Post.create(body);
-    res.json({ success: true, post });
+    if (req.file) {
+      body.image = `/uploads/${req.file.filename}`;
+    }
 
+    body.coverImage = body.image;
+
+    const post = await Post.create(body);
+
+    res.json({ success: true, post });
   } catch (err) {
     console.error("createPost error:", err);
     res.status(500).json({ message: err.message });
   }
-
-  
 };
+
 
 
 

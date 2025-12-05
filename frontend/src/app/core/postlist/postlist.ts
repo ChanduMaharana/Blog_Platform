@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { PostService, PostSummary } from '../../services/post-service';
 import { firstValueFrom } from 'rxjs';
 import { PaginationComponent } from '../../shared/pagination/pagination';
+import { environment } from '../../environments/environment.prod';
 @Component({
   selector: 'app-postlist',
   standalone: true,
@@ -28,9 +29,9 @@ async ngOnInit() {
 
     this.posts = posts.map(post => ({
   ...post,
-  coverImage: post.coverImage?.startsWith('http')
-    ? post.coverImage // already a full URL, use as-is
-    : `https://blog-platform-xybron-git-master-220101120198s-projects.vercel.app/assets/${post.coverImage}`,
+  coverImage: post.image?.startsWith('http')
+    ? post.image 
+    : `${environment.apiUrl}${post.image}`,
   category: (post as any).category || 'News',
 }));
 

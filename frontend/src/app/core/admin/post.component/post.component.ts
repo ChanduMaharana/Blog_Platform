@@ -19,6 +19,8 @@ export class PostComponent {
 
   categories = ['News', 'Business', 'Politics', 'Tech', 'Sports'];
 
+
+
   constructor(private fb: FormBuilder, private postService: PostService) {
     this.form = this.fb.group({
       id: [0],
@@ -40,6 +42,13 @@ export class PostComponent {
       ogDescription: ['']
     });
   }
+
+selectedFile: File | null = null;
+
+onFileSelect(file: File | null) {
+  this.selectedFile = file;
+}
+
 
   ngOnInit() {
     this.loadPosts();
