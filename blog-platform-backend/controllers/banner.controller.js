@@ -4,25 +4,29 @@ const BASE_URL = "https://blog-platform-backend.up.railway.app";
 
 export const createBanner = async (req, res) => {
   try {
-    const { title, redirectUrl, orderNo, active } = req.body;
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
 
     if (!req.file) {
-      return res.status(400).json({ message: "Image is required" });
+      return res.status(400).json({ message: "Image upload failed. req.file is missing." });
     }
 
     const banner = await Banner.create({
-      title: title || "Untitled Banner",
-      redirectUrl: redirectUrl || null,
-      orderNo: orderNo || 0,
-      active: active ?? true,
+      title: req.body.title || "Untitled Banner",
+      redirectUrl: req.body.redirectUrl || null,
+      orderNo: req.body.orderNo ? Number(req.body.orderNo) : 0,
+      active: req.body.active === "true" ? true : false,
       image: req.file.filename,
     });
 
     res.json({ success: true, banner });
+
   } catch (err) {
+    console.error("createBanner ERROR:", err);
     res.status(500).json({ message: err.message });
   }
 };
+
 
 export const getBanners = async (req, res) => {
   try {
