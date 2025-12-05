@@ -8,7 +8,8 @@ import postRoutes from "./routes/post.routes.js";
 import categoryRoutes from "./routes/category.routes.js";
 import bannerRoutes from "./routes/banner.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
-
+import Post from "./post.model.js";
+import Category from "./category.model.js";
 import "./models/admin.model.js";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -34,7 +35,8 @@ app.use(
 );
 
 app.use(express.json());
-
+Post.belongsTo(Category, { foreignKey: "categoryId" });
+Category.hasMany(Post, { foreignKey: "categoryId" });
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
