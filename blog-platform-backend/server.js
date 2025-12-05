@@ -41,13 +41,7 @@ app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 app.use(compression());
 
-app.use((req, res, next) => {
-  console.time(`Request → ${req.method} ${req.path}`);
-  res.on("finish", () => {
-    console.timeEnd(`Request → ${req.method} ${req.path}`);
-  });
-  next();
-});
+
 
 process.on("uncaughtException", (err) => {
   console.error("FATAL ERROR ->", err);

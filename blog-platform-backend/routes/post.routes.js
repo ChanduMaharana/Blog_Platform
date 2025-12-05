@@ -14,7 +14,7 @@ import { getComments, addComment } from "../controllers/comment.controller.js";
 
 const router = express.Router();
 
-router.post("/", createPost);
+
 router.get("/", getPosts);
 // router.get("/:id", getPostById);
 // router.put("/:id", updatePost);
