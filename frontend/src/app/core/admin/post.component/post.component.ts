@@ -111,25 +111,26 @@ onFileSelect(file: File | null) {
   }
 
   onSubmit() {
-    const payload = this.form.value as PostSummary;
+  const payload = this.form.value as PostSummary;
 
-    // Ensure required fields exist to avoid backend notNull errors
-    payload.description = payload.description || payload.excerpt || '';
-    payload.date = payload.date || new Date().toDateString();
-    payload.author = payload.author || 'Unknown';
+  payload.description = payload.description || payload.excerpt || '';
+  payload.date = payload.date || new Date().toDateString();
+  payload.author = payload.author || 'Unknown';
 
-    if (this.editMode) {
-      this.postService.update(payload.id, payload).subscribe({
-        next: () => { this.loadPosts(); this.cancel(); },
-        error: err => console.error('Update failed', err)
-      });
-    } else {
-      this.postService.create(payload).subscribe({
-        next: () => { this.loadPosts(); this.cancel(); },
-        error: err => console.error('Create failed', err)
-      });
-    }
+  if (this.editMode) {
+    this.postService.update(payload.id, payload).subscribe({
+      next: () => { this.loadPosts(); this.cancel(); },
+      error: err => console.error('Update failed', err)
+    });
+  } 
+  else {
+    this.postService.create(payload, this.selectedFile || undefined).subscribe({
+      next: () => { this.loadPosts(); this.cancel(); },
+      error: err => console.error('Create failed', err)
+    });
   }
+}
+
 
   deletePost(id?: number) {
     if (!id) return;
