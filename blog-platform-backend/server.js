@@ -35,8 +35,7 @@ app.use(
 );
 
 app.use(express.json());
-Post.belongsTo(Category, { foreignKey: "categoryId" });
-Category.hasMany(Post, { foreignKey: "categoryId" });
+
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
@@ -54,7 +53,8 @@ process.on("unhandledRejection", (err) => {
 app.get("/", (req, res) => {
   res.send("Backend is running 🚀");
 });
-
+Post.belongsTo(Category, { foreignKey: "categoryId" });
+Category.hasMany(Post, { foreignKey: "categoryId" });
 app.use("/api/admin", adminRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/categories", categoryRoutes);
