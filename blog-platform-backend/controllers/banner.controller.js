@@ -87,3 +87,11 @@ export const deleteBanner = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+export const getAllBanners = async (req, res) => {
+  try {
+    const banners = await Banner.findAll();
+    res.json(banners);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
