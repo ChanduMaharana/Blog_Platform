@@ -17,58 +17,47 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-
 app.use(
   cors({
     origin: [
-      "https://blog-platform-xybron-git-master-220101120198s-projects.vercel.app/",
-      "http://localhost:4200",
+      "https://blog-platform-xybron-git-master-220101120198s-projects.vercel.app",
+      "http://localhost:4200"
     ],
     methods: "GET,POST,PUT,PATCH,DELETE",
-    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-app.options("*", cors()); 
-
-app.use(compression());
-app.set("timeout", 20000);
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
+app.use(compression());
 
 app.use((req, res, next) => {
-  console.log("👉 CORS Passed for:", req.method, req.url);
+  console.time(`Request → ${req.method} ${req.path}`);
+  res.on("finish", () => {
+    console.timeEnd(`Request → ${req.method} ${req.path}`);
+  });
   next();
 });
 
-
-// app.get("/", (req, res) => {
-//   res.send("Backend is running 🚀 Use /api/ endpoints");
-// });
+app.get("/", (req, res) => {
+  res.send("Backend is running 🚀");
+});
 
 app.use("/api/admin", adminRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/banners", bannerRoutes);
 
+process.on("uncaughtException", console.error);
+process.on("unhandledRejection", console.error);
 
-app.use((req, res) => {
-  res.status(404).json({ message: "API route not found" });
+sequelize.sync({ alter: false }).then(() => {
+  const PORT = process.env.PORT || 8080;
+  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
 });
-
-
-sequelize
-  .sync()
-  .then(() => {
-    console.log("📌 Database Synced");
-    const PORT = process.env.PORT || 8080;
-    app.listen(PORT, () =>
-      console.log(`🚀 Server running on port ${PORT}`)
-    );
-  })
-  .catch((err) => console.error("❌ DB Connection Error →", err));
