@@ -32,7 +32,7 @@ export const getBanners = async (req, res) => {
 
     const banners = list.map((b) => ({
       ...b.dataValues,
-      image: `${BASE_URL}/uploads/${b.image}`,
+      image: `${BASE_URL}/uploads/banners/${b.image}`,
     }));
 
     res.json(banners);
