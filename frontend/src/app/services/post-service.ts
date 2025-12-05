@@ -56,6 +56,8 @@ export class PostService {
     if (file) {
       formData.append("image", file);
     }
+    console.log("FORMDATA ENTRIES:");
+formData.forEach((v, k) => console.log(k, v));
 
     return this.http.post(this.api, formData);
   }
