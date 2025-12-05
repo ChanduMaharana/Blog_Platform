@@ -1,3 +1,6 @@
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/db.js';
+
 const Post = sequelize.define('Post', {
   title: DataTypes.STRING,
   description: DataTypes.TEXT,
@@ -5,7 +8,7 @@ const Post = sequelize.define('Post', {
   author: DataTypes.STRING,
   date: DataTypes.STRING,
 
-  image: DataTypes.STRING,      // ONE SINGLE COLUMN
+  image: DataTypes.STRING,      
 
   popular: DataTypes.BOOLEAN,
   featured: DataTypes.BOOLEAN,
@@ -25,3 +28,8 @@ const Post = sequelize.define('Post', {
     allowNull: false
   }
 });
+
+sequelize.sync({ alter: true });
+
+
+export default Post;
