@@ -1,6 +1,7 @@
 import Banner from "../models/banner.model.js";
 
-// CREATE BANNER
+const BASE_URL = "https://blog-platform-backend.up.railway.app"; 
+
 export const createBanner = async (req, res) => {
   try {
     const { title, redirectUrl, orderNo, active } = req.body;
@@ -23,17 +24,15 @@ export const createBanner = async (req, res) => {
   }
 };
 
-// GET ALL
 export const getBanners = async (req, res) => {
   try {
     const list = await Banner.findAll({
       order: [["orderNo", "ASC"]],
     });
 
-    // Convert filename → URL
     const banners = list.map((b) => ({
       ...b.dataValues,
-      image: `http://localhost:3000/uploads/banners/${b.image}`,
+      image: `${BASE_URL}/uploads/${b.image}`,
     }));
 
     res.json(banners);
@@ -42,13 +41,12 @@ export const getBanners = async (req, res) => {
   }
 };
 
-// GET BY ID
 export const getBannerById = async (req, res) => {
   try {
     const banner = await Banner.findByPk(req.params.id);
     if (!banner) return res.status(404).json({ message: "Banner not found" });
 
-    banner.image = `http://localhost:3000/uploads/banners/${banner.image}`;
+    banner.image = `${BASE_URL}/uploads/banners/${banner.image}`; 
 
     res.json(banner);
   } catch (err) {
@@ -56,7 +54,6 @@ export const getBannerById = async (req, res) => {
   }
 };
 
-// UPDATE
 export const updateBanner = async (req, res) => {
   try {
     const updatedData = req.body;
@@ -77,7 +74,6 @@ export const updateBanner = async (req, res) => {
   }
 };
 
-// DELETE
 export const deleteBanner = async (req, res) => {
   try {
     const deleted = await Banner.destroy({
