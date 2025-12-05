@@ -57,7 +57,13 @@ app.use("/api/banners", bannerRoutes);
 process.on("uncaughtException", console.error);
 process.on("unhandledRejection", console.error);
 
-sequelize.sync({ alter: false }).then(() => {
-  const PORT = process.env.PORT || 8080;
-  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-});
+sequelize.sync({ alter: false })
+  .then(() => {
+    const PORT = process.env.PORT || 8080;
+    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+  })
+  .catch(err => {
+    console.error("❌ DATABASE CONNECTION FAILED");
+    console.error(err);
+  });
+
