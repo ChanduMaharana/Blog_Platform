@@ -2,6 +2,14 @@ import express from "express";
 import multer from "multer";
 import fs from "fs";
 import { BANNERS_PATH } from "../config/paths.js";
+import {
+  createBanner,
+  updateBanner,
+  deleteBanner,
+  getBanners,
+  getBannerById
+} from "../controllers/banner.controller.js";
+
 
 const router = express.Router();
 
@@ -20,6 +28,7 @@ const storage = multer.diskStorage({
 
 const uploadBanner = multer({ storage });
 
+router.get("/", getBanners);
 router.get("/:id", getBannerById);
 router.post("/", uploadBanner.single("image"), createBanner);
 router.put("/:id", uploadBanner.single("image"), updateBanner);
