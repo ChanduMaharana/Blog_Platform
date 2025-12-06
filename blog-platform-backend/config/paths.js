@@ -1,16 +1,10 @@
-import multer from "multer";
 import path from "path";
-import fs from "fs";
+import { fileURLToPath } from "url";
 
-const uploadDir = path.resolve("uploads");
+export const __filename = fileURLToPath(import.meta.url);
+export const __dirname = path.dirname(__filename);
 
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, uploadDir),
-  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname)),
-});
-
-export const upload = multer({ storage });
+export const ROOT_DIR = path.join(__dirname, "..");
+export const UPLOADS_PATH = path.join(ROOT_DIR, "uploads");
+export const BANNERS_PATH = path.join(ROOT_DIR, "uploads/banners");
+a
