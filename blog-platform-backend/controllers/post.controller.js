@@ -1,19 +1,14 @@
 import Post from "../models/post.model.js";
 import Category from "../models/category.model.js";
 
-const BASE_URL = "https://blog-platform-backend.up.railway.app";
-
+const BASE_URL = process.env.BASE_URL || "https://blog-platform-backend.up.railway.app";
 const normalizeImage = (img) => {
   if (!img) return null;
-
   if (img.startsWith("http")) return img;
-
-  if (!img.startsWith("/uploads/")) {
-    return `${BASE_URL}/uploads/${img}`;
-  }
-
-  return `${BASE_URL}${img}`;
+  if (img.startsWith("/")) return `${BASE_URL}${img}`;
+  return `${BASE_URL}/uploads/${img}`;
 };
+
 
 export const createPost = async (req, res) => {
   try {

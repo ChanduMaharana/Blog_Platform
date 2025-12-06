@@ -99,6 +99,7 @@ onFileSelect(file: File | null) {
     this.showForm = true;
     this.editMode = true;
     this.form.patchValue(post);
+    
   }
 
   viewPost(post: PostSummary) {
@@ -118,18 +119,40 @@ onFileSelect(file: File | null) {
   payload.author = payload.author || 'Unknown';
 
   if (this.editMode) {
-    this.postService.update(payload.id, payload).subscribe({
+
+    if (this.selectedFile) {
+      const fd = new FormData();
+
+      Object.entries(payload).forEach(([k, v]: any) => {
+        if (v !== undefined && v !== null) fd.append(k, v);
+      });
+
+      fd.append("image", this.selectedFile);
+
+      this.postService.updateWithFile(payload.id!, fd).subscribe({
+        next: () => { this.loadPosts(); this.cancel(); },
+        error: (err) => console.error("Update failed", err),
+      });
+
+      return; 
+    }
+
+    this.postService.update(payload.id!, payload).subscribe({
       next: () => { this.loadPosts(); this.cancel(); },
-      error: err => console.error('Update failed', err)
+      error: (err) => console.error("Update failed", err),
     });
-  } 
-  else {
-    this.postService.create(payload, this.selectedFile || undefined).subscribe({
-      next: () => { this.loadPosts(); this.cancel(); },
-      error: err => console.error('Create failed', err)
-    });
+
+    return;
   }
+
+  this.postService
+    .create(payload, this.selectedFile || undefined)
+    .subscribe({
+      next: () => { this.loadPosts(); this.cancel(); },
+      error: (err) => console.error("Create failed", err),
+    });
 }
+
 
 
   deletePost(id?: number) {

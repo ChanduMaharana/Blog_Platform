@@ -11,6 +11,7 @@ import Post from "./models/post.model.js";
 import Category from "./models/category.model.js";
 import "./models/admin.model.js";
 import path from "path";
+import fs from "fs";
 import { fileURLToPath } from "url";
 import { UPLOADS_PATH } from "./config/paths.js";   
 
@@ -19,9 +20,14 @@ const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const APP_ROOT = process.cwd()
 
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+const UPLOADS_DIR = path.join(APP_ROOT, "uploads");
+if (!fs.existsSync(UPLOADS_DIR)) {
+  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+}
 
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 app.use(
   cors({
     origin: [

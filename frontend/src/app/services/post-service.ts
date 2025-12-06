@@ -61,8 +61,10 @@ formData.forEach((v, k) => console.log(k, v));
 
     return this.http.post(this.api, formData);
   }
-
-
+updateWithFile(id: number, formData: FormData) {
+  return this.http.put(`${this.api}/${id}`, formData);
+  
+}
 
 
   update(id: number | undefined, post: PostSummary) {
