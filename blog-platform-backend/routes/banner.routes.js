@@ -20,7 +20,6 @@ const storage = multer.diskStorage({
 
 const uploadBanner = multer({ storage });
 
-router.get("/", getBanners);
 router.get("/:id", getBannerById);
 router.post("/", uploadBanner.single("image"), createBanner);
 router.put("/:id", uploadBanner.single("image"), updateBanner);
