@@ -11,8 +11,8 @@ import Post from "./models/post.model.js";
 import Category from "./models/category.model.js";
 import "./models/admin.model.js";
 import path from "path";
-import { UPLOADS_PATH } from "./config/paths.js";
 import { fileURLToPath } from "url";
+import { UPLOADS_PATH } from "./config/paths.js";   
 
 dotenv.config();
 const app = express();
@@ -20,9 +20,6 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-
-export const UPLOADS_PATH = path.join(__dirname, "uploads");
-export const BANNER_PATH = path.join(__dirname, "uploads/banners");
 
 app.use("/uploads", express.static(UPLOADS_PATH));
 
@@ -34,7 +31,6 @@ app.use(
     ],
     methods: "GET,POST,PUT,PATCH,DELETE",
     credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
@@ -42,22 +38,20 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(compression());
 
-app.get("/", (req, res) => {
-  res.send("Backend is running 🚀");
-});
-
-Post.belongsTo(Category, { foreignKey: "categoryId" });
-Category.hasMany(Post, { foreignKey: "categoryId" });
-
+// Routes
 app.use("/api/admin", adminRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/banners", bannerRoutes);
 
+Post.belongsTo(Category, { foreignKey: "categoryId" });
+Category.hasMany(Post, { foreignKey: "categoryId" });
 
-
-sequelize.sync().then(() => {
+sequelize
+  .sync()
+  .then(() => {
     const PORT = process.env.PORT || 8080;
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })
   .catch((err) => console.error("DB sync failed", err));
+
