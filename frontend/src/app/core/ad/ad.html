@@ -4,11 +4,7 @@
     class="relative rounded-xl overflow-hidden shadow-md hover:shadow-lg transition cursor-pointer"
     (click)="open(ad.redirectUrl)"
   >    
-    <img
-      [src]="ad.image"
-      alt="img"
-      class="w-full h-[180px] object-cover brightness-75"
-    />
+    <img [src]="ad.image">
 
     <div class="absolute bottom-0 left-0 p-4 text-white bg-gradient-to-t from-black/70 to-transparent w-full">
       <h3 class="text-lg font-semibold">{{ ad.title }}</h3>
