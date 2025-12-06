@@ -56,11 +56,15 @@ export const getPosts = async (req, res) => {
       include: [{ model: Category }],
     });
 
-    const formatted = posts.map((p) => ({
-      ...p.dataValues,
-      image: normalizeImage(p.image),
-      coverImage: normalizeImage(p.image),
-    }));
+    const formatted = posts.map((p) => {
+      const img = p.image;
+
+      return {
+        ...p.dataValues,
+        image: img ? `https://blog-platform-backend.up.railway.app${img.startsWith('/') ? img : '/uploads/' + img}` : null,
+        coverImage: img ? `https://blog-platform-backend.up.railway.app${img.startsWith('/') ? img : '/uploads/' + img}` : null
+      };
+    });
 
     res.json(formatted);
 
@@ -69,16 +73,19 @@ export const getPosts = async (req, res) => {
   }
 };
 
+
 export const getPostById = async (req, res) => {
   try {
     const post = await Post.findByPk(req.params.id);
 
     if (!post) return res.status(404).json({ message: "Post not found" });
 
+    const img = post.image;
+
     const formatted = {
       ...post.dataValues,
-      image: normalizeImage(post.image),
-      coverImage: normalizeImage(post.image),
+      image: img ? `https://blog-platform-backend.up.railway.app${img.startsWith('/') ? img : '/uploads/' + img}` : null,
+      coverImage: img ? `https://blog-platform-backend.up.railway.app${img.startsWith('/') ? img : '/uploads/' + img}` : null
     };
 
     res.json(formatted);
@@ -87,6 +94,7 @@ export const getPostById = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
 
 export const updatePost = async (req, res) => {
   try {
