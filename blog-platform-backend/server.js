@@ -11,6 +11,7 @@ import Post from "./models/post.model.js";
 import Category from "./models/category.model.js";
 import "./models/admin.model.js";
 import path from "path";
+import { UPLOADS_PATH } from "./config/paths.js";
 import { fileURLToPath } from "url";
 
 dotenv.config();
