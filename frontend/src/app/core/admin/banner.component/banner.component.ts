@@ -43,7 +43,6 @@ export class BannerComponent {
     this.loadBanners();
   }
 
-  // Load from backend and map to Banner type
   loadBanners() {
     this.bannerService.getAll().subscribe({
       next: (res) => {
@@ -53,7 +52,7 @@ export class BannerComponent {
           redirectUrl: b.redirectUrl,
           orderNo: b.orderNo,
           active: b.active,
-          image: b.image, // full URL from backend
+          image: b.image, 
         }));
       },
       error: (err) => console.error(err),

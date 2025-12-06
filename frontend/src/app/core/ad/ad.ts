@@ -24,4 +24,9 @@ export class Ad implements OnInit {
       },
     });
   }
+  open(url?: string) {
+  if (!url) return;
+  window.open(url, "_blank");
+}
+
 }
