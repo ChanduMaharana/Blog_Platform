@@ -1,21 +1,18 @@
 import Banner from "../models/banner.model.js";
 
-const BASE_URL = "https://blog-platform-backend.up.railway.app"; 
+const BASE_URL = "https://blog-platform-backend.up.railway.app";
 
 export const createBanner = async (req, res) => {
   try {
-    console.log("BODY:", req.body);
-    console.log("FILE:", req.file);
-
     if (!req.file) {
-      return res.status(400).json({ message: "Image upload failed. req.file is missing." });
+      return res.status(400).json({ message: "Image is required" });
     }
 
     const banner = await Banner.create({
       title: req.body.title || "Untitled Banner",
       redirectUrl: req.body.redirectUrl || null,
       orderNo: req.body.orderNo ? Number(req.body.orderNo) : 0,
-      active: req.body.active === "true" ? true : false,
+      active: req.body.active === "true" || req.body.active === true,
       image: req.file.filename,
     });
 
@@ -26,7 +23,6 @@ export const createBanner = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-
 
 export const getBanners = async (req, res) => {
   try {
@@ -50,9 +46,11 @@ export const getBannerById = async (req, res) => {
     const banner = await Banner.findByPk(req.params.id);
     if (!banner) return res.status(404).json({ message: "Banner not found" });
 
-    banner.image = `${BASE_URL}/uploads/banners/${banner.image}`; 
+    res.json({
+      ...banner.dataValues,
+      image: `${BASE_URL}/uploads/banners/${banner.image}`,
+    });
 
-    res.json(banner);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -73,6 +71,7 @@ export const updateBanner = async (req, res) => {
     if (!updated) return res.status(404).json({ message: "Banner not found" });
 
     res.json({ success: true });
+
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -89,13 +88,5 @@ export const deleteBanner = async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ message: err.message });
-  }
-};
-export const getAllBanners = async (req, res) => {
-  try {
-    const banners = await Banner.findAll();
-    res.json(banners);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
   }
 };

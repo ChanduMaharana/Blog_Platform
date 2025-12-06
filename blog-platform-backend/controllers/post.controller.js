@@ -3,6 +3,18 @@ import Category from "../models/category.model.js";
 
 const BASE_URL = "https://blog-platform-backend.up.railway.app";
 
+const normalizeImage = (img) => {
+  if (!img) return null;
+
+  if (img.startsWith("http")) return img;
+
+  if (!img.startsWith("/uploads/")) {
+    return `${BASE_URL}/uploads/${img}`;
+  }
+
+  return `${BASE_URL}${img}`;
+};
+
 export const createPost = async (req, res) => {
   try {
     const body = { ...req.body };
@@ -22,13 +34,13 @@ export const createPost = async (req, res) => {
 
     const post = await Post.create(body);
 
-    const responsePost = {
+    const formatted = {
       ...post.dataValues,
-      image: post.image ? `${BASE_URL}${post.image}` : null,
-      coverImage: post.image ? `${BASE_URL}${post.image}` : null
+      image: normalizeImage(post.image),
+      coverImage: normalizeImage(post.image),
     };
 
-    res.json({ success: true, post: responsePost });
+    res.json({ success: true, post: formatted });
 
   } catch (err) {
     console.error("createPost error:", err);
@@ -46,8 +58,8 @@ export const getPosts = async (req, res) => {
 
     const formatted = posts.map((p) => ({
       ...p.dataValues,
-      image: p.image ? `${BASE_URL}${p.image}` : null,
-      coverImage: p.image ? `${BASE_URL}${p.image}` : null
+      image: normalizeImage(p.image),
+      coverImage: normalizeImage(p.image),
     }));
 
     res.json(formatted);
@@ -65,8 +77,8 @@ export const getPostById = async (req, res) => {
 
     const formatted = {
       ...post.dataValues,
-      image: post.image ? `${BASE_URL}${post.image}` : null,
-      coverImage: post.image ? `${BASE_URL}${post.image}` : null
+      image: normalizeImage(post.image),
+      coverImage: normalizeImage(post.image),
     };
 
     res.json(formatted);
@@ -122,8 +134,8 @@ export const getPaginatedPosts = async (req, res) => {
 
     const formatted = rows.map((p) => ({
       ...p.dataValues,
-      image: p.image ? `${BASE_URL}${p.image}` : null,
-      coverImage: p.image ? `${BASE_URL}${p.image}` : null
+      image: normalizeImage(p.image),
+      coverImage: normalizeImage(p.image),
     }));
 
     res.json({
