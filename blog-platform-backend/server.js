@@ -28,18 +28,13 @@ const APP_ROOT = process.cwd();
 const UPLOADS_DIR = path.join(APP_ROOT, "uploads");
 const BANNERS_DIR = path.join(UPLOADS_DIR, "banners");
 
-const ensureDir = (dir) => {
-  try {
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  } catch (err) {
-    console.error("Failed to create dir ->", dir, err);
-  }
-};
 
-ensureDir(UPLOADS_DIR);
-ensureDir(BANNERS_DIR);
+if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+if (!fs.existsSync(BANNERS_DIR)) fs.mkdirSync(BANNERS_DIR, { recursive: true });
+
 
 app.use("/uploads", express.static(UPLOADS_DIR));
+
 
 app.use(
   cors({
