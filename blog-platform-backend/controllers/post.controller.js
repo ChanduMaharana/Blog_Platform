@@ -1,14 +1,6 @@
+// controllers/post.controller.js
 import Post from "../models/post.model.js";
 import Category from "../models/category.model.js";
-
-const BASE_URL = process.env.BASE_URL || "https://blog-platform-backend.up.railway.app";
-const normalizeImage = (img) => {
-  if (!img) return null;
-  if (img.startsWith("http")) return img;
-  if (img.startsWith("/")) return `${BASE_URL}${img}`;
-  return `${BASE_URL}/uploads/${img}`;
-};
-
 
 export const createPost = async (req, res) => {
   try {
@@ -20,70 +12,55 @@ export const createPost = async (req, res) => {
     body.author = body.author || "Unknown";
     body.date = new Date().toDateString();
 
-    if (!body.categoryId)
-      return res.status(400).json({ message: "categoryId is required" });
+    if (!body.categoryId) return res.status(400).json({ message: "categoryId is required" });
 
     if (req.file) {
-      body.image = `/uploads/${req.file.filename}`;
+      const BASE_URL = `${req.protocol}://${req.get("host")}`;
+      body.image = `/uploads/${req.file.filename}`;            // store relative path in DB
+      body.coverImage = `/uploads/${req.file.filename}`;
     }
 
     const post = await Post.create(body);
-
-    const formatted = {
-      ...post.dataValues,
-      image: normalizeImage(post.image),
-      coverImage: normalizeImage(post.image),
-    };
-
-    res.json({ success: true, post: formatted });
-
+    res.json({ success: true, post });
   } catch (err) {
     console.error("createPost error:", err);
     res.status(500).json({ message: err.message });
   }
 };
 
-// GET ALL POSTS
 export const getPosts = async (req, res) => {
   try {
     const posts = await Post.findAll({
       order: [["id", "DESC"]],
-      include: [{ model: Category }],
+      include: [{ model: Category }]
     });
 
-    const formatted = posts.map((p) => {
-      const img = p.image;
+    const BASE_URL = `${req.protocol}://${req.get("host")}`;
+    const mapped = posts.map(p => ({
+      ...p.dataValues,
+      coverImage: p.coverImage ? `${BASE_URL}${p.coverImage}` : null,
+      image: p.image ? `${BASE_URL}${p.image}` : null
+    }));
 
-      return {
-        ...p.dataValues,
-        image: img ? `https://blog-platform-backend.up.railway.app${img.startsWith('/') ? img : '/uploads/' + img}` : null,
-        coverImage: img ? `https://blog-platform-backend.up.railway.app${img.startsWith('/') ? img : '/uploads/' + img}` : null
-      };
-    });
-
-    res.json(formatted);
-
+    res.json(mapped);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
 
-export const getPostById = async (req, res) => {
+
+export const getBannerById = async (req, res) => {
   try {
-    const post = await Post.findByPk(req.params.id);
+    const banner = await Banner.findByPk(req.params.id);
+    if (!banner) return res.status(404).json({ message: "Banner not found" });
 
-    if (!post) return res.status(404).json({ message: "Post not found" });
+    const BASE_URL = `${req.protocol}://${req.get("host")}`;
 
-    const img = post.image;
-
-    const formatted = {
-      ...post.dataValues,
-      image: img ? `https://blog-platform-backend.up.railway.app${img.startsWith('/') ? img : '/uploads/' + img}` : null,
-      coverImage: img ? `https://blog-platform-backend.up.railway.app${img.startsWith('/') ? img : '/uploads/' + img}` : null
-    };
-
-    res.json(formatted);
+    res.json({
+      ...banner.dataValues,
+      image: `${BASE_URL}/uploads/banners/${banner.image}`,
+    });
 
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -122,6 +99,12 @@ export const deletePost = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+function normalizeImage(img) {
+  if (!img) return null;
+  if (img.startsWith("http")) return img; 
+  return `${process.env.BASE_URL || ""}${img}`;
+}
+
 
 export const getPaginatedPosts = async (req, res) => {
   try {

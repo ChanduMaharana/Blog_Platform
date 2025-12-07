@@ -12,11 +12,10 @@ import { getComments, addComment } from "../controllers/comment.controller.js";
 
 const router = express.Router();
 
+router.post("/", upload.single("image"), createPost);
 router.get("/paginated/list", getPaginatedPosts);
 router.get("/", getPosts);
 router.get("/:id", getPostById);
-
-router.post("/", upload.single("image"), createPost);
 router.put("/:id", updatePost);
 router.delete("/:id", deletePost);
 
