@@ -46,6 +46,8 @@ export const getBannerById = async (req, res) => {
     const banner = await Banner.findByPk(req.params.id);
     if (!banner) return res.status(404).json({ message: "Banner not found" });
 
+    const BASE_URL = `${req.protocol}://${req.get("host")}`;
+
     res.json({
       ...banner.dataValues,
       image: `${BASE_URL}/uploads/banners/${banner.image}`,
@@ -55,6 +57,7 @@ export const getBannerById = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
 
 export const updateBanner = async (req, res) => {
   try {

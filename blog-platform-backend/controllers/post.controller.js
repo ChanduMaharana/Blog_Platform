@@ -50,17 +50,21 @@ export const getPosts = async (req, res) => {
 
 
 
-export const getBannerById = async (req, res) => {
+export const getPostById = async (req, res) => {
   try {
-    const banner = await Banner.findByPk(req.params.id);
-    if (!banner) return res.status(404).json({ message: "Banner not found" });
+    const post = await Post.findByPk(req.params.id);
 
-    const BASE_URL = `${req.protocol}://${req.get("host")}`;
+    if (!post) return res.status(404).json({ message: "Post not found" });
 
-    res.json({
-      ...banner.dataValues,
-      image: `${BASE_URL}/uploads/banners/${banner.image}`,
-    });
+    const img = post.image;
+
+    const formatted = {
+      ...post.dataValues,
+      image: img ? `https://blog-platform-backend.up.railway.app${img.startsWith('/') ? img : '/uploads/' + img}` : null,
+      coverImage: img ? `https://blog-platform-backend.up.railway.app${img.startsWith('/') ? img : '/uploads/' + img}` : null
+    };
+
+    res.json(formatted);
 
   } catch (err) {
     res.status(500).json({ message: err.message });
