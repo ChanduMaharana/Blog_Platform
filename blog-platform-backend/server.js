@@ -21,8 +21,6 @@ dotenv.config();
 
 const app = express();
 
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
 const APP_ROOT = process.cwd();
 
 const UPLOADS_DIR = path.join(APP_ROOT, "uploads");
@@ -58,10 +56,19 @@ app.use("/api/banners", bannerRoutes);
 Post.belongsTo(Category, { foreignKey: "categoryId" });
 Category.hasMany(Post, { foreignKey: "categoryId" });
 
-sequelize
-  .sync()
-  .then(() => {
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log("Database connected");
+
+    await sequelize.sync();
+    console.log("📦 Models synced");
+
     const PORT = process.env.PORT || 8080;
-    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-  })
-  .catch((err) => console.error("DB sync failed ❌", err));
+    app.listen(PORT, () =>
+      console.log(`🚀 Server running on port ${PORT}`)
+    );
+  } catch (err) {
+    console.error("❌ FATAL DB ERROR:", err.message);
+  }
+})();

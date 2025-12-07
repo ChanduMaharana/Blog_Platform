@@ -1,7 +1,6 @@
 import Banner from "../models/banner.model.js";
 
-const BASE_URL = "https://blog-platform-backend.up.railway.app";
-// const BASE_URL = `${req.protocol}://${req.get("host")}`;
+// const BASE_URL = "https://blog-platform-backend.up.railway.app";
 
 export const createBanner = async (req, res) => {
   try {
@@ -27,13 +26,12 @@ export const createBanner = async (req, res) => {
 
 export const getBanners = async (req, res) => {
   try {
-    const list = await Banner.findAll({
-      order: [["orderNo", "ASC"]],
-    });
+    const BASE_URL = `${req.protocol}://${req.get("host")}`;
+    const list = await Banner.findAll({ order: [["orderNo", "ASC"]] });
 
-    const banners = list.map((b) => ({
+    const banners = list.map(b => ({
       ...b.dataValues,
-      image: `${BASE_URL}/uploads/banners/${b.image}`,
+      image: `${BASE_URL}/uploads/banners/${b.image}`
     }));
 
     res.json(banners);
@@ -41,6 +39,7 @@ export const getBanners = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
 
 export const getBannerById = async (req, res) => {
   try {
