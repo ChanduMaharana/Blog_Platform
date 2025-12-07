@@ -6,7 +6,7 @@ import { createBanner, updateBanner, deleteBanner, getBanners, getBannerById } f
 
 const router = express.Router();
 
-const bannerDir = path.resolve("uploads/banners");
+const bannerDir = path.join(process.cwd(), "uploads", "banners");
 
 if (!fs.existsSync(bannerDir)) {
   fs.mkdirSync(bannerDir, { recursive: true });
