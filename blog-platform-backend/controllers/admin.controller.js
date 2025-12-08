@@ -24,15 +24,12 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Find admin
     const admin = await Admin.findOne({ where: { email } });
     if (!admin) return res.status(404).json({ message: 'Admin not found' });
 
-    // Compare passwords
     const valid = await bcrypt.compare(password, admin.password);
     if (!valid) return res.status(401).json({ message: 'Invalid password' });
 
-    // Generate JWT token
     const token = jwt.sign(
       { id: admin.id, email: admin.email },
       process.env.JWT_SECRET || 'defaultSecret', 
@@ -43,4 +40,6 @@ export const login = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+  console.log("MOBILE INPUT:", req.body);
+
 };
