@@ -32,7 +32,7 @@ export interface PostDetail extends PostSummary {
 
 @Injectable({ providedIn: 'root' })
 export class PostService {
-  private api = `${environment.apiUrl}/api/posts`;
+  private api = `${environment.apiUrl}/posts`;
 
   constructor(private http: HttpClient) {}
 
