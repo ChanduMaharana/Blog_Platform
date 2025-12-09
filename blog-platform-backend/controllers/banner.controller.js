@@ -1,6 +1,6 @@
 import Banner from "../models/banner.model.js";
 
-const BASE_URL = process.env.BASE_URL || "https://blog-backend-biys.onrender.com";
+const BASE_URL = (process.env.BASE_URL || "https://blog-backend-biys.onrender.com").trim();
 
 const normalizeBannerImage = (img) => {
   if (!img) return null;
