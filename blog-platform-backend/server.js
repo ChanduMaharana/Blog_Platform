@@ -39,14 +39,12 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 app.use(
   cors({
-    origin: [
-      "https://blog-platform-xybron-git-master-220101120198s-projects.vercel.app",
-      "http://localhost:4200",
-    ],
+    origin: "*",
     methods: "GET,POST,PUT,PATCH,DELETE",
-    credentials: true,
+    allowedHeaders: "Content-Type, Authorization",
   })
 );
+
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
