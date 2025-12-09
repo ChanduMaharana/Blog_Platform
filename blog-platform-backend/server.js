@@ -31,6 +31,8 @@ if (!fs.existsSync(BANNERS_DIR)) fs.mkdirSync(BANNERS_DIR, { recursive: true });
 
 
 app.use("/uploads", express.static(UPLOADS_DIR));
+app.use("/uploads/banners", express.static(BANNERS_DIR));
+
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
@@ -42,9 +44,6 @@ app.use(
   })
 );
 
-
-app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(compression());
 
 app.use("/api/admin", adminRoutes);
@@ -59,6 +58,7 @@ sequelize
   .sync()
   .then(() => {
     const PORT = process.env.PORT || 8080;
+     console.log("Banners Folder:", BANNERS_DIR);
     app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
   })
   .catch((err) => console.error("DB sync failed ❌", err));

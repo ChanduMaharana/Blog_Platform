@@ -14,7 +14,10 @@ if (!fs.existsSync(bannerDir)) {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, bannerDir),
-  filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname),
+  filename: (req, file, cb) => {
+    const cleanName = file.originalname.replace(/\s+/g, "_");
+    cb(null, `${Date.now()}_${cleanName}`);
+  }
 });
 
 const uploadBanner = multer({ storage });
