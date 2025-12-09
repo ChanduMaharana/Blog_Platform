@@ -1,12 +1,13 @@
 import Post from "../models/post.model.js";
 import Category from "../models/category.model.js";
 
-const BASE_URL = process.env.BASE_URL || "https://blog-platform-backend.up.railway.app";
+const BASE_URL = process.env.BASE_URL || "https://blog-backend-biys.onrender.com";
 const normalizeImage = (img) => {
   if (!img) return null;
-  if (img.startsWith("http")) return img;
-  if (img.startsWith("/")) return `${BASE_URL}${img}`;
-  return `${BASE_URL}/uploads/${img}`;
+  if (!img.startsWith("/")) {
+    img = `/uploads/${img}`;
+  }
+  return `${BASE_URL}${img}`;
 };
 
 
@@ -24,7 +25,7 @@ export const createPost = async (req, res) => {
       return res.status(400).json({ message: "categoryId is required" });
 
     if (req.file) {
-      body.image = `/uploads/${req.file.filename}`;
+       body.image = req.file.filename;
     }
 
     const post = await Post.create(body);
@@ -56,8 +57,8 @@ export const getPosts = async (req, res) => {
 
       return {
         ...p.dataValues,
-        image: img ? `https://blog-platform-backend.up.railway.app${img.startsWith('/') ? img : '/uploads/' + img}` : null,
-        coverImage: img ? `https://blog-platform-backend.up.railway.app${img.startsWith('/') ? img : '/uploads/' + img}` : null
+        image: normalizeImage(img),
+       coverImage: normalizeImage(img),
       };
     });
 
@@ -79,8 +80,8 @@ export const getPostById = async (req, res) => {
 
     const formatted = {
       ...post.dataValues,
-      image: img ? `https://blog-platform-backend.up.railway.app${img.startsWith('/') ? img : '/uploads/' + img}` : null,
-      coverImage: img ? `https://blog-platform-backend.up.railway.app${img.startsWith('/') ? img : '/uploads/' + img}` : null
+      image: normalizeImage(post.image),
+      coverImage: normalizeImage(post.image),
     };
 
     res.json(formatted);

@@ -1,7 +1,16 @@
 import Banner from "../models/banner.model.js";
 
-// const BASE_URL = "https://blog-platform-backend.up.railway.app";
+const BASE_URL = process.env.BASE_URL || "https://blog-backend-biys.onrender.com";
 
+const normalizeBannerImage = (img) => {
+  if (!img) return null;
+
+  if (!img.startsWith("/")) {
+    img = `/uploads/banners/${img}`;
+  }
+
+  return `${BASE_URL}${img}`;
+};
 export const createBanner = async (req, res) => {
   try {
     if (!req.file) {
@@ -16,7 +25,13 @@ export const createBanner = async (req, res) => {
       image: req.file.filename,
     });
 
-    res.json({ success: true, banner });
+    res.json({
+      success: true,
+      banner: {
+        ...banner.dataValues,
+        image: normalizeBannerImage(banner.image),
+      }
+    });
 
   } catch (err) {
     console.error("createBanner ERROR:", err);
@@ -26,12 +41,11 @@ export const createBanner = async (req, res) => {
 
 export const getBanners = async (req, res) => {
   try {
-    const BASE_URL = `${req.protocol}://${req.get("host")}`;
     const list = await Banner.findAll({ order: [["orderNo", "ASC"]] });
 
     const banners = list.map(b => ({
       ...b.dataValues,
-      image: `${BASE_URL}/uploads/banners/${b.image}`
+      image: normalizeBannerImage(b.image),
     }));
 
     res.json(banners);
@@ -46,11 +60,9 @@ export const getBannerById = async (req, res) => {
     const banner = await Banner.findByPk(req.params.id);
     if (!banner) return res.status(404).json({ message: "Banner not found" });
 
-    const BASE_URL = `${req.protocol}://${req.get("host")}`;
-
     res.json({
       ...banner.dataValues,
-      image: `${BASE_URL}/uploads/banners/${banner.image}`,
+      image: normalizeBannerImage(banner.image),
     });
 
   } catch (err) {
