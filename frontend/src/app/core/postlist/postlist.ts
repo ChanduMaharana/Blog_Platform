@@ -31,7 +31,7 @@ async ngOnInit() {
   ...post,
   coverImage: post.image?.startsWith('http')
     ? post.image 
-    : `${environment.apiUrl}${post.image}`,
+    : `${environment.assetUrl}${post.image}`,
   category: (post as any).category || 'News',
 }));
 

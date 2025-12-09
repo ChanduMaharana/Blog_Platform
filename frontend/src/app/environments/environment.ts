@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://blog-backend-biys.onrender.com/api'
+  apiUrl: 'https://blog-backend-biys.onrender.com/api',
+  assetUrl: 'https://blog-backend-biys.onrender.com'
 };
