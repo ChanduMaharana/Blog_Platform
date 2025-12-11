@@ -1,125 +1,128 @@
-<div *ngIf="!loading; else loadingTemplate" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+<div *ngIf="!loading; else loadingTemplate"
+     class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
   <!-- Back Button -->
-  <button routerLink="/home" class="text-gray-500 cursor-pointer text-sm mb-6 inline-block hover:underline">
+  <button routerLink="/home"
+    class="text-gray-500 cursor-pointer text-sm mb-6 inline-block hover:underline">
     ← Back to Posts
   </button>
 
+  <!-- TITLE -->
+  <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 text-gray-900 leading-tight">
+    {{ post?.title }}
+  </h1>
 
-<div class="flex flex-col lg:flex-row gap-8">
-
-  <div class="w-full lg:w-2/3 order-1">
-=    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 text-gray-900 leading-tight">
-      {{ post?.title }}
-    </h1>
-
-    <div class="flex flex-wrap items-center gap-2 sm:gap-4 mb-6">
-      <span class="font-semibold text-gray-900 text-sm sm:text-base">{{ post?.author }}</span>
-      <span class="text-gray-500 text-sm sm:text-base">{{ post?.date }}</span>
-    </div>
-
-<div class="flex flex-wrap items-center gap-2 sm:gap-3 border-t border-b border-gray-300 py-3 sm:py-4 mb-6 sm:mb-8">
-  <span class="text-gray-600 font-semibold text-sm sm:text-base whitespace-nowrap">Share: </span>
-
-  <button 
-    (click)="shareOnFacebook()"
-    class="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-2 border border-gray-200 text-gray-800 font-semibold rounded text-xs sm:text-sm hover:bg-gray-100 transition whitespace-nowrap">
-    <lucide-icon name="facebook" class="w-3 h-3 sm:w-4 sm:h-4 text-blue-600"></lucide-icon>
-    Facebook
-  </button>
-
-  <button 
-    (click)="shareOnTwitter()"
-    class="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-2 border border-gray-200 text-gray-800 font-semibold rounded text-xs sm:text-sm hover:bg-gray-100 transition whitespace-nowrap">
-    <lucide-icon name="twitter" class="w-3 h-3 sm:w-4 sm:h-4 text-blue-400"></lucide-icon>
-    Twitter
-  </button>
-
-  <button 
-    (click)="shareOnLinkedIn()"
-    class="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-2 border border-gray-200 text-gray-800 font-semibold rounded text-xs sm:text-sm hover:bg-gray-100 transition whitespace-nowrap">
-    <lucide-icon name="linkedin" class="w-3 h-3 sm:w-4 sm:h-4 text-blue-700"></lucide-icon>
-    LinkedIn
-  </button>
-
-  <button 
-    (click)="copyLink()"
-    class="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-2 border border-gray-200 text-gray-800 font-semibold rounded text-xs sm:text-sm hover:bg-gray-100 transition whitespace-nowrap">
-    <lucide-icon name="link" class="w-3 h-3 sm:w-4 sm:h-4 text-gray-700"></lucide-icon>
-    Copy Link
-  </button>
-</div>
-
-
-    <img
-      *ngIf="post?.coverImage"
-      [src]="post?.coverImage"
-      [alt]="post?.title"
-      class="rounded-lg sm:rounded-xl shadow w-full mb-6 object-cover h-48 sm:h-64 lg:h-80"
-    />
-    <div class="text-gray-800 leading-relaxed text-base sm:text-lg mb-8 sm:mb-10 space-y-4 sm:space-y-6">
-      <div class="prose prose-sm sm:prose-base lg:prose-lg max-w-none">
-        {{ post?.content || post?.description || 'Content not available.' }}
-      </div>
-    </div>
-
-    <div class="mb-8 sm:mb-10">
-      <app-comment-section></app-comment-section>
-    </div>
+  <div class="flex flex-wrap items-center gap-2 sm:gap-4 mb-6">
+    <span class="font-semibold text-gray-900 text-sm sm:text-base">
+      {{ post?.author }}
+    </span>
+    <span class="text-gray-500 text-sm sm:text-base">
+      {{ post?.date }}
+    </span>
   </div>
 
-  <div class="w-full lg:w-1/3 order-2 lg:order-none">
-    <div *ngIf="relatedPosts.length" class="lg:sticky lg:top-6">
-      <div class="border-b border-gray-200 mb-4 sm:mb-6"></div>
-      <h2 class="text-lg sm:text-xl font-semibold mb-4 sm:mb-6">Related Posts</h2>
+  <!-- SHARE BUTTONS -->
+  <div
+    class="flex flex-wrap items-center gap-2 sm:gap-3 border-t border-b border-gray-300 py-3 sm:py-4 mb-8">
+    <span class="text-gray-600 font-semibold text-sm sm:text-base">
+      Share:
+    </span>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4 sm:gap-6">
-        <div
-          *ngFor="let related of relatedPosts"
-          class="cursor-pointer bg-white border border-blue-200 rounded-lg shadow hover:shadow-lg transition-all overflow-hidden"
-          (click)="viewPost(related.id)"
-        >
-          <div class="relative">
-            <img
-              [src]="related.coverImage"
-              [alt]="related.title"
-              class="w-full h-32 sm:h-40 object-cover"
-            />
-            <span
-              class="absolute top-2 left-2 px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800"
-            >
-              {{ related.category || 'News' }}
-            </span>
-          </div>
+    <button (click)="shareOnFacebook()"
+      class="flex items-center gap-2 px-3 py-2 border border-gray-200 text-gray-800 font-semibold rounded text-xs sm:text-sm hover:bg-gray-100 transition">
+      <lucide-icon name="facebook" class="w-4 h-4 text-blue-600"></lucide-icon>
+      Facebook
+    </button>
 
-          <div class="p-3 sm:p-4">
-            <h2 class="font-semibold text-sm sm:text-base text-gray-800 mb-2 line-clamp-2">
-              {{ related.title }}
-            </h2>
-            <p class="text-gray-600 text-xs mb-3 leading-relaxed line-clamp-2">
-              {{ related.description | slice: 0:80 }}...
-            </p>
+    <button (click)="shareOnTwitter()"
+      class="flex items-center gap-2 px-3 py-2 border border-gray-200 text-gray-800 font-semibold rounded text-xs sm:text-sm hover:bg-gray-100 transition">
+      <lucide-icon name="twitter" class="w-4 h-4 text-blue-400"></lucide-icon>
+      Twitter
+    </button>
 
-            <div class="border-b border-blue-200 mb-3"></div>
+    <button (click)="shareOnLinkedIn()"
+      class="flex items-center gap-2 px-3 py-2 border border-gray-200 text-gray-800 font-semibold rounded text-xs sm:text-sm hover:bg-gray-100 transition">
+      <lucide-icon name="linkedin" class="w-4 h-4 text-blue-700"></lucide-icon>
+      LinkedIn
+    </button>
 
-            <div class="text-xs text-gray-500 flex justify-between items-center">
-              <span class="font-medium">{{ related.author }}</span>
-              <span>{{ related.date }}</span>
-            </div>
+    <button (click)="copyLink()"
+      class="flex items-center gap-2 px-3 py-2 border border-gray-200 text-gray-800 font-semibold rounded text-xs sm:text-sm hover:bg-gray-100 transition">
+      <lucide-icon name="link" class="w-4 h-4 text-gray-700"></lucide-icon>
+      Copy Link
+    </button>
+  </div>
+
+  <img
+    *ngIf="post?.coverImage"
+    [src]="post?.coverImage"
+    class="rounded-xl shadow w-full mb-6 object-cover h-48 sm:h-64 lg:h-80"
+    [alt]="post?.title"
+  />
+
+  <!-- CONTENT -->
+  <div class="prose prose-sm sm:prose-base lg:prose-lg max-w-none mb-10 text-gray-800">
+    {{ post?.content || post?.description || 'Content not available.' }}
+  </div>
+
+  <!-- COMMENTS -->
+  <div class="mb-10">
+    <app-comment-section></app-comment-section>
+  </div>
+
+  <div *ngIf="relatedPosts.length" class="mt-10">
+    <h2 class="text-lg sm:text-xl font-semibold mb-6">
+      Related Posts
+    </h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <div
+        *ngFor="let related of relatedPosts"
+        (click)="viewPost(related.id)"
+        class="cursor-pointer bg-white border border-blue-200 rounded-lg shadow hover:shadow-lg transition overflow-hidden">
+
+        <div class="relative">
+          <img [src]="related.coverImage"
+               [alt]="related.title"
+               class="w-full h-40 object-cover" />
+
+          <span
+            class="absolute top-2 left-2 px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
+            {{ related.category || 'News' }}
+          </span>
+        </div>
+
+        <div class="p-4">
+          <h3 class="font-semibold text-base text-gray-800 mb-2 leading-tight line-clamp-2">
+            {{ related.title }}
+          </h3>
+
+          <p class="text-gray-600 text-xs mb-3 line-clamp-2">
+            {{ related.description | slice: 0:80 }}...
+          </p>
+
+          <div class="border-b mb-3"></div>
+
+          <div class="text-xs text-gray-500 flex justify-between">
+            <span class="font-medium">{{ related.author }}</span>
+            <span>{{ related.date }}</span>
           </div>
         </div>
+
       </div>
 
     </div>
   </div>
 
 </div>
-</div>
 
+<!-- LOADING TEMPLATE -->
 <ng-template #loadingTemplate>
   <div class="max-w-4xl mx-auto px-4 py-10">
-    <div class="text-center text-gray-600 py-10 sm:py-20">
-      <div class="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-      <p class="text-sm sm:text-base">Loading post...</p>
+    <div class="text-center text-gray-600 py-20">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+      <p class="text-base">Loading post...</p>
     </div>
   </div>
 </ng-template>
