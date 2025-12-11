@@ -63,6 +63,15 @@ export class Postdetails {
   this.meta.updateTag({ name: 'twitter:image', content: image });
 
   this.setSchemaJSONLD(title, description, image, url);
+
+  console.log("SEO Updated:", {
+  title,
+  description,
+  keywords,
+  image,
+  url
+});
+
 }
 
   setSchemaJSONLD(title: string, description: string, image: string, url: string) {
