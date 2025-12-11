@@ -1,79 +1,164 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6 bg-white rounded-xl shadow p-4 mb-4">
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4 sm:space-y-6 bg-white rounded-lg sm:rounded-xl shadow p-3 sm:p-4 md:p-6 mb-4 sm:mb-6">
+  <!-- Title -->
   <div>
-    <label class="block text-sm mb-1">Title</label>
-    <input type="text" formControlName="title" class="w-full border p-2 rounded" />
+    <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+    <input 
+      type="text" 
+      formControlName="title" 
+      class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+    />
   </div>
 
+  <!-- Excerpt -->
   <div>
-    <label class="block text-sm mb-1">Excerpt</label>
-    <textarea formControlName="excerpt" rows="2" class="w-full border p-2 rounded"></textarea>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Excerpt</label>
+    <textarea 
+      formControlName="excerpt" 
+      rows="2" 
+      class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+    ></textarea>
   </div>
 
+  <!-- Description -->
   <div>
-    <label class="block text-sm mb-1">Description</label>
-    <textarea formControlName="description" rows="3" class="w-full border p-2 rounded"></textarea>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+    <textarea 
+      formControlName="description" 
+      rows="3" 
+      class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+    ></textarea>
   </div>
 
+  <!-- Content -->
   <div>
-    <label class="block text-sm mb-1">Content</label>
-    <textarea formControlName="content" rows="6" class="w-full border p-2 rounded"></textarea>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Content</label>
+    <textarea 
+      formControlName="content" 
+      rows="4" 
+      class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+    ></textarea>
   </div>
 
-  <div class="grid md:grid-cols-2 gap-4">
-  <div>
-  <label class="block text-sm mb-1">Category</label>
-  <select formControlName="categoryId" class="w-full border p-2 rounded">
-  <option value="">Select category</option>
-   <option [value]="c.id" *ngFor="let c of categories">
-    {{ c.name }}
-  </option>
-</select>
-  </div>
-
+  <!-- Category and Author -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
     <div>
-      <label class="block text-sm mb-1">Author</label>
-      <input formControlName="author" class="w-full border p-2 rounded" />
-    </div>
-  </div>
-
-  <div>
-    <label class="block text-sm mb-1">Image (filename)</label>
-    <input type="file" (change)="onFile($event)" class="w-full" />
-    <div *ngIf="form.get('image')?.value" class="text-sm text-gray-600 mt-1">Selected: {{ form.get('image')?.value }}</div>
-  </div>
-
-  <div class="flex items-center gap-4">
-    <label><input type="checkbox" formControlName="published" /> Published</label>
-    <label><input type="checkbox" formControlName="featured" /> Featured</label>
-    <label><input type="checkbox" formControlName="trending" /> Trending</label>
-  </div>
-
-  <div class="pt-4 border-t">
-    <h4 class="font-semibold mb-2">SEO</h4>
-
-    <div>
-      <label class="block text-sm mb-1">Meta Description</label>
-      <textarea formControlName="metaDescription" rows="2" class="w-full border p-2 rounded"></textarea>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+      <select 
+        formControlName="categoryId" 
+        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+      >
+        <option value="">Select category</option>
+        <option [value]="c.id" *ngFor="let c of categories">
+          {{ c.name }}
+        </option>
+      </select>
     </div>
 
     <div>
-      <label class="block text-sm mb-1">Meta Keywords</label>
-      <input formControlName="metaKeywords" class="w-full border p-2 rounded" />
-    </div>
-
-    <div>
-      <label class="block text-sm mb-1">OG Title</label>
-      <input formControlName="ogTitle" class="w-full border p-2 rounded" />
-    </div>
-
-    <div>
-      <label class="block text-sm mb-1">OG Description</label>
-      <textarea formControlName="ogDescription" rows="2" class="w-full border p-2 rounded"></textarea>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Author</label>
+      <input 
+        formControlName="author" 
+        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+      />
     </div>
   </div>
 
-  <div class="flex gap-3 justify-end pt-4">
-    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">{{ editMode ? 'Update' : 'Create' }}</button>
-    <button type="button" (click)="onCancel()" class="px-4 py-2 border rounded">Cancel</button>
+  <!-- Image Upload -->
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Image</label>
+    <input 
+      type="file" 
+      (change)="onFile($event)" 
+      class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm sm:text-base file:mr-3 file:py-1 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+    />
+    <div *ngIf="form.get('image')?.value" class="text-xs sm:text-sm text-gray-600 mt-1 truncate">
+      Selected: {{ form.get('image')?.value }}
+    </div>
+  </div>
+
+  <!-- Checkboxes -->
+  <div class="flex flex-wrap items-center gap-3 sm:gap-4 pt-2">
+    <label class="inline-flex items-center gap-2 text-sm">
+      <input 
+        type="checkbox" 
+        formControlName="published" 
+        class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+      />
+      Published
+    </label>
+    <label class="inline-flex items-center gap-2 text-sm">
+      <input 
+        type="checkbox" 
+        formControlName="featured" 
+        class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+      />
+      Featured
+    </label>
+    <label class="inline-flex items-center gap-2 text-sm">
+      <input 
+        type="checkbox" 
+        formControlName="trending" 
+        class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+      />
+      Trending
+    </label>
+  </div>
+
+  <!-- SEO Section -->
+  <div class="pt-4 border-t border-gray-200">
+    <h4 class="font-semibold text-lg mb-3">SEO</h4>
+
+    <div class="space-y-3 sm:space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Meta Description</label>
+        <textarea 
+          formControlName="metaDescription" 
+          rows="2" 
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        ></textarea>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Meta Keywords</label>
+        <input 
+          formControlName="metaKeywords" 
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">OG Title</label>
+        <input 
+          formControlName="ogTitle" 
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">OG Description</label>
+        <textarea 
+          formControlName="ogDescription" 
+          rows="2" 
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        ></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="flex flex-col sm:flex-row gap-3 justify-end pt-4">
+    <button 
+      type="submit" 
+      class="w-full sm:w-auto px-4 sm:px-6 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm sm:text-base"
+    >
+      {{ editMode ? 'Update Post' : 'Create Post' }}
+    </button>
+    <button 
+      type="button" 
+      (click)="onCancel()" 
+      class="w-full sm:w-auto px-4 sm:px-6 py-2.5 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors text-sm sm:text-base"
+    >
+      Cancel
+    </button>
   </div>
 </form>

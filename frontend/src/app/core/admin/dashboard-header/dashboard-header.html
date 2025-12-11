@@ -1,23 +1,33 @@
 <header class="bg-white shadow-md sticky top-0 z-50 border-b border-blue-200">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-[90px]">
-        <!-- Logo -->
-        <div class="flex items-center">
-          <h1 class="text-3xl font-bold text-blue-600 flex items-center">
-            theXybron Admin
-          </h1>
-        </div>
+  <div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 flex items-center justify-between h-[70px] sm:h-[80px] md:h-[90px]">
+    <!-- Logo -->
+    <div class="flex items-center">
+      <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-blue-600 flex items-center">
+        theXybron Admin
+      </h1>
+    </div>
 
-        <!-- Email and Logout -->
-        <div class="flex items-center gap-4">
-          <div class="text-sm text-gray-700 flex items-center">
-            {{ email }}
-          </div>
-          <button 
-            (click)="logout()" 
-            class="px-4 py-2 border border-blue-300 rounded-lg hover:bg-blue-50 text h-10  w- 10 font-medium flex items-center transition-colors duration-200">
-            <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/></svg>
-            Logout
-          </button>
-        </div>
+    <!-- Email and Logout -->
+    <div class="flex items-center gap-2 sm:gap-3 md:gap-4">
+      <div class="text-xs sm:text-sm text-gray-700 flex items-center whitespace-nowrap truncate max-w-[120px] sm:max-w-none">
+        {{ email }}
       </div>
-    </header>
+      <button 
+        (click)="logout()" 
+        class="px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-blue-300 rounded-lg hover:bg-blue-50 font-medium flex items-center gap-1 sm:gap-2 transition-colors duration-200 text-xs sm:text-sm"
+      >
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          height="14px" 
+          viewBox="0 -960 960 960" 
+          width="14px" 
+          class="sm:w-4 sm:h-4 md:w-5 md:h-5"
+          fill="#5f6368"
+        >
+          <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/>
+        </svg>
+        <span class="hidden sm:inline">Logout</span>
+      </button>
+    </div>
+  </div>
+</header>

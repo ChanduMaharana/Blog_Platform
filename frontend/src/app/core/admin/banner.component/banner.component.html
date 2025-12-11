@@ -6,37 +6,86 @@
 >
   <!-- form slot -->
   <div form *ngIf="showForm" class="mb-6">
-    <div class="bg-white rounded-xl p-6 shadow border">
-      <h4 class="font-semibold mb-3">{{ editMode ? 'Edit Banner' : 'Create New Banner' }}</h4>
-      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-3">
-        <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
-        <input formControlName="title"  class="w-full border rounded px-3 py-2" />
-        <label class="block text-sm font-medium text-gray-700 mb-1">Link</label>
-        <input formControlName="redirectUrl"  class="w-full border rounded px-3 py-2" />
-
+    <div class="bg-white rounded-lg sm:rounded-xl p-4 sm:p-6 shadow border border-gray-100">
+      <h4 class="font-semibold text-lg sm:text-xl mb-4">{{ editMode ? 'Edit Banner' : 'Create New Banner' }}</h4>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+        <!-- Title -->
         <div>
-          <label class="block mb-1 text-sm">Image</label>
-          <input type="file" (change)="onFileChange($event)" class="w-full border rounded px-3  py-2" />
+          <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+          <input 
+            formControlName="title"  
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+        
+        <!-- Link -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Link</label>
+          <input 
+            formControlName="redirectUrl"  
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
         </div>
 
-        <div class="flex gap-4 items-center">
-          <label class="block mb-1 text-sm">Order</label>
-          <input formControlName="orderNo" type="number" placeholder="Order" class="w-[500px] border rounded px-3 py-2" />
-          <label class="inline-flex items-center gap-2">
-            <input type="checkbox" formControlName="active" /> Active
+        <!-- Image Upload -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Image</label>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <input 
+              type="file" 
+              (change)="onFileChange($event)" 
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm sm:text-base file:mr-3 file:py-1 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+            />
+            <div *ngIf="previewName" class="text-sm text-gray-600 truncate">
+              {{ previewName }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Order and Active -->
+        <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+          <div class="w-full sm:w-auto">
+            <label class="block text-sm font-medium text-gray-700 mb-1 sm:mb-0">Order</label>
+            <input 
+              formControlName="orderNo" 
+              type="number" 
+              placeholder="Order" 
+              class="w-full sm:w-32 border border-gray-300 rounded-lg px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          
+          <label class="inline-flex items-center gap-2 mt-2 sm:mt-0">
+            <input 
+              type="checkbox" 
+              formControlName="active" 
+              class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            /> 
+            <span class="text-sm font-medium text-gray-700">Active</span>
           </label>
         </div>
 
-        <div class="flex gap-3 mt-4">
-          <button class="px-4 py-2 bg-blue-600 text-white rounded-lg h-10 w-15 items-center justify-center">{{ editMode ? 'Save' : 'Create' }}</button>
-          <button type="button" (click)="cancel()" class="px-4 py-2 border rounded-lg h-10 w-15 items-center justify-center">Cancel</button>
+        <!-- Buttons -->
+        <div class="flex flex-col sm:flex-row gap-3 pt-4">
+          <button 
+            type="submit"
+            class="px-4 sm:px-6 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm sm:text-base w-full sm:w-auto"
+          >
+            {{ editMode ? 'Save Changes' : 'Create Banner' }}
+          </button>
+          <button 
+            type="button" 
+            (click)="cancel()"
+            class="px-4 sm:px-6 py-2.5 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors text-sm sm:text-base w-full sm:w-auto"
+          >
+            Cancel
+          </button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- list slot -->
-  <div list>
+  <div list class="w-full">
     <app-list-card
       [items]="banners"
       titleKey="title"
