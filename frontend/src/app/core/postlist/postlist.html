@@ -1,37 +1,33 @@
-<div class="space-y-12 px-3 sm:px-6 lg:px-10 xl:px-16 max-w-screen-xl mx-auto">
-
+<div class="space-y-12 px-4 sm:px-6 lg:px-8">
   <!-- Trending Now Section -->
   <section>
     <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">🔥 Trending News</h2>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 max-w-full">
       <div
         *ngFor="let post of trendingPosts"
         (click)="viewPost(post.id)"
-        class="cursor-pointer bg-white border border-blue-200 rounded-xl shadow-sm hover:shadow-lg transition-all overflow-hidden"
+        class="cursor-pointer bg-white border border-blue-200 rounded-lg sm:rounded-xl shadow hover:shadow-lg transition-all duration-300 overflow-hidden post-card"
       >
         <div class="relative">
           <img
             [src]="post.coverImage"
             [alt]="post.title"
-            class="w-full h-40 sm:h-48 md:h-52 object-cover"
+            class="w-full h-40 sm:h-48 object-cover transition-all duration-300"
           />
-          <span class="absolute top-3 left-3 px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
+          <span
+            class="absolute top-3 left-3 px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800"
+          >
             {{ post.category || 'News' }}
           </span>
         </div>
-
-        <div class="p-4">
-          <h2 class="font-semibold text-base sm:text-lg text-gray-800 mb-2 line-clamp-2">
+        <div class="p-3 sm:p-4">
+          <h2 class="font-semibold text-base sm:text-lg text-gray-800 mb-2 leading-tight line-clamp-2">
             {{ post.title }}
           </h2>
-
-          <p class="text-gray-600 text-xs sm:text-sm mb-4 line-clamp-2">
+          <p class="text-gray-600 text-xs sm:text-sm mb-4 sm:mb-6 leading-relaxed line-clamp-2">
             {{ post.description | slice: 0:100 }}...
           </p>
-
-          <div class="border-b border-blue-200 mb-3"></div>
-
+          <div class="border-b border-blue-200 mb-3 sm:mb-4"></div>
           <div class="text-xs text-gray-500 flex justify-between items-center">
             <span class="font-medium">{{ post.author }}</span>
             <span>{{ post.date }}</span>
@@ -40,95 +36,90 @@
       </div>
     </div>
   </section>
-
+  
   <!-- Most Popular Section -->
   <section>
     <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Most Popular</h2>
-
-    <div class="grid grid-cols-1 gap-6">
+    <div class="grid grid-cols-1 gap-6 max-w-full">
       <div
         *ngFor="let post of popularPosts"
         (click)="viewPost(post.id)"
-        class="cursor-pointer bg-white border border-blue-200 rounded-xl shadow hover:shadow-lg transition-all overflow-hidden"
+        class="cursor-pointer bg-white border border-blue-200 rounded-lg shadow hover:shadow-lg transition-all duration-300 overflow-hidden post-card"
       >
-
         <div class="flex flex-col lg:flex-row">
-
-          <!-- Image -->
+          <!-- Image on Left -->
           <div class="lg:w-1/2">
             <img
               [src]="post.coverImage"
               [alt]="post.title"
-              class="w-full h-48 sm:h-56 lg:h-full object-cover"
+              class="w-full h-48 lg:h-full object-cover"
             />
           </div>
-
-          <!-- Content -->
+          
+          <!-- Content on Right -->
           <div class="lg:w-1/2 p-4 sm:p-6">
-
-            <div class="flex flex-wrap items-center gap-2 mb-3">
-              <span class="px-3 py-1 text-xs font-semibold rounded-lg bg-gray-900 text-white">
+            <!-- Category and Featured Tag -->
+            <div class="flex flex-wrap items-center gap-2 sm:gap-3 mb-3">
+              <span class="px-2 sm:px-3 py-1 text-xs font-semibold rounded-lg bg-gray-900 text-white whitespace-nowrap">
                 {{ post.category || 'News' }}
               </span>
-              <span class="px-3 py-1 text-xs font-semibold rounded-lg text-gray-700 border">
+              <span class="px-2 sm:px-3 py-1 text-xs font-semibold rounded-md text-gray-500 border border-gray-100 whitespace-nowrap">
                 FEATURED
               </span>
             </div>
-
+            
+            <!-- Title -->
             <h2 class="font-bold text-lg sm:text-xl lg:text-2xl text-gray-900 mb-3 leading-tight line-clamp-3">
               {{ post.title }}
             </h2>
-
+            
+            <!-- Description -->
             <p class="text-gray-600 text-sm mb-4 sm:mb-6 leading-relaxed line-clamp-3">
               {{ post.description | slice: 0:120 }}...
             </p>
-
+            
+            <!-- Author and Date -->
             <div class="border-b border-blue-200 mb-4"></div>
-
-            <div class="text-xs text-gray-500 flex flex-col sm:flex-row justify-between gap-2">
+            <div class="text-xs text-gray-500 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
               <span class="font-semibold text-gray-900">{{ post.author }}</span>
               <span class="text-gray-400">{{ post.date }}</span>
             </div>
-
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Latest Posts -->
+  <!-- Main Posts Grid -->
   <section>
     <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Latest Posts</h2>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 max-w-full">
       <div
         *ngFor="let post of paginatedPosts"
         (click)="viewPost(post.id)"
-        class="cursor-pointer bg-white border border-blue-200 rounded-xl shadow-sm hover:shadow-md transition-all overflow-hidden"
+        class="cursor-pointer bg-white border border-blue-200 rounded-lg sm:rounded-xl shadow hover:shadow-md transition-all duration-300 overflow-hidden post-card"
       >
         <div class="relative">
           <img
             [src]="post.coverImage"
             [alt]="post.title"
-            class="w-full h-40 sm:h-48 md:h-52 object-cover"
+            class="w-full h-40 sm:h-48 object-cover"
           />
-          <span class="absolute top-3 left-3 px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+          <span
+            class="absolute top-3 left-3 px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800"
+          >
             {{ post.category || 'News' }}
           </span>
         </div>
-
-        <div class="p-4">
-          <h2 class="font-semibold text-base sm:text-lg text-gray-800 mb-2 line-clamp-2">
+        <div class="p-3 sm:p-4">
+          <h2 class="font-semibold text-base sm:text-lg text-gray-800 mb-2 leading-tight line-clamp-2">
             {{ post.title }}
           </h2>
-
-          <p class="text-gray-600 text-xs sm:text-sm mb-4 line-clamp-2">
+          <p class="text-gray-600 text-xs sm:text-sm mb-4 sm:mb-6 leading-relaxed line-clamp-2">
             {{ post.description | slice: 0:100 }}...
           </p>
-
-          <div class="border-b border-blue-200 mb-3"></div>
-
-          <div class="text-xs text-gray-500 flex justify-between">
+          <div class="border-b border-blue-200 mb-3 sm:mb-4"></div>
+          <div class="text-xs text-gray-500 flex justify-between items-center">
             <span class="font-medium">{{ post.author }}</span>
             <span>{{ post.date }}</span>
           </div>
@@ -137,7 +128,7 @@
     </div>
 
     <!-- Pagination -->
-    <div class="mt-8 flex justify-center">
+    <div class="mt-8">
       <app-pagination
         [currentPage]="currentPage"
         [totalPages]="totalPages"
@@ -145,5 +136,4 @@
       ></app-pagination>
     </div>
   </section>
-
 </div>
