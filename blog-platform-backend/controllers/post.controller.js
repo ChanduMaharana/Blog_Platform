@@ -79,10 +79,17 @@ export const getPostById = async (req, res) => {
     const img = post.image;
 
     const formatted = {
-      ...post.dataValues,
-      image: normalizeImage(post.image),
-      coverImage: normalizeImage(post.image),
-    };
+  ...post.dataValues,
+  image: normalizeImage(post.image),
+  coverImage: normalizeImage(post.image),
+
+  metaDescription: post.metaDescription,
+  metaKeywords: post.metaKeywords,
+  ogTitle: post.ogTitle,
+  ogDescription: post.ogDescription,
+  excerpt: post.excerpt,
+};
+
 
     res.json(formatted);
 
