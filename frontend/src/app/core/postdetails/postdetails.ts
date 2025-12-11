@@ -78,4 +78,29 @@ export class Postdetails {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
+
+  shareOnFacebook() {
+  const url = encodeURIComponent(window.location.href);
+  const title = encodeURIComponent(this.post?.title || '');
+  window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${title}`, '_blank');
+}
+
+shareOnTwitter() {
+  const url = encodeURIComponent(window.location.href);
+  const title = encodeURIComponent(this.post?.title || '');
+  window.open(`https://twitter.com/intent/tweet?url=${url}&text=${title}`, '_blank');
+}
+
+shareOnLinkedIn() {
+  const url = encodeURIComponent(window.location.href);
+  const title = encodeURIComponent(this.post?.title || '');
+  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
+}
+
+copyLink() {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    alert("Link copied to clipboard!");
+  });
+}
+
 }
