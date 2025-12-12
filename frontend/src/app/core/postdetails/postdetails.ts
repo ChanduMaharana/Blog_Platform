@@ -1,4 +1,4 @@
-import { Component, NgZone, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, NgZone, Inject, PLATFORM_ID, makeStateKey } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule, isPlatformServer, isPlatformBrowser } from '@angular/common';
 import { PostService, PostDetail, PostSummary } from '../../services/post-service';
@@ -6,6 +6,8 @@ import { LucideAngularModule } from 'lucide-angular';
 import { firstValueFrom } from 'rxjs';
 import { CommentSection } from '../../shared/comment-section/comment-section';
 import { Title, Meta, MetaDefinition } from '@angular/platform-browser';
+import { TransferState } from '@angular/core';
+
 
 @Component({
   selector: 'app-postdetails',
@@ -27,7 +29,8 @@ export class Postdetails {
     private ngZone: NgZone,
     private titleService: Title,
     private meta: Meta,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private transferState: TransferState
   ) {}
 
   private getFullUrl(img: string | null | undefined): string {
@@ -35,6 +38,8 @@ export class Postdetails {
     if (img.startsWith("http")) return img;
     return `${this.BASE_URL}/${img.replace(/^\/+/, "")}`;
   }
+
+  private POST_KEY = makeStateKey<PostDetail>('post-data');
 
   private updateSEO() {
     if (!this.post) return;
@@ -48,21 +53,18 @@ export class Postdetails {
       ? window.location.href
       : `https://your-domain.com/posts/${this.post.id}`;
 
-    // 🔥 Works on SSR + Browser
     this.titleService.setTitle(title);
 
     const tags: MetaDefinition[] = [
       { name: "description", content: description },
       { name: "keywords", content: keywords },
 
-      // Open Graph
       { property: "og:title", content: title },
       { property: "og:description", content: description },
       { property: "og:image", content: image },
       { property: "og:url", content: url },
       { property: "og:type", content: "article" },
 
-      // Twitter
       { name: "twitter:title", content: title },
       { name: "twitter:description", content: description },
       { name: "twitter:image", content: image },
@@ -98,38 +100,32 @@ export class Postdetails {
     } as any);
   }
 
-  async ngOnInit() {
-    try {
-      const id = Number(this.route.snapshot.paramMap.get("id"));
-      const fetched = await firstValueFrom(this.postService.getById(id));
+  async  ngOnInit() {
+  const id = Number(this.route.snapshot.paramMap.get("id"));
 
-      this.post = {
-        ...fetched,
-        content: fetched.content ?? "",
-        coverImage: this.getFullUrl(fetched.coverImage),
-        image: this.getFullUrl(fetched.image)
-      };
-
-      const all = await firstValueFrom(this.postService.list());
-      this.relatedPosts = all
-        .filter(p => p.category === this.post?.category && p.id !== this.post?.id)
-        .slice(0, 3)
-        .map(p => ({
-          ...p,
-          coverImage: this.getFullUrl(p.coverImage),
-          image: this.getFullUrl(p.image)
-        }));
-
-      this.loading = false;
-
-      // SSR + Browser SEO
-      this.updateSEO();
-
-    } catch (error) {
-      console.error("Error loading post details:", error);
-      this.loading = false;
-    }
+  if (this.transferState.hasKey(this.POST_KEY)) {
+    this.post = this.transferState.get(this.POST_KEY, null as any);
+    this.transferState.remove(this.POST_KEY);
+    this.updateSEO();
+    this.loading = false;
+    return;
   }
+
+  const fetched = await firstValueFrom(this.postService.getById(id));
+  this.post = {
+    ...fetched,
+    coverImage: this.getFullUrl(fetched.coverImage),
+    image: this.getFullUrl(fetched.image),
+    content: fetched.content || "",
+  };
+
+  if (isPlatformServer(this.platformId)) {
+    this.transferState.set(this.POST_KEY, this.post);
+  }
+
+  this.updateSEO();
+  this.loading = false;
+}
 
   viewPost(id: number) {
     this.router.navigate(["/posts", id]);
