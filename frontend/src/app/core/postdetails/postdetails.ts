@@ -1,11 +1,11 @@
 import { Component, NgZone, Inject, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CommonModule, isPlatformServer } from '@angular/common';
+import { CommonModule, isPlatformServer, isPlatformBrowser } from '@angular/common';
 import { PostService, PostDetail, PostSummary } from '../../services/post-service';
 import { LucideAngularModule } from 'lucide-angular';
 import { firstValueFrom } from 'rxjs';
 import { CommentSection } from '../../shared/comment-section/comment-section';
-import { Title, Meta } from '@angular/platform-browser';
+import { Title, Meta, MetaDefinition } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-postdetails',
@@ -33,46 +33,55 @@ export class Postdetails {
   private getFullUrl(img: string | null | undefined): string {
     if (!img) return "assets/default.jpg";
     if (img.startsWith("http")) return img;
-    const cleaned = img.replace(/^\/+/, "");
-    return `${this.BASE_URL}/${cleaned}`;
+    return `${this.BASE_URL}/${img.replace(/^\/+/, "")}`;
   }
 
-  updateSEO() {
+  private updateSEO() {
     if (!this.post) return;
 
-    const title = this.post.ogTitle || this.post.title || '';
+    const title = this.post.ogTitle || this.post.title || "";
     const description =
-      this.post.metaDescription || this.post.description || this.post.excerpt || '';
-    const keywords = this.post.metaKeywords || '';
-    const ogDesc = this.post.ogDescription || description;
-    const image = this.post.coverImage || '';
-    const url = typeof window !== "undefined" ? window.location.href : '';
+      this.post.metaDescription || this.post.description || this.post.excerpt || "";
+    const keywords = this.post.metaKeywords || "";
+    const image = this.post.coverImage || "";
+    const url = isPlatformBrowser(this.platformId)
+      ? window.location.href
+      : `https://your-domain.com/posts/${this.post.id}`;
 
+    // 🔥 Works on SSR + Browser
     this.titleService.setTitle(title);
 
-    this.meta.updateTag({ name: 'description', content: description });
-    this.meta.updateTag({ name: 'keywords', content: keywords });
+    const tags: MetaDefinition[] = [
+      { name: "description", content: description },
+      { name: "keywords", content: keywords },
 
-    this.meta.updateTag({ property: 'og:title', content: title });
-    this.meta.updateTag({ property: 'og:description', content: ogDesc });
-    this.meta.updateTag({ property: 'og:image', content: image });
-    this.meta.updateTag({ property: 'og:url', content: url });
+      // Open Graph
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:image", content: image },
+      { property: "og:url", content: url },
+      { property: "og:type", content: "article" },
 
-    this.meta.updateTag({ name: 'twitter:title', content: title });
-    this.meta.updateTag({ name: 'twitter:description', content: ogDesc });
-    this.meta.updateTag({ name: 'twitter:image', content: image });
+      // Twitter
+      { name: "twitter:title", content: title },
+      { name: "twitter:description", content: description },
+      { name: "twitter:image", content: image },
+      { name: "twitter:card", content: "summary_large_image" }
+    ];
 
-    this.setSchemaJSONLD(title, description, image, url);
+    tags.forEach(tag => this.meta.updateTag(tag));
 
-    console.log("SEO Updated:", { title, description, keywords, image, url });
+    if (isPlatformServer(this.platformId)) {
+      this.injectJSONLD(title, description, image, url);
+    }
   }
 
-  setSchemaJSONLD(title: string, description: string, image: string, url: string) {
-    const jsonLD = {
+  private injectJSONLD(title: string, desc: string, image: string, url: string) {
+    const ld = {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
       "headline": title,
-      "description": description,
+      "description": desc,
       "image": image,
       "author": {
         "@type": "Person",
@@ -82,13 +91,11 @@ export class Postdetails {
       "url": url
     };
 
-    let script = document.querySelector('script[type="application/ld+json"]');
-    if (!script) {
-      script = document.createElement('script');
-      script.setAttribute('type', 'application/ld+json');
-      document.head.appendChild(script);
-    }
-    script.textContent = JSON.stringify(jsonLD);
+    this.meta.updateTag({
+      id: "json-ld",
+      name: "application/ld+json",
+      content: JSON.stringify(ld)
+    } as any);
   }
 
   async ngOnInit() {
@@ -96,31 +103,27 @@ export class Postdetails {
       const id = Number(this.route.snapshot.paramMap.get("id"));
       const fetched = await firstValueFrom(this.postService.getById(id));
 
-      const mappedPost: PostDetail = {
+      this.post = {
         ...fetched,
         content: fetched.content ?? "",
         coverImage: this.getFullUrl(fetched.coverImage),
-        image: this.getFullUrl(fetched.image),
+        image: this.getFullUrl(fetched.image)
       };
 
-      const allPosts = await firstValueFrom(this.postService.list());
-
-      const related = allPosts
-        .filter(p => p.category === fetched.category && p.id !== fetched.id)
+      const all = await firstValueFrom(this.postService.list());
+      this.relatedPosts = all
+        .filter(p => p.category === this.post?.category && p.id !== this.post?.id)
         .slice(0, 3)
         .map(p => ({
           ...p,
           coverImage: this.getFullUrl(p.coverImage),
-          image: this.getFullUrl(p.image),
+          image: this.getFullUrl(p.image)
         }));
 
-      this.ngZone.run(() => {
-        this.post = mappedPost;
-        this.relatedPosts = related;
-        this.loading = false;
+      this.loading = false;
 
-        this.updateSEO();
-      });
+      // SSR + Browser SEO
+      this.updateSEO();
 
     } catch (error) {
       console.error("Error loading post details:", error);
@@ -129,26 +132,19 @@ export class Postdetails {
   }
 
   viewPost(id: number) {
-    this.router.navigate(['/posts', id]).then(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    this.router.navigate(["/posts", id]);
   }
 
   shareOnFacebook() {
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank');
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${location.href}`, "_blank");
   }
-
   shareOnTwitter() {
-    window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}`, '_blank');
+    window.open(`https://twitter.com/intent/tweet?url=${location.href}`, "_blank");
   }
-
   shareOnLinkedIn() {
-    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`, '_blank');
+    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${location.href}`, "_blank");
   }
-
   copyLink() {
-    navigator.clipboard.writeText(window.location.href).then(() =>
-      alert("Link copied to clipboard!")
-    );
+    navigator.clipboard.writeText(location.href).then(() => alert("Link copied!"));
   }
 }
