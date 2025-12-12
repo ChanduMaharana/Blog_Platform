@@ -1,6 +1,6 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, Inject, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformServer } from '@angular/common';
 import { PostService, PostDetail, PostSummary } from '../../services/post-service';
 import { LucideAngularModule } from 'lucide-angular';
 import { firstValueFrom } from 'rxjs';
@@ -26,9 +26,9 @@ export class Postdetails {
     private router: Router,
     private ngZone: NgZone,
     private titleService: Title,
-    private meta: Meta
+    private meta: Meta,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
-
 
   private getFullUrl(img: string | null | undefined): string {
     if (!img) return "assets/default.jpg";
@@ -38,41 +38,34 @@ export class Postdetails {
   }
 
   updateSEO() {
-  if (!this.post) return;
+    if (!this.post) return;
 
-  const title = this.post.ogTitle || this.post.title || '';
-  const description =
-    this.post.metaDescription || this.post.description || this.post.excerpt || '';
-  const keywords = this.post.metaKeywords || '';
-  const ogDesc = this.post.ogDescription || description;
-  const image = this.post.coverImage || '';
-  const url = window.location.href || '';
+    const title = this.post.ogTitle || this.post.title || '';
+    const description =
+      this.post.metaDescription || this.post.description || this.post.excerpt || '';
+    const keywords = this.post.metaKeywords || '';
+    const ogDesc = this.post.ogDescription || description;
+    const image = this.post.coverImage || '';
+    const url = typeof window !== "undefined" ? window.location.href : '';
 
-  this.titleService.setTitle(title);
+    this.titleService.setTitle(title);
 
-  this.meta.updateTag({ name: 'description', content: description });
-  this.meta.updateTag({ name: 'keywords', content: keywords });
+    this.meta.updateTag({ name: 'description', content: description });
+    this.meta.updateTag({ name: 'keywords', content: keywords });
 
-  this.meta.updateTag({ property: 'og:title', content: title });
-  this.meta.updateTag({ property: 'og:description', content: ogDesc });
-  this.meta.updateTag({ property: 'og:image', content: image });
-  this.meta.updateTag({ property: 'og:url', content: url });
+    this.meta.updateTag({ property: 'og:title', content: title });
+    this.meta.updateTag({ property: 'og:description', content: ogDesc });
+    this.meta.updateTag({ property: 'og:image', content: image });
+    this.meta.updateTag({ property: 'og:url', content: url });
 
-  this.meta.updateTag({ name: 'twitter:title', content: title });
-  this.meta.updateTag({ name: 'twitter:description', content: ogDesc });
-  this.meta.updateTag({ name: 'twitter:image', content: image });
+    this.meta.updateTag({ name: 'twitter:title', content: title });
+    this.meta.updateTag({ name: 'twitter:description', content: ogDesc });
+    this.meta.updateTag({ name: 'twitter:image', content: image });
 
-  this.setSchemaJSONLD(title, description, image, url);
+    this.setSchemaJSONLD(title, description, image, url);
 
-  console.log("SEO Updated:", {
-  title,
-  description,
-  keywords,
-  image,
-  url
-});
-
-}
+    console.log("SEO Updated:", { title, description, keywords, image, url });
+  }
 
   setSchemaJSONLD(title: string, description: string, image: string, url: string) {
     const jsonLD = {
@@ -101,7 +94,6 @@ export class Postdetails {
   async ngOnInit() {
     try {
       const id = Number(this.route.snapshot.paramMap.get("id"));
-
       const fetched = await firstValueFrom(this.postService.getById(id));
 
       const mappedPost: PostDetail = {
@@ -135,6 +127,7 @@ export class Postdetails {
       this.loading = false;
     }
   }
+
   viewPost(id: number) {
     this.router.navigate(['/posts', id]).then(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -142,25 +135,20 @@ export class Postdetails {
   }
 
   shareOnFacebook() {
-    const url = encodeURIComponent(window.location.href);
-    const title = encodeURIComponent(this.post?.title || '');
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${title}`, '_blank');
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank');
   }
 
   shareOnTwitter() {
-    const url = encodeURIComponent(window.location.href);
-    const title = encodeURIComponent(this.post?.title || '');
-    window.open(`https://twitter.com/intent/tweet?url=${url}&text=${title}`, '_blank');
+    window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}`, '_blank');
   }
 
   shareOnLinkedIn() {
-    const url = encodeURIComponent(window.location.href);
-    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
+    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`, '_blank');
   }
 
   copyLink() {
-    navigator.clipboard.writeText(window.location.href).then(() => {
-      alert("Link copied to clipboard!");
-    });
+    navigator.clipboard.writeText(window.location.href).then(() =>
+      alert("Link copied to clipboard!")
+    );
   }
 }
