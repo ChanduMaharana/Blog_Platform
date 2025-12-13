@@ -5,6 +5,9 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:browser": "ng build",
+    "build:server": "ng run blog-platform:server",
+    "build:ssr": "npm run build:browser && npm run build:server",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:blog-platform": "node dist/blog-platform/server/server.mjs"
