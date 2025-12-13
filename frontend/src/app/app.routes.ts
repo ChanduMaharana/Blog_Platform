@@ -5,6 +5,7 @@ import { Postdetails } from './core/postdetails/postdetails';
 import { AdminDashboard } from './core/admin/admin-dashboard/admin-dashboard';
 import { Login } from './core/login/login';
 import { AuthGuard } from './services/auth/auth.guard';
+import { postResolver } from './shared/post.resolver';
 
 export const routes: Routes = [
   
@@ -13,7 +14,14 @@ export const routes: Routes = [
   { path: 'home', component: Home },
 
   { path: 'posts', component: Postlist },
-  { path: 'posts/:id', component: Postdetails },
+  // { path: 'posts/:id', component: Postdetails },
+   {
+    path: 'post/:id',
+    loadComponent: () =>
+      import('./core/postdetails/postdetails')
+        .then(m => m.Postdetails),
+    resolve: { post: postResolver }
+  },
 
   { path: 'login', component: Login },
 
