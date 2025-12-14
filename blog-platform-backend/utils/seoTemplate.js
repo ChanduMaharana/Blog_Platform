@@ -13,7 +13,7 @@ export function seoHTML(post) {
   <meta property="og:title" content="${post.ogTitle || post.title || ""}" />
   <meta property="og:description" content="${post.ogDescription || post.metaDescription || ""}" />
   <meta property="og:image" content="${post.coverImage || ""}" />
-  <meta property="og:url" content="https://your-frontend.vercel.app/post/${post.id}" />
+  <meta property="og:url" content="https://blog-platform-xybron-git-master-220101120198s-projects.vercel.app/post/${post.id}" />
 
   <link rel="canonical" href="https://blog-backend-biys.onrender.com/api/posts/${post.id}" />
 
