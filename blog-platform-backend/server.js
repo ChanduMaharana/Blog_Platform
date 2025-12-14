@@ -30,8 +30,8 @@ if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 if (!fs.existsSync(BANNERS_DIR)) fs.mkdirSync(BANNERS_DIR, { recursive: true });
 
 
-app.use("/uploads", express.static(UPLOADS_DIR));
-app.use("/uploads/banners", express.static(BANNERS_DIR));
+// app.use("/uploads", express.static(UPLOADS_DIR));
+// app.use("/uploads/banners", express.static(BANNERS_DIR));
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));

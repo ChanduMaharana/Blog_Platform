@@ -13,36 +13,17 @@ const normalizeImage = (img) => {
 
 export const createPost = async (req, res) => {
   try {
-    const body = { ...req.body };
+    const post = await Post.create({
+      ...req.body,
+      coverImage: req.file ? req.file.path : null,
+    });
 
-    body.title = body.title || "Untitled";
-    body.description = body.description || "";
-    body.content = body.content || "";
-    body.author = body.author || "Unknown";
-    body.date = new Date().toDateString();
-
-    if (!body.categoryId)
-      return res.status(400).json({ message: "categoryId is required" });
-
-    if (req.file) {
-       body.image = req.file.filename;
-    }
-
-    const post = await Post.create(body);
-
-    const formatted = {
-      ...post.dataValues,
-      image: normalizeImage(post.image),
-      coverImage: normalizeImage(post.image),
-    };
-
-    res.json({ success: true, post: formatted });
-
+    res.status(201).json(post);
   } catch (err) {
-    console.error("createPost error:", err);
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ error: err.message });
   }
 };
+
 
 // GET ALL POSTS
 export const getPosts = async (req, res) => {
