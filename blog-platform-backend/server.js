@@ -55,7 +55,7 @@ Post.belongsTo(Category, { foreignKey: "categoryId" });
 Category.hasMany(Post, { foreignKey: "categoryId" });
 
 sequelize
-  .sync()
+.sync({ alter: false })
   .then(() => {
     const PORT = process.env.PORT || 8080;
      console.log("Banners Folder:", BANNERS_DIR);
