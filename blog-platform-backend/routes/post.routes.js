@@ -22,21 +22,38 @@ router.get("/paginated/list", getPaginatedPosts);
 router.get("/", getPosts);
 
 router.get("/:id", async (req, res) => {
-  const post = await Post.findByPk(req.params.id);
+  try {
+    const post = await Post.findByPk(req.params.id);
 
-  if (!post) return res.status(404).json({ message: "Post not found" });
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
 
-  const ua = req.headers["user-agent"] || "";
+    const ua = req.headers["user-agent"] || "";
 
-  if (isBot(ua)) {
-    return res
-      .status(200)
-      .set("Content-Type", "text/html")
-      .send(seoHTML(post));
+    if (isBot(ua)) {
+      const html = seoHTML({
+        ...post.toJSON(),
+        coverImage: post.coverImage || "",
+        metaDescription: post.metaDescription || post.description || "",
+        ogTitle: post.ogTitle || post.title,
+        ogDescription: post.ogDescription || post.description || ""
+      });
+
+      return res
+        .status(200)
+        .set("Content-Type", "text/html")
+        .send(html);
+    }
+
+    return res.json(post);
+
+  } catch (err) {
+    console.error("SEO Route Error:", err);
+    return res.status(500).json({ message: "Internal server error" });
   }
-
-  return res.json(post);
 });
+
 
 router.put("/:id", updatePost);
 router.delete("/:id", deletePost);
