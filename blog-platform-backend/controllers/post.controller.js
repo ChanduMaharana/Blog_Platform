@@ -82,19 +82,26 @@ export const getPostById = async (req, res) => {
 
 export const updatePost = async (req, res) => {
   try {
-    const [updated] = await Post.update(req.body, {
-      where: { id: req.params.id }
-    });
+    const post = await Post.findByPk(req.params.id);
+    if (!post) return res.status(404).json({ message: "Post not found" });
 
-    if (!updated) return res.status(404).json({ message: "Post not found" });
+    const updatedData = {
+      ...req.body,
+    };
 
-    res.json({ success: true });
+    if (req.file) {
+      updatedData.coverImage = req.file.path; // Cloudinary URL
+    }
+
+    await post.update(updatedData);
+    res.json(post);
 
   } catch (err) {
     console.error("updatePost error", err);
     res.status(500).json({ message: err.message });
   }
 };
+
 
 export const deletePost = async (req, res) => {
   try {
