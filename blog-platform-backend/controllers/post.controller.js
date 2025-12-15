@@ -1,16 +1,6 @@
 import Post from "../models/post.model.js";
 import Category from "../models/category.model.js";
 
-const BASE_URL = process.env.BASE_URL || "https://blog-backend-biys.onrender.com";
-const normalizeImage = (img) => {
-  if (!img) return null;
-  if (!img.startsWith("/")) {
-    img = `/uploads/${img}`;
-  }
-  return `${BASE_URL}${img}`;
-};
-
-
 export const createPost = async (req, res) => {
   try {
     const post = await Post.create({
@@ -25,7 +15,6 @@ export const createPost = async (req, res) => {
 };
 
 
-// GET ALL POSTS
 export const getPosts = async (req, res) => {
   try {
     const posts = await Post.findAll({
@@ -33,47 +22,21 @@ export const getPosts = async (req, res) => {
       include: [{ model: Category }],
     });
 
-    const formatted = posts.map((p) => {
-      const img = p.image;
-
-      return {
-        ...p.dataValues,
-        image: normalizeImage(img),
-       coverImage: normalizeImage(img),
-      };
-    });
-
-    res.json(formatted);
-
+    res.json(posts);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-
 export const getPostById = async (req, res) => {
   try {
     const post = await Post.findByPk(req.params.id);
 
-    if (!post) return res.status(404).json({ message: "Post not found" });
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
 
-    const img = post.image;
-
-    const formatted = {
-  ...post.dataValues,
-  image: normalizeImage(post.image),
-  coverImage: normalizeImage(post.image),
-
-  metaDescription: post.metaDescription,
-  metaKeywords: post.metaKeywords,
-  ogTitle: post.ogTitle,
-  ogDescription: post.ogDescription,
-  excerpt: post.excerpt,
-};
-
-
-    res.json(formatted);
-
+    res.json(post);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -83,21 +46,20 @@ export const getPostById = async (req, res) => {
 export const updatePost = async (req, res) => {
   try {
     const post = await Post.findByPk(req.params.id);
-    if (!post) return res.status(404).json({ message: "Post not found" });
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
 
-    const updatedData = {
-      ...req.body,
-    };
+    const updatedData = { ...req.body };
 
     if (req.file) {
-      updatedData.coverImage = req.file.path; // Cloudinary URL
+      updatedData.coverImage = req.file.path; 
     }
 
     await post.update(updatedData);
     res.json(post);
-
   } catch (err) {
-    console.error("updatePost error", err);
+    console.error("updatePost error:", err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -106,15 +68,16 @@ export const updatePost = async (req, res) => {
 export const deletePost = async (req, res) => {
   try {
     const deleted = await Post.destroy({
-      where: { id: req.params.id }
+      where: { id: req.params.id },
     });
 
-    if (!deleted) return res.status(404).json({ message: "Post not found" });
+    if (!deleted) {
+      return res.status(404).json({ message: "Post not found" });
+    }
 
     res.json({ success: true });
-
   } catch (err) {
-    console.error("deletePost error", err);
+    console.error("deletePost error:", err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -131,19 +94,12 @@ export const getPaginatedPosts = async (req, res) => {
       order: [["createdAt", "DESC"]],
     });
 
-    const formatted = rows.map((p) => ({
-      ...p.dataValues,
-      image: normalizeImage(p.image),
-      coverImage: normalizeImage(p.image),
-    }));
-
     res.json({
-      posts: formatted,
+      posts: rows, 
       totalItems: count,
       totalPages: Math.ceil(count / limit),
       currentPage: page,
     });
-
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

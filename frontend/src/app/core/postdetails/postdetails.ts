@@ -53,23 +53,40 @@ export class Postdetails {
   }
 
   updateSEO() {
-    const title = this.post.ogTitle || this.post.title!;
-    const desc = this.post.metaDescription || this.post.description || '';
-    const ogDesc = this.post.ogDescription || desc;
-    const image = this.post.coverImage || '';
-    const url = `${this.SITE_URL}/post/${this.post.id}`;
+  const title: string =
+    this.post.ogTitle ?? this.post.title ?? 'Blog';
 
-    this.title.setTitle(title);
+  const description: string =
+    this.post.metaDescription ??
+    this.post.description ??
+    'Read this blog post';
 
-    this.meta.updateTag({ name: 'description', content: desc });
-    this.meta.updateTag({ property: 'og:title', content: title });
-    this.meta.updateTag({ property: 'og:description', content: ogDesc });
-    this.meta.updateTag({ property: 'og:image', content: image });
-    this.meta.updateTag({ property: 'og:url', content: url });
-    this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+  const image: string =
+    this.post.coverImage ??
+    `${this.SITE_URL}/assets/default-og.jpg`;
 
-    this.injectJsonLD(title, desc, image, url);
-  }
+  const url: string = `${this.SITE_URL}/post/${this.post.id}`;
+
+  // Page title
+  this.title.setTitle(title);
+
+  // Meta tags (NO undefined values)
+  this.meta.updateTag({ name: 'description', content: description });
+
+  this.meta.updateTag({ property: 'og:title', content: title });
+  this.meta.updateTag({ property: 'og:description', content: description });
+  this.meta.updateTag({ property: 'og:image', content: image });
+  this.meta.updateTag({ property: 'og:url', content: url });
+
+  this.meta.updateTag({
+    name: 'twitter:card',
+    content: 'summary_large_image',
+  });
+
+  this.injectJsonLD(title, description, image, url);
+}
+
+
 
   injectJsonLD(title: string, description: string, image: string, url: string) {
     const jsonLD = {
