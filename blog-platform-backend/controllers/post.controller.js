@@ -1,11 +1,25 @@
 import Post from "../models/post.model.js";
 import Category from "../models/category.model.js";
 
+const BASE_URL = process.env.BASE_URL || "https://blog-backend-biys.onrender.com";
+
+// ✅ Universal image resolver
+const resolveImage = (img) => {
+  if (!img) return null;
+
+  // Cloudinary URL → return as-is
+  if (img.startsWith("http")) return img;
+
+  // Old local filename → convert to full URL
+  return `${BASE_URL}/uploads/${img}`;
+};
+
+// CREATE POST
 export const createPost = async (req, res) => {
   try {
     const post = await Post.create({
       ...req.body,
-      coverImage: req.file ? req.file.path : null,
+      coverImage: req.file?.path || null, // Cloudinary URL
     });
 
     res.status(201).json(post);
@@ -14,7 +28,7 @@ export const createPost = async (req, res) => {
   }
 };
 
-
+// GET ALL POSTS
 export const getPosts = async (req, res) => {
   try {
     const posts = await Post.findAll({
@@ -22,85 +36,49 @@ export const getPosts = async (req, res) => {
       include: [{ model: Category }],
     });
 
-    res.json(posts);
+    const formatted = posts.map((p) => ({
+      ...p.dataValues,
+      image: resolveImage(p.coverImage || p.image),
+      coverImage: resolveImage(p.coverImage || p.image),
+    }));
+
+    res.json(formatted);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
+// GET POST BY ID
 export const getPostById = async (req, res) => {
   try {
     const post = await Post.findByPk(req.params.id);
+    if (!post) return res.status(404).json({ message: "Post not found" });
 
-    if (!post) {
-      return res.status(404).json({ message: "Post not found" });
-    }
-
-    res.json(post);
+    res.json({
+      ...post.dataValues,
+      image: resolveImage(post.coverImage || post.image),
+      coverImage: resolveImage(post.coverImage || post.image),
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-
+// UPDATE POST
 export const updatePost = async (req, res) => {
   try {
     const post = await Post.findByPk(req.params.id);
-    if (!post) {
-      return res.status(404).json({ message: "Post not found" });
-    }
+    if (!post) return res.status(404).json({ message: "Post not found" });
 
     const updatedData = { ...req.body };
 
     if (req.file) {
-      updatedData.coverImage = req.file.path; 
+      updatedData.coverImage = req.file.path; // Cloudinary URL
     }
 
     await post.update(updatedData);
     res.json(post);
   } catch (err) {
-    console.error("updatePost error:", err);
     res.status(500).json({ message: err.message });
-  }
-};
-
-
-export const deletePost = async (req, res) => {
-  try {
-    const deleted = await Post.destroy({
-      where: { id: req.params.id },
-    });
-
-    if (!deleted) {
-      return res.status(404).json({ message: "Post not found" });
-    }
-
-    res.json({ success: true });
-  } catch (err) {
-    console.error("deletePost error:", err);
-    res.status(500).json({ message: err.message });
-  }
-};
-
-export const getPaginatedPosts = async (req, res) => {
-  try {
-    const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || 6;
-    const offset = (page - 1) * limit;
-
-    const { rows, count } = await Post.findAndCountAll({
-      limit,
-      offset,
-      order: [["createdAt", "DESC"]],
-    });
-
-    res.json({
-      posts: rows, 
-      totalItems: count,
-      totalPages: Math.ceil(count / limit),
-      currentPage: page,
-    });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
   }
 };
