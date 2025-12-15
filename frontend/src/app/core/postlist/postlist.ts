@@ -29,9 +29,7 @@ async ngOnInit() {
 
     this.posts = posts.map(post => ({
   ...post,
-  coverImage: post.image?.startsWith('http')
-    ? post.image 
-    : `${environment.assetUrl}${post.image}`,
+  coverImage: post.coverImage,
   category: (post as any).category || 'News',
 }));
 
