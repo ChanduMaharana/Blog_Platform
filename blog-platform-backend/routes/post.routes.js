@@ -44,7 +44,7 @@ router.get("/:id", async (req, res) => {
         <meta property="og:title" content="${post.ogTitle || post.title}">
         <meta property="og:description" content="${post.ogDescription || post.metaDescription || ""}">
         <meta property="og:image" content="${image}">
-        <meta property="og:url" content="https://YOUR_FRONTEND_DOMAIN/post/${post.id}">
+        <meta property="og:url" content="https://blog-platform-xybron-git-master-220101120198s-projects.vercel.app/${post.id}">
         <meta property="og:type" content="article">
 
         <meta name="twitter:card" content="summary_large_image">
