@@ -1,52 +1,31 @@
 import Banner from "../models/banner.model.js";
 
-const BASE_URL = (process.env.BASE_URL || "https://blog-backend-biys.onrender.com").trim();
-
-const normalizeBannerImage = (img) => {
-  if (!img) return null;
-
-  if (!img.startsWith("/")) {
-    img = `/uploads/banners/${img}`;
-  }
-
-  return `${BASE_URL}${img}`;
-};
 export const createBanner = async (req, res) => {
   try {
-    if (!req.file) {
+    if (!req.file?.path) {
       return res.status(400).json({ message: "Image is required" });
     }
 
     const banner = await Banner.create({
       title: req.body.title || "Untitled Banner",
       redirectUrl: req.body.redirectUrl || null,
-      orderNo: req.body.orderNo ? Number(req.body.orderNo) : 0,
-      active: req.body.active === "true" || req.body.active === true,
-      image: req.file.filename,
+      orderNo: Number(req.body.orderNo) || 0,
+      active: req.body.active !== "false",
+      image: req.file.path, 
     });
 
-    res.json({
-      success: true,
-      banner: {
-        ...banner.dataValues,
-        image: normalizeBannerImage(banner.image),
-      }
-    });
-
+    res.json({ success: true, banner });
   } catch (err) {
-    console.error("createBanner ERROR:", err);
     res.status(500).json({ message: err.message });
   }
 };
 
 export const getBanners = async (req, res) => {
   try {
-    const list = await Banner.findAll({ order: [["orderNo", "ASC"]] });
-
-    const banners = list.map(b => ({
-      ...b.dataValues,
-      image: normalizeBannerImage(b.image),
-    }));
+    const banners = await Banner.findAll({
+      where: { active: true },
+      order: [["orderNo", "ASC"]],
+    });
 
     res.json(banners);
   } catch (err) {
@@ -54,54 +33,24 @@ export const getBanners = async (req, res) => {
   }
 };
 
-
 export const getBannerById = async (req, res) => {
-  try {
-    const banner = await Banner.findByPk(req.params.id);
-    if (!banner) return res.status(404).json({ message: "Banner not found" });
-
-    res.json({
-      ...banner.dataValues,
-      image: normalizeBannerImage(banner.image),
-    });
-
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+  const banner = await Banner.findByPk(req.params.id);
+  if (!banner) return res.status(404).json({ message: "Not found" });
+  res.json(banner);
 };
 
-
 export const updateBanner = async (req, res) => {
-  try {
-    const updatedData = req.body;
+  const banner = await Banner.findByPk(req.params.id);
+  if (!banner) return res.status(404).json({ message: "Not found" });
 
-    if (req.file) {
-      updatedData.image = req.file.filename;
-    }
+  const data = { ...req.body };
+  if (req.file?.path) data.image = req.file.path;
 
-    const [updated] = await Banner.update(updatedData, {
-      where: { id: req.params.id },
-    });
-
-    if (!updated) return res.status(404).json({ message: "Banner not found" });
-
-    res.json({ success: true });
-
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+  await banner.update(data);
+  res.json({ success: true });
 };
 
 export const deleteBanner = async (req, res) => {
-  try {
-    const deleted = await Banner.destroy({
-      where: { id: req.params.id },
-    });
-
-    if (!deleted) return res.status(404).json({ message: "Banner not found" });
-
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+  await Banner.destroy({ where: { id: req.params.id } });
+  res.json({ success: true });
 };

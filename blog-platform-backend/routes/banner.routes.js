@@ -1,26 +1,8 @@
 import express from "express";
-import multer from "multer";
-import fs from "fs";
-import path from "path";
 import { createBanner, updateBanner, deleteBanner, getBanners, getBannerById } from "../controllers/banner.controller.js";
+import { uploadBanner } from "../middleware/bannerUpload.js";
 
 const router = express.Router();
-
-const bannerDir = path.join(process.cwd(), "uploads", "banners");
-
-if (!fs.existsSync(bannerDir)) {
-  fs.mkdirSync(bannerDir, { recursive: true });
-}
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, bannerDir),
-  filename: (req, file, cb) => {
-    const cleanName = file.originalname.replace(/\s+/g, "_");
-    cb(null, `${Date.now()}_${cleanName}`);
-  }
-});
-
-const uploadBanner = multer({ storage });
 
 router.get("/", getBanners);
 router.get("/:id", getBannerById);
