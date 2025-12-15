@@ -22,25 +22,29 @@ router.get("/paginated/list", getPaginatedPosts);
 router.get("/", getPosts);
 
 router.get("/:id", async (req, res) => {
-  try {
-    const post = await Post.findByPk(req.params.id);
-    if (!post) return res.status(404).json({ message: "Post not found" });
+  const post = await Post.findByPk(req.params.id);
+  if (!post) return res.status(404).send("Not found");
 
-    const ua = req.headers["user-agent"] || "";
+  const ua = req.headers["user-agent"] || "";
 
-    if (isBot(ua)) {
-      return res
-        .status(200)
-        .set("Content-Type", "text/html")
-        .send(seoHTML(post.toJSON()));
-    }
-
-    return res.json(post);
-
-  } catch (err) {
-    console.error("SEO crash:", err);
-    return res.status(500).json({ error: "SEO render failed" });
+  if (/googlebot|facebookexternalhit|twitterbot/i.test(ua)) {
+    return res.send(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>${post.ogTitle || post.title}</title>
+        <meta name="description" content="${post.metaDescription}">
+        <meta property="og:title" content="${post.ogTitle || post.title}">
+        <meta property="og:description" content="${post.ogDescription}">
+        <meta property="og:image" content="${post.image}">
+        <meta property="og:url" content="https://yourdomain.com/posts/${post.id}">
+      </head>
+      <body></body>
+      </html>
+    `);
   }
+
+  res.json(post);
 });
 
 
