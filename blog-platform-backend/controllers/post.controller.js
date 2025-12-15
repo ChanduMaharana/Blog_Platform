@@ -91,3 +91,26 @@ export const deletePost = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const getPaginatedPosts = async (req, res) => {
+  try {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 6;
+    const offset = (page - 1) * limit;
+
+    const { rows, count } = await Post.findAndCountAll({
+      limit,
+      offset,
+      order: [["createdAt", "DESC"]],
+    });
+
+    res.json({
+      posts: rows, 
+      totalItems: count,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
