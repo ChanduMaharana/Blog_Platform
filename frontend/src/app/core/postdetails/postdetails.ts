@@ -19,7 +19,7 @@ export class Postdetails {
   loading = true;
   relatedPosts: PostSummary[] = [];
 
-  private readonly SITE_URL = 'https://blog-platform-xybron-git-master-220101120198s-projects.vercel.app/';
+  private readonly SITE_URL = 'https://blog-backend-biys.onrender.com/api';
 
   constructor(
     private route: ActivatedRoute,
