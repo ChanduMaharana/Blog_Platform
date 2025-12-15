@@ -54,11 +54,11 @@
   </div>
 
   <img
-    *ngIf="post?.coverImage"
-    [src]="post?.coverImage"
-    class="rounded-xl shadow w-full mb-6 object-cover h-48 sm:h-64 lg:h-80"
-    [alt]="post?.title"
-  />
+  *ngIf="post?.coverImage"
+  [src]="post.coverImage"
+  class="rounded-xl w-full"
+/>
+
 
   <!-- CONTENT -->
   <div class="prose prose-sm sm:prose-base lg:prose-lg max-w-none mb-10 text-gray-800">

@@ -13,10 +13,12 @@ const normalizeImage = (img) => {
 
 export const createPost = async (req, res) => {
   try {
+    const imageUrl = req.file?.path || null;
+
     const post = await Post.create({
       ...req.body,
-      coverImage: req.file?.path || null, 
-      image: req.file?.path || null
+      image: imageUrl,
+      coverImage: imageUrl,
     });
 
     res.status(201).json(post);
@@ -26,38 +28,31 @@ export const createPost = async (req, res) => {
 };
 
 export const getPosts = async (req, res) => {
-  try {
-    const posts = await Post.findAll({
-      order: [["id", "DESC"]],
-      include: [{ model: Category }]
-    });
+  const posts = await Post.findAll({
+    order: [["id", "DESC"]],
+    include: [{ model: Category }],
+  });
 
-    const formatted = posts.map(p => ({
+  res.json(
+    posts.map(p => ({
       ...p.dataValues,
       image: normalizeImage(p.image),
-      coverImage: normalizeImage(p.coverImage)
-    }));
-
-    res.json(formatted);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+      coverImage: normalizeImage(p.coverImage),
+    }))
+  );
 };
 
 export const getPostById = async (req, res) => {
-  try {
-    const post = await Post.findByPk(req.params.id);
-    if (!post) return res.status(404).json({ message: "Post not found" });
+  const post = await Post.findByPk(req.params.id);
+  if (!post) return res.status(404).json({ message: "Not found" });
 
-    res.json({
-      ...post.dataValues,
-      image: normalizeImage(post.image),
-      coverImage: normalizeImage(post.coverImage)
-    });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+  res.json({
+    ...post.dataValues,
+    image: normalizeImage(post.image),
+    coverImage: normalizeImage(post.coverImage),
+  });
 };
+
 
 export const updatePost = async (req, res) => {
   try {
