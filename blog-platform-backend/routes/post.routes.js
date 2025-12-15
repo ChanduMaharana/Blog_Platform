@@ -25,34 +25,37 @@ router.get("/:id", async (req, res) => {
   const post = await Post.findByPk(req.params.id);
   if (!post) return res.status(404).send("Not found");
 
-  const image = post.image?.startsWith("http")
-    ? post.image
-    : `https://blog-backend-biys.onrender.com/uploads/${post.image}`;
-
   const ua = req.headers["user-agent"] || "";
+  const isBot = /googlebot|facebookexternalhit|twitterbot|linkedinbot|whatsapp/i.test(ua);
 
-  if (/googlebot|facebookexternalhit|twitterbot/i.test(ua)) {
+  if (isBot) {
+    const image =
+      post.coverImage?.startsWith("http")
+        ? post.coverImage
+        : `${process.env.BASE_URL}/uploads/${post.coverImage}`;
+
     return res.send(`
       <!DOCTYPE html>
-      <html>
+      <html lang="en">
       <head>
         <title>${post.ogTitle || post.title}</title>
-        <meta name="description" content="${post.metaDescription}">
+        <meta name="description" content="${post.metaDescription || ""}">
+
         <meta property="og:title" content="${post.ogTitle || post.title}">
-        <meta property="og:description" content="${post.ogDescription}">
+        <meta property="og:description" content="${post.ogDescription || post.metaDescription || ""}">
         <meta property="og:image" content="${image}">
-        <meta property="og:url" content="https://yourdomain.com/post/${post.id}">
+        <meta property="og:url" content="https://YOUR_FRONTEND_DOMAIN/post/${post.id}">
+        <meta property="og:type" content="article">
+
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="${image}">
       </head>
       <body></body>
       </html>
     `);
   }
 
-  res.json({
-    ...post.dataValues,
-    image,
-    coverImage: image,
-  });
+  res.json(post);
 });
 
 
