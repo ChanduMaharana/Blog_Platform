@@ -76,3 +76,18 @@ export const updatePost = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+export const deletePost = async (req, res) => {
+  try {
+    const deleted = await Post.destroy({
+      where: { id: req.params.id }
+    });
+
+    if (!deleted) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
