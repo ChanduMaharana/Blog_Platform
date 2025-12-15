@@ -33,24 +33,27 @@ export class Postdetails {
   ) {}
 
   ngOnInit() {
-    this.post = this.route.snapshot.data['post'];
+  this.post = this.route.snapshot.data['post'];
 
-    this.post = {
-      ...this.post,
-      coverImage: this.getFullUrl(this.post.coverImage),
-      image: this.getFullUrl(this.post.image),
-      content: this.post.content ?? ''
-    };
+  this.post = {
+    ...this.post,
+    image: this.getFullUrl(this.post.image),
+    coverImage: this.getFullUrl(this.post.coverImage),
+    content: this.post.content ?? ''
+  };
 
-    this.updateSEO();
-    this.loading = false;
-  }
+  this.updateSEO();
+  this.loading = false;
+}
 
-  private getFullUrl(img?: string) {
-    if (!img) return 'assets/default.jpg';
-    if (img.startsWith('http')) return img;
-    return `${this.BASE_URL}/${img.replace(/^\/+/, '')}`;
-  }
+  private getFullUrl(img?: string): string {
+  if (!img) return 'assets/default.jpg';
+
+  if (img.startsWith('http')) return img;
+
+  return `${this.BASE_URL}/${img.replace(/^\/+/, '')}`;
+}
+
 
   updateSEO() {
   const title: string =
@@ -62,15 +65,15 @@ export class Postdetails {
     'Read this blog post';
 
   const image: string =
-    this.post.coverImage ??
-    `${this.SITE_URL}/assets/default-og.jpg`;
+  this.post.coverImage?.startsWith('http')
+    ? this.post.coverImage
+    : `${this.SITE_URL}/assets/default-og.jpg`;
+
 
   const url: string = `${this.SITE_URL}/post/${this.post.id}`;
 
-  // Page title
   this.title.setTitle(title);
 
-  // Meta tags (NO undefined values)
   this.meta.updateTag({ name: 'description', content: description });
 
   this.meta.updateTag({ property: 'og:title', content: title });
