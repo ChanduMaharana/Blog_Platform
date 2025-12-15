@@ -18,15 +18,14 @@ export class Login {
   constructor(private auth: AuthService, private router: Router) {}
 
 onLogin() {
-    this.auth.login(this.email, this.password).subscribe({
-      next: (res) => {
-        this.auth.saveToken(res.token); 
-        this.router.navigate(['/admin/dashboard']);
-        
-      },
-      error: (err) => {
-        alert(err.error.message || 'Login failed');
-      },
-    });
-  }
+  this.auth.login(this.email, this.password).subscribe({
+    next: (res) => {
+      this.auth.saveToken(res.token);
+      this.router.navigate(['/admin/dashboard']);
+    },
+    error: (err) => {
+      alert(err.error.message || 'Login failed');
+    },
+  });
+}
 }
