@@ -4,7 +4,7 @@ import {
   createPost,getPosts,updatePost,deletePost,getPaginatedPosts,} from "../controllers/post.controller.js";
 import { getComments, addComment } from "../controllers/comment.controller.js";
 
-// import { isBot } from "../utils/isBot.js";
+import { isBot } from "../utils/isBot.js";
 // import { seoHTML } from "../utils/seoTemplate.js";
 import Post from "../models/post.model.js";
 
@@ -25,18 +25,24 @@ router.get("/:id", async (req, res) => {
     : `https://blog-backend-biys.onrender.com/uploads/${post.image}`;
 
   const ua = req.headers["user-agent"] || "";
+  const isBot = /googlebot|facebookexternalhit|twitterbot|linkedinbot|whatsapp/i.test(ua);
 
   if (/googlebot|facebookexternalhit|twitterbot/i.test(ua)) {
     return res.send(`
       <!DOCTYPE html>
-      <html>
+      <html lang="en">
       <head>
         <title>${post.ogTitle || post.title}</title>
-        <meta name="description" content="${post.metaDescription}">
+        <meta name="description" content="${post.metaDescription || ""}">
+
         <meta property="og:title" content="${post.ogTitle || post.title}">
-        <meta property="og:description" content="${post.ogDescription}">
+        <meta property="og:description" content="${post.ogDescription || post.metaDescription || ""}">
         <meta property="og:image" content="${image}">
-        <meta property="og:url" content="https://blog-platform-xybron-git-master-220101120198s-projects.vercel.app/${post.id}">
+        <meta property="og:url" content="https://blog-platform-xybron-git-master-220101120198s-projects.vercel.app/post/${post.id}">
+        <meta property="og:type" content="article">
+
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="${image}">
       </head>
       <body></body>
       </html>

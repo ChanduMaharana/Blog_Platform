@@ -5,6 +5,7 @@ import { Meta, Title } from '@angular/platform-browser';
 import { PostDetail, PostSummary } from '../../services/post-service';
 import { LucideAngularModule } from 'lucide-angular';
 import { CommentSection } from '../../shared/comment-section/comment-section';
+import { environment } from '../../environments/environment.prod';
 
 @Component({
   selector: 'app-postdetails',
@@ -30,14 +31,34 @@ export class Postdetails {
 
   ngOnInit() {
     this.post = this.route.snapshot.data['post'];
-    this.updateSEO();
-    this.loading = false;
+
+    this.post = {
+    ...this.post,
+    coverImage: this.post.coverImage,
+    image: this.post.image,
+    content: this.post.content ?? ''
+  };
+  
+  this.loadRelatedPosts();
+  this.updateSEO();
+  this.loading = false;
   }
+  loadRelatedPosts() {
+  fetch(`${environment.apiUrl}/posts`)
+    .then(res => res.json())
+    .then(posts => {
+      this.relatedPosts = posts
+        .filter((p: any) => p.id !== this.post.id)
+        .slice(0, 3);
+    });
+
+  }
+
 
   updateSEO() {
     const title = this.post.ogTitle || this.post.title!;
     const description = this.post.metaDescription || this.post.description!;
-    const image = this.post.coverImage!; // already FULL URL from backend
+    const image = this.post.coverImage!; 
     const url = `${this.SITE_URL}/post/${this.post.id}`;
 
     this.title.setTitle(title);
