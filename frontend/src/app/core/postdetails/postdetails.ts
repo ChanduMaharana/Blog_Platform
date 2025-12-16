@@ -6,7 +6,6 @@ import { PostDetail, PostSummary } from '../../services/post-service';
 import { LucideAngularModule } from 'lucide-angular';
 import { CommentSection } from '../../shared/comment-section/comment-section';
 import { environment } from '../../environments/environment.prod';
-
 @Component({
   selector: 'app-postdetails',
   standalone: true,
@@ -23,11 +22,16 @@ export class Postdetails {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
+    public router: Router,
     private title: Title,
     private meta: Meta,
     @Inject(DOCUMENT) private document: Document
   ) {}
+
+//   goHome() {
+//   this.router.navigateByUrl('/home');
+// }
+
 
   ngOnInit() {
     this.post = this.route.snapshot.data['post'];
@@ -57,7 +61,8 @@ export class Postdetails {
             : 'assets/default.jpg'
         }));
     });
-  }
+}
+
 
 
   updateSEO() {
