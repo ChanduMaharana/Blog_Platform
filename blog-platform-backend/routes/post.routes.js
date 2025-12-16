@@ -27,7 +27,7 @@ router.get("/:id", async (req, res) => {
   const ua = req.headers["user-agent"] || "";
   const isBot = /googlebot|facebookexternalhit|twitterbot|linkedinbot|whatsapp/i.test(ua);
 
-  if (/googlebot|facebookexternalhit|twitterbot/i.test(ua)) {
+  if (isBot) {
     return res.send(`
       <!DOCTYPE html>
       <html lang="en">

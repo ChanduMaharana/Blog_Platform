@@ -1,13 +1,11 @@
 <div *ngIf="!loading; else loadingTemplate"
      class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
-  <!-- Back Button -->
-  <button routerLink=" "
+  <button routerLink="/home"
     class="text-gray-500 cursor-pointer text-sm mb-6 inline-block hover:underline">
     ← Back to Posts
   </button>
 
-  <!-- TITLE -->
   <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 text-gray-900 leading-tight">
     {{ post?.title }}
   </h1>
@@ -83,9 +81,10 @@
         class="cursor-pointer bg-white border border-blue-200 rounded-lg shadow hover:shadow-lg transition overflow-hidden">
 
         <div class="relative">
-          <img [src]="related.coverImage"
-               [alt]="related.title"
-               class="w-full h-40 object-cover" />
+         <img
+         [src]="related.coverImage || 'assets/default.jpg'"
+         [alt]="related.title"
+         class="w-full h-40 object-cover" />
 
           <span
             class="absolute top-2 left-2 px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
