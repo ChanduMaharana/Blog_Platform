@@ -1,18 +1,15 @@
 {
   "version": 2,
-  "framework": "angular",
-  "buildCommand": "npm run build:ssr",
-  "outputDirectory": "dist/blog-platform/browser",
-  "rewrites": [
+  "builds": [
     {
-      "source": "/post/:id",
-      "destination": "https://blog-backend-biys.onrender.com/api/posts/:id"
+      "src": "dist/blog-platform/server/main.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/dist/blog-platform/server/server.mjs"
+      "dest": "dist/blog-platform/server/main.js"
     }
   ],
   "functions": {
@@ -22,3 +19,4 @@
     }
   }
 }
+

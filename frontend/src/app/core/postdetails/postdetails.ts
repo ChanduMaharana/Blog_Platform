@@ -78,50 +78,61 @@ export class Postdetails implements OnInit {
     });
   }
 
-  updateSEO() {
-    const title = this.post.ogTitle || this.post.title || 'Blog Post';
-    const description = this.post.metaDescription || this.post.description || '';
-    const image = this.post.coverImage || this.post.image || '';
-    const url = this.post.canonicalUrl || `${this.SITE_URL}/post/${this.post.id}`;
-    const author = this.post.author || 'Unknown';
-    const publishedDate = this.post.date || new Date().toISOString();
+ updateSEO() {
+  const title: string =
+    this.post.ogTitle ??
+    this.post.title ??
+    'Blog';
 
-    // Update title
-    this.title.setTitle(title);
+  const description: string =
+    this.post.metaDescription ??
+    this.post.description ??
+    'Read this blog post';
 
-    // Clear existing meta tags
-    this.meta.removeTag('name="description"');
-    this.meta.removeTag('property="og:title"');
-    this.meta.removeTag('property="og:description"');
-    this.meta.removeTag('property="og:image"');
-    this.meta.removeTag('property="og:url"');
-    this.meta.removeTag('name="twitter:card"');
-    this.meta.removeTag('property="twitter:title"');
-    this.meta.removeTag('property="twitter:description"');
-    this.meta.removeTag('property="twitter:image"');
-    this.meta.removeTag('property="og:type"');
-    this.meta.removeTag('property="og:site_name"');
+  const image: string =
+    this.post.coverImage ??
+    `${this.SITE_URL}/assets/default-og.jpg`;
 
-    // Add new meta tags
-    this.meta.addTag({ name: 'description', content: description });
-    this.meta.addTag({ property: 'og:title', content: title });
-    this.meta.addTag({ property: 'og:description', content: description });
-    this.meta.addTag({ property: 'og:image', content: image });
-    this.meta.addTag({ property: 'og:url', content: url });
-    this.meta.addTag({ property: 'og:type', content: 'article' });
-    this.meta.addTag({ property: 'og:site_name', content: 'BlogPlatform' });
-    
-    this.meta.addTag({ name: 'twitter:card', content: 'summary_large_image' });
-    this.meta.addTag({ name: 'twitter:title', content: title });
-    this.meta.addTag({ name: 'twitter:description', content: description });
-    this.meta.addTag({ name: 'twitter:image', content: image });
+  const url: string =
+    `${this.SITE_URL}/post/${this.post.id}`;
 
-    // Add canonical link
-    this.updateCanonicalLink(url);
+  this.title.setTitle(title);
 
-    // Inject JSON-LD
-    this.injectJsonLD(title, description, image, url, author, publishedDate);
-  }
+  this.meta.updateTag({
+    name: 'description',
+    content: description
+  });
+
+  this.meta.updateTag({
+    property: 'og:title',
+    content: title
+  });
+
+  this.meta.updateTag({
+    property: 'og:description',
+    content: description
+  });
+
+  this.meta.updateTag({
+    property: 'og:image',
+    content: image
+  });
+
+  this.meta.updateTag({
+    property: 'og:type',
+    content: 'article'
+  });
+
+  this.meta.updateTag({
+    property: 'og:url',
+    content: url
+  });
+
+  this.meta.updateTag({
+    name: 'twitter:card',
+    content: 'summary_large_image'
+  });
+}
 
   updateCanonicalLink(url: string) {
     let canonicalLink = this.document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
