@@ -20,44 +20,43 @@ router.get("/:id", async (req, res) => {
   const post = await Post.findByPk(req.params.id);
   if (!post) return res.status(404).send("Not found");
 
-  const image = post.coverImage?.startsWith("http")
-    ? post.coverImage
-    : "https://blog-backend-biys.onrender.com/uploads/default-og.jpg";
+  const image = post.image?.startsWith("http")
+    ? post.image
+    : `https://blog-backend-biys.onrender.com/uploads/${post.image}`;
 
   const ua = req.headers["user-agent"] || "";
-  const isBot = /facebookexternalhit|twitterbot|linkedinbot|googlebot|whatsapp/i.test(ua);
+  const isBot = /googlebot|facebookexternalhit|twitterbot|linkedinbot|whatsapp/i.test(ua);
 
   if (isBot) {
-    return res.status(200).send(`
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<title>${post.ogTitle || post.title}</title>
+    return res.send(`
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <title>${post.ogTitle || post.title}</title>
+        <meta name="description" content="${post.metaDescription || ""}">
 
-<meta name="description" content="${post.metaDescription || ""}">
+        <meta property="og:title" content="${post.ogTitle || post.title}">
+        <meta property="og:description" content="${post.ogDescription || post.metaDescription || ""}">
+        <meta property="og:image" content="${image}">
+        <meta property="og:url" content="https://blog-platform-xybron-git-master-220101120198s-projects.vercel.app/post/${post.id}">
+        <meta property="og:type" content="article">
 
-<meta property="og:title" content="${post.ogTitle || post.title}">
-<meta property="og:description" content="${post.ogDescription || post.metaDescription || ""}">
-<meta property="og:image" content="${image}">
-<meta property="og:image:secure_url" content="${image}">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://blog-platform-xybron-git-master-220101120198s-projects.vercel.app/posts/${post.id}">
-
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="${image}">
-</head>
-<body></body>
-</html>
-`);
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="${image}">
+      </head>
+      <body></body>
+      </html>
+    `);
   }
 
-  // Normal users
   res.json({
     ...post.dataValues,
     image,
     coverImage: image,
   });
 });
+
+
 
 router.put("/:id", updatePost);
 router.delete("/:id", deletePost);
