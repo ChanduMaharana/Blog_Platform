@@ -164,30 +164,47 @@ updateSEO() {
     }
   }
 
+  private getShareUrl(): string {
+  return `https://blog-backend-biys.onrender.com/posts/${this.post.id}`;
+}
+
   shareOnFacebook() {
-    const url = encodeURIComponent(window.location.href);
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
-  }
+  const url = encodeURIComponent(this.getShareUrl());
+  window.open(
+    `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+    '_blank'
+  );
+}
+
 
   shareOnTwitter() {
-    const url = encodeURIComponent(window.location.href);
-    const text = encodeURIComponent(this.post?.title || '');
-    window.open(
-      `https://twitter.com/intent/tweet?url=${url}&text=${text}`,
-      '_blank'
-    );
-  }
+  const url = encodeURIComponent(this.getShareUrl());
+  const text = encodeURIComponent(this.post?.title || '');
+  window.open(
+    `https://twitter.com/intent/tweet?url=${url}&text=${text}`,
+    '_blank'
+  );
+}
 
-  shareOnLinkedIn() {
-    const url = encodeURIComponent(window.location.href);
-    window.open(
-      `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
-      '_blank'
-    );
-  }
+shareOnLinkedIn() {
+  const url = encodeURIComponent(this.getShareUrl());
+  window.open(
+    `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
+    '_blank'
+  );
+}
+ shareOnWhatsApp() {
+  const url = encodeURIComponent(this.getShareUrl());
+  const text = encodeURIComponent(this.post?.title || '');
+  window.open(
+    `https://api.whatsapp.com/send?text=${text}%20${url}`,
+    '_blank'
+  );
+}
 
-  copyLink() {
-    navigator.clipboard.writeText(window.location.href);
-    alert('Link copied!');
-  }
+copyLink() {
+  navigator.clipboard.writeText(this.getShareUrl());
+  alert('Share link copied!');
+}
+
 }
