@@ -1,7 +1,7 @@
 <div *ngIf="!loading; else loadingTemplate"
      class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
- <button (click)="router.navigateByUrl('/home')"
+ <button (click)="router.navigateByUrl('/')"
     class="text-gray-500 cursor-pointer text-sm mb-6 inline-block hover:underline">
     ← Back to Posts
   </button>
@@ -43,6 +43,7 @@
       <lucide-icon name="linkedin" class="w-4 h-4 text-blue-700"></lucide-icon>
       LinkedIn
     </button>
+
     <button (click)="shareOnWhatsApp()"
       class="flex items-center gap-2 px-3 py-2 border border-gray-200 text-gray-800 font-semibold rounded text-xs sm:text-sm hover:bg-gray-100 transition">
       <lucide-icon name="Watsapp" class="w-4 h-4 text-blue-700"></lucide-icon>

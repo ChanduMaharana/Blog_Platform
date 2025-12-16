@@ -68,7 +68,7 @@ export class Postdetails implements OnInit {
         .slice(0, 3)
         .map(p => ({
         ...p,
-        coverImage: p.coverImage || 'assets/default.jpg'
+        image: p.image || 'assets/default.jpg'
   }));
 
       },
