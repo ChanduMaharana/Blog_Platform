@@ -64,13 +64,13 @@ export class Postdetails implements OnInit {
     this.postService.list().subscribe({
       next: (posts) => {
         this.relatedPosts = posts
-          .filter(p => p.id !== this.post.id && p.published)
-          .slice(0, 3)
-          .map(p => ({
-            ...p,
-            coverImage: this.postService.getFullImageUrl(p.coverImage),
-            image: this.postService.getFullImageUrl(p.image)
-          }));
+        .filter(p => p.id !== this.post.id)
+        .slice(0, 3)
+        .map(p => ({
+        ...p,
+        coverImage: p.coverImage || 'assets/default.jpg'
+  }));
+
       },
       error: (error) => {
         console.error('Error loading related posts:', error);
@@ -78,61 +78,20 @@ export class Postdetails implements OnInit {
     });
   }
 
- updateSEO() {
-  const title: string =
-    this.post.ogTitle ??
-    this.post.title ??
-    'Blog';
-
-  const description: string =
-    this.post.metaDescription ??
-    this.post.description ??
-    'Read this blog post';
-
-  const image: string =
-    this.post.coverImage ??
-    `${this.SITE_URL}/assets/default-og.jpg`;
-
-  const url: string =
-    `${this.SITE_URL}/post/${this.post.id}`;
+updateSEO() {
+  const title = this.post.ogTitle ?? this.post.title ?? '';
+  const description = this.post.metaDescription ?? this.post.description ?? '';
+  const image = this.post.coverImage ?? '';
 
   this.title.setTitle(title);
 
-  this.meta.updateTag({
-    name: 'description',
-    content: description
-  });
-
-  this.meta.updateTag({
-    property: 'og:title',
-    content: title
-  });
-
-  this.meta.updateTag({
-    property: 'og:description',
-    content: description
-  });
-
-  this.meta.updateTag({
-    property: 'og:image',
-    content: image
-  });
-
-  this.meta.updateTag({
-    property: 'og:type',
-    content: 'article'
-  });
-
-  this.meta.updateTag({
-    property: 'og:url',
-    content: url
-  });
-
-  this.meta.updateTag({
-    name: 'twitter:card',
-    content: 'summary_large_image'
-  });
+  this.meta.updateTag({ name: 'description', content: description });
+  this.meta.updateTag({ property: 'og:title', content: title });
+  this.meta.updateTag({ property: 'og:description', content: description });
+  this.meta.updateTag({ property: 'og:image', content: image });
+  this.meta.updateTag({ property: 'og:type', content: 'article' });
 }
+
 
   updateCanonicalLink(url: string) {
     let canonicalLink = this.document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
