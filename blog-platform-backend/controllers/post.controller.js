@@ -27,6 +27,7 @@ export const createPost = async (req, res) => {
   }
 };
 
+/* GET ALL */
 export const getPosts = async (req, res) => {
   const posts = await Post.findAll({
     order: [["id", "DESC"]],
@@ -42,6 +43,7 @@ export const getPosts = async (req, res) => {
   );
 };
 
+/* GET BY ID */
 export const getPostById = async (req, res) => {
   const post = await Post.findByPk(req.params.id);
   if (!post) return res.status(404).json({ message: "Not found" });
@@ -52,6 +54,7 @@ export const getPostById = async (req, res) => {
     coverImage: normalizeImage(post.coverImage),
   });
 };
+
 
 
 export const updatePost = async (req, res) => {
