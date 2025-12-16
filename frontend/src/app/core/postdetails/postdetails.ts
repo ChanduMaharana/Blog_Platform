@@ -88,18 +88,24 @@ export class Postdetails {
   }
 
   injectJsonLD(title: string, description: string, image: string, url: string) {
-    const script = document.createElement('script');
-    script.type = 'application/ld+json';
-    script.text = JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'BlogPosting',
-      headline: title,
-      description,
-      image,
-      url
-    });
-    document.head.appendChild(script);
-  }
+  const existing = document.getElementById('jsonld');
+  if (existing) existing.remove();
+
+  const script = document.createElement('script');
+  script.id = 'jsonld';
+  script.type = 'application/ld+json';
+  script.text = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description,
+    image,
+    url
+  });
+
+  document.head.appendChild(script);
+}
+
 
   viewPost(id?: number) {
     if (id) this.router.navigate(['/post', id]);
