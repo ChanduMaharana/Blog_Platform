@@ -8,8 +8,9 @@
   ],
   "routes": [
     {
-      "src": "/(.*)",
-      "dest": "dist/blog-platform/server/main.js"
+      "src": "/posts/(.*)",
+      "headers": { "User-Agent": ".*(facebookexternalhit|twitterbot|whatsapp|linkedinbot).*" },
+      "dest": "https://blog-backend-biys.onrender.com/seo/posts/$1"
     }
   ],
   "functions": {
