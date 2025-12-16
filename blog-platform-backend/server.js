@@ -33,6 +33,45 @@ if (!fs.existsSync(BANNERS_DIR)) fs.mkdirSync(BANNERS_DIR, { recursive: true });
 // app.use("/uploads", express.static(UPLOADS_DIR));
 // app.use("/uploads/banners", express.static(BANNERS_DIR));
 
+// backend server.js
+app.get('/posts/:id', async (req, res) => {
+  const ua = req.headers['user-agent'] || '';
+  const isBot = /facebookexternalhit|twitterbot|googlebot|whatsapp/i.test(ua);
+
+  const post = await Post.findByPk(req.params.id);
+  if (!post) return res.status(404).send('Not found');
+
+  const image = post.coverImage?.startsWith('http')
+    ? post.coverImage
+    : 'https://blog-backend-biys.onrender.com/uploads/default-og.jpg';
+
+  if (isBot) {
+    return res.status(200).send(`
+<!DOCTYPE html>
+<html>
+<head>
+<title>${post.ogTitle || post.title}</title>
+<meta name="description" content="${post.metaDescription || ''}">
+
+<meta property="og:title" content="${post.ogTitle || post.title}">
+<meta property="og:description" content="${post.metaDescription || ''}">
+<meta property="og:image" content="${image}">
+<meta property="og:image:secure_url" content="${image}">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://blog-backend-biys.onrender.com/posts/${post.id}">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="${image}">
+</head>
+<body></body>
+</html>
+`);
+  }
+
+  res.redirect(`https://blog-platform-xybron-git-master-220101120198s-projects.vercel.app/post/${post.id}`);
+});
+
+
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
