@@ -53,9 +53,16 @@ export class Postdetails {
     .then(posts => {
       this.relatedPosts = posts
         .filter((p: any) => p.id !== this.post.id)
-        .slice(0, 3);
-    });
+        .slice(0, 3)
+        .map((p: any) => ({
+          ...p,
+          coverImage: p.coverImage && p.coverImage.startsWith('http')
+            ? p.coverImage
+            : 'https://blog-backend-biys.onrender.com/uploads/default-og.jpg'
+        }))
+    })
 }
+
 
 
 
