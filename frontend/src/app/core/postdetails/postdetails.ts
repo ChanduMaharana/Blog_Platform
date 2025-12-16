@@ -85,7 +85,7 @@ updateSEO() {
   const description: string =
     this.post.metaDescription ??
     this.post.description ??
-    'Read this blog post on Blog Platform';
+    'Read this blog post';
 
   const image: string =
     this.post.coverImage ??
@@ -93,49 +93,17 @@ updateSEO() {
 
   const url: string = `${this.SITE_URL}/post/${this.post.id}`;
 
-  // Page title
   this.title.setTitle(title);
 
-  // Meta tags (ALL strings — NO undefined)
-  this.meta.updateTag({
-    name: 'description',
-    content: description
-  });
+  this.meta.updateTag({ name: 'description', content: description });
+  this.meta.updateTag({ property: 'og:title', content: title });
+  this.meta.updateTag({ property: 'og:description', content: description });
+  this.meta.updateTag({ property: 'og:image', content: image });
+  this.meta.updateTag({ property: 'og:type', content: 'article' });
+  this.meta.updateTag({ property: 'og:url', content: url });
 
-  this.meta.updateTag({
-    property: 'og:title',
-    content: title
-  });
-
-  this.meta.updateTag({
-    property: 'og:description',
-    content: description
-  });
-
-  this.meta.updateTag({
-    property: 'og:image',
-    content: image
-  });
-
-  this.meta.updateTag({
-    property: 'og:type',
-    content: 'article'
-  });
-
-  this.meta.updateTag({
-    property: 'og:url',
-    content: url
-  });
-
-  this.meta.updateTag({
-    name: 'twitter:card',
-    content: 'summary_large_image'
-  });
-
-  this.meta.updateTag({
-    name: 'twitter:image',
-    content: image
-  });
+  this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+  this.meta.updateTag({ name: 'twitter:image', content: image });
 }
 
 

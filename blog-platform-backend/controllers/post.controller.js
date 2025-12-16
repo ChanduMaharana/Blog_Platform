@@ -3,13 +3,11 @@ import Category from "../models/category.model.js";
 
 const BASE_URL = process.env.BASE_URL || "https://blog-backend-biys.onrender.com";
 
-const normalizeImage = (img) => {
-  if (!img) return null;
+const normalizeImage = (img) =>
+  img?.startsWith('http')
+    ? img
+    : `https://blog-backend-biys.onrender.com/uploads/${img}`;
 
-  if (img.startsWith("http")) return img;
-
-  return `${BASE_URL}/uploads/${img}`;
-};
 
 export const createPost = async (req, res) => {
   try {

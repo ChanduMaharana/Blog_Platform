@@ -16,7 +16,7 @@ export const routes: Routes = [
   { path: 'posts', component: Postlist },
   // { path: 'posts/:id', component: Postdetails },
    {
-  path: 'post/:id',
+  path: 'posts/:id',
   component: Postdetails,
   resolve: { post: PostResolver }
 },
