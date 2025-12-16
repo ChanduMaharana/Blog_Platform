@@ -79,18 +79,65 @@ export class Postdetails implements OnInit {
   }
 
 updateSEO() {
-  const title = this.post.ogTitle ?? this.post.title ?? '';
-  const description = this.post.metaDescription ?? this.post.description ?? '';
-  const image = this.post.coverImage ?? '';
+  const title: string =
+    this.post.ogTitle ?? this.post.title ?? 'Blog Platform';
 
+  const description: string =
+    this.post.metaDescription ??
+    this.post.description ??
+    'Read this blog post on Blog Platform';
+
+  const image: string =
+    this.post.coverImage ??
+    'https://blog-backend-biys.onrender.com/uploads/default-og.jpg';
+
+  const url: string = `${this.SITE_URL}/post/${this.post.id}`;
+
+  // Page title
   this.title.setTitle(title);
 
-  this.meta.updateTag({ name: 'description', content: description });
-  this.meta.updateTag({ property: 'og:title', content: title });
-  this.meta.updateTag({ property: 'og:description', content: description });
-  this.meta.updateTag({ property: 'og:image', content: image });
-  this.meta.updateTag({ property: 'og:type', content: 'article' });
+  // Meta tags (ALL strings — NO undefined)
+  this.meta.updateTag({
+    name: 'description',
+    content: description
+  });
+
+  this.meta.updateTag({
+    property: 'og:title',
+    content: title
+  });
+
+  this.meta.updateTag({
+    property: 'og:description',
+    content: description
+  });
+
+  this.meta.updateTag({
+    property: 'og:image',
+    content: image
+  });
+
+  this.meta.updateTag({
+    property: 'og:type',
+    content: 'article'
+  });
+
+  this.meta.updateTag({
+    property: 'og:url',
+    content: url
+  });
+
+  this.meta.updateTag({
+    name: 'twitter:card',
+    content: 'summary_large_image'
+  });
+
+  this.meta.updateTag({
+    name: 'twitter:image',
+    content: image
+  });
 }
+
 
 
   updateCanonicalLink(url: string) {
