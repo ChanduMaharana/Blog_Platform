@@ -15,6 +15,7 @@ import "./models/admin.model.js";
 
 import path from "path";
 import fs from "fs";
+import { createDefaultAdmin } from "./utils/createDefaultAdmin.js";
 import { fileURLToPath } from "url";
 
 dotenv.config();
@@ -95,7 +96,8 @@ Category.hasMany(Post, { foreignKey: "categoryId" });
 
 sequelize
 .sync({ alter: false })
-  .then(() => {
+  .then(async () => {
+    await createDefaultAdmin(); 
     const PORT = process.env.PORT || 8080;
      console.log("Banners Folder:", BANNERS_DIR);
     app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
