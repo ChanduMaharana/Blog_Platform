@@ -5,8 +5,8 @@
   "outputDirectory": "dist/blog-platform/browser",
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "source": "/post/:id",
+      "destination": "https://blog-backend-biys.onrender.com/api/posts/:id"
     }
   ],
   "routes": [

@@ -28,9 +28,9 @@ export class Postdetails {
     @Inject(DOCUMENT) private document: Document
   ) {}
 
-//   goHome() {
-//   this.router.navigateByUrl('/home');
-// }
+  goHome() {
+  this.router.navigateByUrl('/home');
+}
 
 
   ngOnInit() {
@@ -58,7 +58,7 @@ export class Postdetails {
           ...p,
           coverImage: p.coverImage?.startsWith('http')
             ? p.coverImage
-            : 'assets/default.jpg'
+            : 'https://blog-backend-biys.onrender.com/uploads/' + p.coverImage
         }));
     });
 }

@@ -1,7 +1,7 @@
 <div *ngIf="!loading; else loadingTemplate"
      class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
-  <button (click)="router.navigateByUrl('/home')"
+  <button (click)="goHome()"
     class="text-gray-500 cursor-pointer text-sm mb-6 inline-block hover:underline">
     ← Back to Posts
   </button>
