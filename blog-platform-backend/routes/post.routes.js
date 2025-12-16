@@ -1,12 +1,7 @@
 import express from "express";
 import { upload } from "../middleware/uploads.js";
 import {
-  createPost,
-  getPosts,
-  updatePost,
-  deletePost,
-  getPaginatedPosts,
-} from "../controllers/post.controller.js";
+  createPost,getPosts,updatePost,deletePost,getPaginatedPosts,} from "../controllers/post.controller.js";
 import { getComments, addComment } from "../controllers/comment.controller.js";
 
 // import { isBot } from "../utils/isBot.js";
