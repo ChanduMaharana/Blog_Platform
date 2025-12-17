@@ -43,6 +43,10 @@ export class Postdetails implements OnInit {
     }
   }
 
+  goBack() {
+  window.history.back();
+}
+
   loadPost(id: number) {
     this.loading = true;
     this.postService.getById(id).subscribe({
@@ -67,22 +71,24 @@ export class Postdetails implements OnInit {
   }
 
   loadRelatedPosts() {
-    this.postService.list().subscribe({
-      next: (posts) => {
-        this.relatedPosts = posts
+  this.postService.list().subscribe({
+    next: (posts) => {
+      this.relatedPosts = posts
         .filter(p => p.id !== this.post.id)
         .slice(0, 3)
         .map(p => ({
-        ...p,
-        image: p.image || 'assets/default.jpg'
-  }));
+          ...p,
+          image: this.postService.getFullImageUrl(
+            p.image || p.coverImage
+          )
+        }));
+    },
+    error: (error) => {
+      console.error('Error loading related posts:', error);
+    }
+  });
+}
 
-      },
-      error: (error) => {
-        console.error('Error loading related posts:', error);
-      }
-    });
-  }
 
 updateSEO() {
   const title: string =

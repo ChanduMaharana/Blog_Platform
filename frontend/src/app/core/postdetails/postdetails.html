@@ -1,7 +1,7 @@
 <div *ngIf="!loading; else loadingTemplate"
      class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
- <button (click)="router.navigateByUrl('/posts')"
+ <button (click)="goBack()"
     class="text-gray-500 cursor-pointer text-sm mb-6 inline-block hover:underline">
     ← Back to Posts
   </button>
@@ -46,8 +46,8 @@
 
     <button (click)="shareOnWhatsApp()"
       class="flex items-center gap-2 px-3 py-2 border border-gray-200 text-gray-800 font-semibold rounded text-xs sm:text-sm hover:bg-gray-100 transition">
-      <lucide-icon name="Watsapp" class="w-4 h-4 text-blue-700"></lucide-icon>
-      Watsapp
+      <lucide-icon name="message-circle" class="w-4 h-4 text-green-600"></lucide-icon>
+      WhatsApp
     </button>
 
     <button (click)="copyLink()"
