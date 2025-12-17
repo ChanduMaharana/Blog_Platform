@@ -1,7 +1,7 @@
 <div *ngIf="!loading; else loadingTemplate"
      class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
- <button (click)="router.navigateByUrl('/')"
+ <button (click)="router.navigateByUrl('/posts')"
     class="text-gray-500 cursor-pointer text-sm mb-6 inline-block hover:underline">
     ← Back to Posts
   </button>
@@ -88,7 +88,7 @@
 
         <div class="relative">
          <img
-         [src]="related.coverImage || 'assets/default.jpg'"
+         [src]="related.image || 'assets/default.jpg'"
          [alt]="related.title"
          class="w-full h-40 object-cover" />
 
