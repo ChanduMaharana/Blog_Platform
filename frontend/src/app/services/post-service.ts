@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../environments/environment.prod';
+import { environment } from '../environments/environment';
 
 export interface PostSummary {
   id: number;
@@ -33,7 +33,6 @@ export interface PostDetail extends PostSummary {
 @Injectable({ providedIn: 'root' })
 export class PostService {
   private api = `${environment.apiUrl}/posts`;
-  private readonly SITE_URL = 'https://blog-platform-xybron-git-master-220101120198s-projects.vercel.app';
 
   constructor(private http: HttpClient) {}
 
@@ -55,7 +54,7 @@ export class PostService {
     });
 
     if (file) {
-      formData.append("image", file, file.name);
+      formData.append('image', file, file.name);
     }
 
     return this.http.post(this.api, formData);
@@ -82,16 +81,16 @@ export class PostService {
   }
 
   getPaginatedPosts(page: number, limit: number = 6): Observable<any> {
-    return this.http.get<any>(`${this.api}/paginated/list?page=${page}&limit=${limit}`);
+    return this.http.get<any>(
+      `${this.api}/paginated/list?page=${page}&limit=${limit}`
+    );
   }
 
   getFullImageUrl(img?: string): string {
     if (!img) return 'assets/default.jpg';
     if (img.startsWith('http')) return img;
-    
-    const backendUrl = 'https://blog-backend-biys.onrender.com/uploads/';
-    if (img.includes(backendUrl)) return img;
-    
-    return `${backendUrl}${img.replace(/^\/+/, '')}`;
+
+    const backendBase = environment.apiUrl.replace('/api', '');
+    return `${backendBase}/uploads/${img.replace(/^\/+/, '')}`;
   }
 }
