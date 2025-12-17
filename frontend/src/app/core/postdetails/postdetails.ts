@@ -43,9 +43,10 @@ export class Postdetails implements OnInit {
     }
   }
 
-  goBack() {
-  window.history.back();
+ goBack() {
+  this.router.navigate(['/posts']);
 }
+
 
   loadPost(id: number) {
     this.loading = true;
