@@ -1,23 +1,18 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "dist/blog-platform/server/main.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/posts/(.*)",
-      "headers": { "User-Agent": ".*(facebookexternalhit|twitterbot|whatsapp|linkedinbot).*" },
-      "dest": "https://blog-backend-biys.onrender.com/seo/posts/$1"
-    }
-  ],
   "functions": {
     "dist/blog-platform/server/server.mjs": {
       "runtime": "nodejs20.x",
       "maxDuration": 60
     }
-  }
+  },
+  "routes": [
+    {
+      "src": "/posts/(.*)",
+      "headers": {
+        "User-Agent": ".*(facebookexternalhit|twitterbot|whatsapp|linkedinbot).*"
+      },
+      "dest": "https://blog-backend-biys.onrender.com/seo/posts/$1"
+    }
+  ]
 }
-
