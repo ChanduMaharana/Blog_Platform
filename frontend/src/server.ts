@@ -42,7 +42,7 @@ app.use((req, res, next) => {
 /**
  * Handle server-side rendering for all other routes
  */
-app.get('/*', async (req, res, next) => {
+app.get('', async (req, res, next) => {
   try {
     const response = await angularApp.handle(req);
 
