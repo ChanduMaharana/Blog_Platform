@@ -42,7 +42,7 @@ app.use((req, res, next) => {
 /**
  * Handle server-side rendering for all other routes
  */
-app.get('', async (req, res, next) => {
+app.use(async (req, res, next) => {
   try {
     const response = await angularApp.handle(req);
 
@@ -52,10 +52,11 @@ app.get('', async (req, res, next) => {
       next();
     }
   } catch (err) {
-    console.error("SSR Error:", err);
+    console.error('SSR Error:', err);
     next(err);
   }
 });
+
 
 /**
  * Start the server (Railway compatible)
