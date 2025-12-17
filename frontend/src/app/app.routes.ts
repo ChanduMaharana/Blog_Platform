@@ -26,6 +26,6 @@ export const routes: Routes = [
 
   { path: 'admin/dashboard', component: AdminDashboard, canActivate: [AuthGuard] },
 
-  { path: '**', redirectTo: 'home' }
+  { path: '**', component: Home }
 ];
 
