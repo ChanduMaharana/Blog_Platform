@@ -40,7 +40,7 @@ app.use(
   cors({
     origin: [
       'https://blog-platform-xybron.vercel.app',
-      'https://blog-platform-xybron-53cyrn27b-220101120198s-projects.vercel.app/'
+      'https://blog-platform-xybron-git-master-220101120198s-projects.vercel.app'
     ],
     methods: 'GET,POST,PUT,DELETE,PATCH',
     allowedHeaders: ['Content-Type', 'Authorization'],
