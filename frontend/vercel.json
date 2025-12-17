@@ -2,11 +2,11 @@
   "version": 2,
   "routes": [
     {
-      "src": "/posts/(.*)",
+      "src": "/posts/(?<slug>.*)",
       "headers": {
         "User-Agent": ".*(facebookexternalhit|twitterbot|whatsapp|linkedinbot).*"
       },
-      "dest": "https://blog-backend-biys.onrender.com/seo/posts/$1"
+      "dest": "https://blog-backend-biys.onrender.com/seo/posts/$slug"
     }
   ]
 }
