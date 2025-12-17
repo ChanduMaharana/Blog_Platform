@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ManagementShell } from '../../../shared/management-shell/management-shell';
 import { ListCard } from "../../../layout/list-card/list-card";
@@ -17,7 +17,7 @@ type Banner = {
 @Component({
   selector: 'app-banner',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ManagementShell, ListCard],
+  imports: [CommonModule,FormsModule, ReactiveFormsModule, ManagementShell, ListCard],
   templateUrl: './banner.component.html',
 })
 export class BannerComponent {

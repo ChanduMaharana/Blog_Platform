@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ListCard } from "../../../layout/list-card/list-card";
 import { ManagementShell } from "../../../shared/management-shell/management-shell";
@@ -8,7 +8,7 @@ import { CategoryService, Category } from '../../../services/category-service';
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ListCard, ManagementShell],
+  imports: [CommonModule,FormsModule, ReactiveFormsModule, ListCard, ManagementShell],
   templateUrl: './categories.component.html',
 })
 export class CategoriesComponent implements OnInit {

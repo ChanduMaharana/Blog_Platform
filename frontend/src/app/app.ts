@@ -10,7 +10,8 @@ import { Footer } from "./core/footer/footer";
   standalone: true,
   imports: [CommonModule, RouterOutlet, Header, Footer],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css']
+
 })
 export class App {
   protected readonly title = signal('blog-platform');

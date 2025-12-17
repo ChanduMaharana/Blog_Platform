@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
 import { PostService, PostDetail, PostSummary } from '../../services/post-service';
@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment';
 @Component({
   selector: 'app-postdetails',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, CommentSection],
+  imports: [CommonModule, LucideAngularModule, CommentSection,RouterModule],
   templateUrl: './postdetails.html',
 })
 export class Postdetails implements OnInit {

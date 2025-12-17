@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PostService, PostSummary } from '../../services/post-service';
 import { firstValueFrom } from 'rxjs';
@@ -8,9 +8,9 @@ import { environment } from '../../environments/environment.prod';
 @Component({
   selector: 'app-postlist',
   standalone: true,
-  imports: [CommonModule,PaginationComponent],
+  imports: [CommonModule,PaginationComponent,RouterModule],
   templateUrl: './postlist.html',
-  styleUrl: './postlist.css',
+  styleUrls: ['./postlist.css'],
 })
 export class Postlist {
   posts: PostSummary[] = [];

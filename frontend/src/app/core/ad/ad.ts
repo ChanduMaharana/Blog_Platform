@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BannerService, Banner } from '../../services/banner-service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-ad',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,FormsModule],
   templateUrl: './ad.html',
-  styleUrl: './ad.css',
+  styleUrls: ['./ad.css'],
 })
 export class Ad implements OnInit {
   ads: Banner[] = [];
