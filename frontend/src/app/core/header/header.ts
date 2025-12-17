@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-header',
+  standalone: true,
   imports: [FormsModule],
   templateUrl: './header.html',
 })
