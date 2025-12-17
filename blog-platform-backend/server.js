@@ -35,6 +35,19 @@ if (!fs.existsSync(BANNERS_DIR)) fs.mkdirSync(BANNERS_DIR, { recursive: true });
 // app.use("/uploads/banners", express.static(BANNERS_DIR));
 
 // backend server.js
+
+app.use(
+  cors({
+    origin: [
+      'https://blog-platform-xybron.vercel.app',
+      'https://blog-platform-xybron-kydwvl35d-220101120198s-projects.vercel.app/'
+    ],
+    methods: 'GET,POST,PUT,DELETE,PATCH',
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: false
+  })
+);
+
 app.get('/posts/:id', async (req, res) => {
   const ua = req.headers['user-agent'] || '';
   const isBot = /facebookexternalhit|twitterbot|googlebot|whatsapp/i.test(ua);
@@ -75,14 +88,6 @@ app.get('/posts/:id', async (req, res) => {
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
-
-app.use(
-  cors({
-    origin: "*",
-    methods: "GET,POST,PUT,PATCH,DELETE",
-    allowedHeaders: "Content-Type, Authorization",
-  })
-);
 
 app.use(compression());
 
