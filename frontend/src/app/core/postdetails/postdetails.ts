@@ -4,7 +4,7 @@ import { CommonModule, DOCUMENT } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
 import { PostService, PostDetail, PostSummary } from '../../services/post-service';
 import { LucideAngularModule, LUCIDE_ICONS as LUCIDE_TOKEN } from 'lucide-angular';
-import { LUCIDE_ICONS } from '../../lucide-icons';
+import { LUCIDE_ICONS } from 'lucide-angular';
 import { CommentSection } from '../../shared/comment-section/comment-section';
 import { environment } from '../../environments/environment';
 
