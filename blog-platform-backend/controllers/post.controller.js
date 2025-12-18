@@ -3,10 +3,13 @@ import Category from "../models/category.model.js";
 
 const BASE_URL = process.env.BASE_URL || "https://blog-backend-biys.onrender.com";
 
-const normalizeImage = (img) =>
-  img?.startsWith('http')
+const normalizeImage = (img) => {
+  if (!img) return null;
+  return img.startsWith('http')
     ? img
     : `https://blog-backend-biys.onrender.com/uploads/${img}`;
+};
+
 
 
 export const createPost = async (req, res) => {
@@ -33,24 +36,30 @@ export const getPosts = async (req, res) => {
   });
 
   res.json(
-    posts.map(p => ({
+  posts.map(p => {
+    const img = p.coverImage || p.image;
+
+    return {
       ...p.dataValues,
-      image: normalizeImage(p.image),
-      coverImage: normalizeImage(p.coverImage),
-    }))
-  );
+      coverImage: normalizeImage(img),
+      image: normalizeImage(img),
+    };
+  })
+);
+
 };
 
 /* GET BY ID */
 export const getPostById = async (req, res) => {
   const post = await Post.findByPk(req.params.id);
   if (!post) return res.status(404).json({ message: "Not found" });
+const img = post.coverImage || post.image;
 
-  res.json({
-    ...post.dataValues,
-    image: normalizeImage(post.image),
-    coverImage: normalizeImage(post.coverImage),
-  });
+res.json({
+  ...post.dataValues,
+  coverImage: normalizeImage(img),
+  image: normalizeImage(img),
+});
 };
 
 
