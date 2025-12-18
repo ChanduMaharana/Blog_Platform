@@ -38,16 +38,32 @@ if (!fs.existsSync(BANNERS_DIR)) fs.mkdirSync(BANNERS_DIR, { recursive: true });
 
 app.use(
   cors({
-    origin: [
-      'https://vercel.com/220101120198s-projects/blog-platform',
-      'blog-platform-1oopydrlp-220101120198s-projects.vercel.app',
-      'https:localhost:4200'
-    ],
-    methods: 'GET,POST,PUT,DELETE,PATCH',
+    origin: function (origin, callback) {
+      // allow requests with no origin (Postman, curl)
+      if (!origin) return callback(null, true);
+
+      const allowedOrigins = [
+        /^http:\/\/localhost:\d+$/, // localhost any port
+        /^https:\/\/.*\.vercel\.app$/, // ALL vercel apps
+        'https://blog-platform-xybron-git-master-220101120198s-projects.vercel.app'
+      ];
+
+      const isAllowed = allowedOrigins.some(o =>
+        typeof o === 'string' ? o === origin : o.test(origin)
+      );
+
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: false
   })
 );
+
 
 app.get('/posts/:id', async (req, res) => {
   const ua = req.headers['user-agent'] || '';
@@ -101,7 +117,7 @@ Post.belongsTo(Category, { foreignKey: "categoryId" });
 Category.hasMany(Post, { foreignKey: "categoryId" });
 
 sequelize
-.sync({ alter: false })
+.sync()
   .then(async () => {
     await createDefaultAdmin(); 
     const PORT = process.env.PORT || 8080;
