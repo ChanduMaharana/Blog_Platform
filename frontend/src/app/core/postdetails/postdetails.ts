@@ -3,8 +3,8 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
 import { PostService, PostDetail, PostSummary } from '../../services/post-service';
-import { LucideAngularModule, LUCIDE_ICONS as LUCIDE_TOKEN } from 'lucide-angular';
-import { LUCIDE_ICONS } from 'lucide-angular';
+import { LucideAngularModule, LUCIDE_ICONS } from 'lucide-angular';
+import { icons } from 'lucide-angular';
 import { CommentSection } from '../../shared/comment-section/comment-section';
 import { environment } from '../../environments/environment';
 
@@ -14,8 +14,8 @@ import { environment } from '../../environments/environment';
   imports: [CommonModule, LucideAngularModule, CommentSection,RouterModule],
    providers: [
     {
-      provide: LUCIDE_TOKEN,
-      useValue: LUCIDE_ICONS
+      provide: LUCIDE_ICONS,
+      useValue: icons
     }
   ],
   templateUrl: './postdetails.html',
