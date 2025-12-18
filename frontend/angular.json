@@ -5,7 +5,6 @@
   "projects": {
     "blog-platform": {
       "projectType": "application",
-      "schematics": {},
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -14,6 +13,12 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "src/main.ts",
+            "server": "src/main.server.ts",
+            "outputMode": "server",
+            "ssr": {
+              "entry": "src/server.ts"
+            },
+            "prerender": false,
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
@@ -21,15 +26,11 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.css"
-            ],
-            "server": "src/main.server.ts",
-            "outputMode": "server",
-            "ssr": true
+            "styles": ["src/styles.css"]
           },
           "configurations": {
             "production": {
+              "prerender": false,
               "fileReplacements": [
                 {
                   "replace": "src/app/environments/environment.ts",
@@ -51,47 +52,18 @@
               "outputHashing": "all"
             },
             "development": {
+              "prerender": false,
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
             }
           },
           "defaultConfiguration": "production"
-        },
-        "serve": {
-          "builder": "@angular/build:dev-server",
-          "configurations": {
-            "production": {
-              "buildTarget": "blog-platform:build:production"
-            },
-            "development": {
-              "buildTarget": "blog-platform:build:development"
-            }
-          },
-          "defaultConfiguration": "development"
-        },
-        "extract-i18n": {
-          "builder": "@angular/build:extract-i18n"
-        },
-        "test": {
-          "builder": "@angular/build:karma",
-          "options": {
-            "tsConfig": "tsconfig.spec.json",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
-            ],
-            "styles": [
-              "src/styles.css"
-            ]
-          }
         }
       }
     }
   },
   "cli": {
-    "analytics": "6077102d-78f5-4bde-aa95-b906ac586b1d"
+    "analytics": "cf205461-ce0d-4932-8051-21911e4a3349"
   }
 }

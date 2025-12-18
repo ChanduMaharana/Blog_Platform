@@ -1,8 +1,6 @@
-import { RenderMode, ServerRoute } from '@angular/ssr';
+// This file exists ONLY to satisfy Angular 20 route extraction
 
-export const serverRoutes: ServerRoute[] = [
-  {
-    path: '**',
-    renderMode: RenderMode.Prerender
-  }
-];
+export async function getPrerenderParams() {
+  // No static routes to prerender
+  return [];
+}
