@@ -13,11 +13,7 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "src/main.ts",
-            "server": "src/main.server.ts",
             "outputMode": "static",
-            "ssr": {
-              "entry": "src/server.ts"
-            },
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
@@ -29,7 +25,6 @@
           },
           "configurations": {
             "production": {
-              "prerender": false,
               "fileReplacements": [
                 {
                   "replace": "src/app/environments/environment.ts",
