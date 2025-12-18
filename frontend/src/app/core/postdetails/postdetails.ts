@@ -3,7 +3,8 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
 import { PostService, PostDetail, PostSummary } from '../../services/post-service';
-import { LucideAngularModule } from 'lucide-angular';
+import { LucideAngularModule, LUCIDE_ICONS as LUCIDE_TOKEN } from 'lucide-angular';
+import { LUCIDE_ICONS } from '../../lucide-icons';
 import { CommentSection } from '../../shared/comment-section/comment-section';
 import { environment } from '../../environments/environment';
 
@@ -11,6 +12,12 @@ import { environment } from '../../environments/environment';
   selector: 'app-postdetails',
   standalone: true,
   imports: [CommonModule, LucideAngularModule, CommentSection,RouterModule],
+   providers: [
+    {
+      provide: LUCIDE_TOKEN,
+      useValue: LUCIDE_ICONS
+    }
+  ],
   templateUrl: './postdetails.html',
 })
 export class Postdetails implements OnInit {
@@ -44,7 +51,7 @@ export class Postdetails implements OnInit {
   }
 
  goBack() {
-  this.router.navigate(['/posts']);
+  this.router.navigate(['/home']);
 }
 
 
