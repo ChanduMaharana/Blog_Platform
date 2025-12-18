@@ -3,21 +3,13 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
 import { PostService, PostDetail, PostSummary } from '../../services/post-service';
-import { LucideAngularModule, LUCIDE_ICONS } from 'lucide-angular';
-import { icons } from 'lucide-angular';
 import { CommentSection } from '../../shared/comment-section/comment-section';
 import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-postdetails',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, CommentSection,RouterModule],
-   providers: [
-    {
-      provide: LUCIDE_ICONS,
-      useValue: icons
-    }
-  ],
+  imports: [CommonModule, CommentSection,RouterModule],
   templateUrl: './postdetails.html',
 })
 export class Postdetails implements OnInit {
