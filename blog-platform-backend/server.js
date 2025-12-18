@@ -39,8 +39,9 @@ if (!fs.existsSync(BANNERS_DIR)) fs.mkdirSync(BANNERS_DIR, { recursive: true });
 app.use(
   cors({
     origin: [
-      'https://blog-platform-xybron.vercel.app',
-      'https://blog-platform-xybron-git-master-220101120198s-projects.vercel.app'
+      'https://vercel.com/220101120198s-projects/blog-platform',
+      'blog-platform-1oopydrlp-220101120198s-projects.vercel.app',
+      'https:localhost:4200'
     ],
     methods: 'GET,POST,PUT,DELETE,PATCH',
     allowedHeaders: ['Content-Type', 'Authorization'],
