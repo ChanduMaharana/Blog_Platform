@@ -7,7 +7,7 @@ import {
 
 import express from 'express';
 import compression from 'compression';
-import path, { join } from 'node:path';
+import { join } from 'node:path';
 
 const app = express();
 
@@ -17,10 +17,6 @@ const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const angularApp = new AngularNodeAppEngine();
 
-/**
- * Serve static files (JS, CSS, images)
- * High cache age ensures better performance
- */
 app.use(
   express.static(browserDistFolder, {
     maxAge: '1y',
@@ -30,18 +26,11 @@ app.use(
   })
 );
 
-/**
- * Improve initial response time on Railway/Vercel/Render by preventing cold-start delay.
- * Adds small caching headers for SSR HTML pages.
- */
 app.use((req, res, next) => {
   res.setHeader('Cache-Control', 'public, max-age=300, stale-while-revalidate=600');
   next();
 });
 
-/**
- * Handle server-side rendering for all other routes
- */
 app.use(async (req, res, next) => {
   try {
     const response = await angularApp.handle(req);
@@ -49,18 +38,15 @@ app.use(async (req, res, next) => {
     if (response) {
       writeResponseToNodeResponse(response, res);
     } else {
-      next();
+      res.sendFile(join(browserDistFolder, 'index.html'));
     }
   } catch (err) {
     console.error('SSR Error:', err);
-    next(err);
+    res.sendFile(join(browserDistFolder, 'index.html'));
   }
 });
 
 
-/**
- * Start the server (Railway compatible)
- */
 if (isMainModule(import.meta.url) || process.env['pm_id']) {
   const port = process.env['PORT'] || 4000;
 
@@ -70,7 +56,4 @@ if (isMainModule(import.meta.url) || process.env['pm_id']) {
   });
 }
 
-/**
- * Export handler for Angular CLI dev-server or serverless platforms
- */
 export const reqHandler = createNodeRequestHandler(app);

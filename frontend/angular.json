@@ -14,11 +14,10 @@
           "options": {
             "browser": "src/main.ts",
             "server": "src/main.server.ts",
-            "outputMode": "server",
+            "outputMode": "static",
             "ssr": {
               "entry": "src/server.ts"
             },
-            "prerender": false,
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
@@ -64,6 +63,6 @@
     }
   },
   "cli": {
-    "analytics": "cf205461-ce0d-4932-8051-21911e4a3349"
+    "analytics": "6bf75620-b154-4c06-97a4-4039577e7d61"
   }
 }

@@ -15,5 +15,12 @@ export default function bootstrap(context: BootstrapContext) {
       provideRouter(routes),
       provideHttpClient()
     ]
-  }, context);
+  }, context
+);
+}
+
+export async function getPrerenderParams() {
+  return {
+    'posts/:id': [] 
+  };
 }
