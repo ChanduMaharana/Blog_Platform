@@ -34,9 +34,9 @@ export class Postlist {
       this.postService.list().subscribe(posts => {
         let allPosts = posts.map(post => ({
        ...post,
-       coverImage: this.postService.getFullImageUrl(post.coverImage),
-       image: this.postService.getFullImageUrl((post as any).image),
-       category: (post as any).category || 'News',
+       image: this.postService.getFullImageUrl(post.image),
+       coverImage: this.postService.getFullImageUrl((post as any).coverImage),
+       category: (post as any).category,
       }));
 
 
