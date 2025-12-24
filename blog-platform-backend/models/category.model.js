@@ -11,10 +11,11 @@ const Category = sequelize.define("Category", {
   name: {
     type: DataTypes.STRING,
     allowNull: false,
+     unique: true,
   },
 
   orderNo: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.BIGINT,
     defaultValue: 0,
   },
 

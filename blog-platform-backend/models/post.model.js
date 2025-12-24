@@ -15,7 +15,7 @@ const Post = sequelize.define('Post', {
   trending: DataTypes.BOOLEAN,
   published: DataTypes.BOOLEAN,
 
-  views: DataTypes.INTEGER,
+  views: DataTypes.BIGINT,
 
   excerpt: DataTypes.TEXT,
   metaDescription: DataTypes.TEXT,
@@ -28,8 +28,5 @@ const Post = sequelize.define('Post', {
     allowNull: false
   }
 });
-
-sequelize.sync({ alter: true });
-
 
 export default Post;

@@ -24,7 +24,7 @@ const Banner = sequelize.define("Banner", {
   },
 
   orderNo: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.BIGINT,
     defaultValue: 0,
   },
 
