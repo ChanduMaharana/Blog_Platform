@@ -9,7 +9,7 @@ const Post = sequelize.define('Post', {
   date: DataTypes.STRING,
 
   image: DataTypes.STRING,      
-
+ coverImage: DataTypes.STRING,
   popular: DataTypes.BOOLEAN,
   featured: DataTypes.BOOLEAN,
   trending: DataTypes.BOOLEAN,
