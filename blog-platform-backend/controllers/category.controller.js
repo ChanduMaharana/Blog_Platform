@@ -9,15 +9,10 @@ export const createCategory = async (req, res) => {
     const category = await Category.create(body);
     res.json({ success: true, category });
 
-  } catch (err) {
-    if (err instanceof Sequelize.UniqueConstraintError) {
-      return res.status(400).json({
-        message: "Category with this name already exists",
-      });
-    }
-
-    res.status(500).json({ message: err.message });
-  }
+  }  catch (err) {
+  console.error("CATEGORY CREATE ERROR 👉", err);
+  res.status(500).json({ message: err.message });
+}
 };
 // GET ALL
 export const getCategories = async (req, res) => {
