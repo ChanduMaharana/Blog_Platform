@@ -64,6 +64,14 @@ app.use(
   })
 );
 
+Post.belongsTo(Category, {
+  foreignKey: "categoryId",
+  as: "Category",
+});
+
+Category.hasMany(Post, {
+  foreignKey: "categoryId",
+});
 
 app.get('/posts/:id', async (req, res) => {
   const ua = req.headers['user-agent'] || '';

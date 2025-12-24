@@ -30,40 +30,49 @@ export const createPost = async (req, res) => {
 
 /* GET ALL */
 export const getPosts = async (req, res) => {
-  const posts = await Post.findAll({
-    order: [["id", "DESC"]],
-    include: [{ model: Category }],
-  });
+  try {
+    const posts = await Post.findAll({
+      order: [["id", "DESC"]],
+      include: [{ model: Category, as: "Category" }],
+    });
 
-  res.json(
-  posts.map(p => {
-    const img = p.coverImage || p.image;
-
-    return {
-      ...p.dataValues,
-      coverImage: normalizeImage(img),
-      image: normalizeImage(img),
-    };
-  })
-);
-
+    res.json(
+      posts.map(p => {
+        const img = p.coverImage || p.image;
+        return {
+          ...p.dataValues,
+          coverImage: img,
+          image: img,
+        };
+      })
+    );
+  } catch (err) {
+    console.error("GET POSTS ERROR 👉", err);
+    res.status(500).json({ error: err.message });
+  }
 };
+
 
 /* GET BY ID */
 export const getPostById = async (req, res) => {
-  const post = await Post.findByPk(req.params.id, {
-    include: [{ model: Category }],
-  });
+  try {
+    const post = await Post.findByPk(req.params.id, {
+      include: [{ model: Category, as: "Category" }],
+    });
 
-  if (!post) return res.status(404).json({ message: "Not found" });
+    if (!post) return res.status(404).json({ message: "Not found" });
 
-  const img = post.coverImage || post.image;
+    const img = post.coverImage || post.image;
 
-  res.json({
-    ...post.dataValues,
-    coverImage: normalizeImage(img),
-    image: normalizeImage(img),
-  });
+    res.json({
+      ...post.dataValues,
+      coverImage: img,
+      image: img,
+    });
+  } catch (err) {
+    console.error("GET POST BY ID ERROR 👉", err);
+    res.status(500).json({ error: err.message });
+  }
 };
 
 
