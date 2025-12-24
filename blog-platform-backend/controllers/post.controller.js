@@ -51,17 +51,20 @@ export const getPosts = async (req, res) => {
 
 /* GET BY ID */
 export const getPostById = async (req, res) => {
-  const post = await Post.findByPk(req.params.id);
+  const post = await Post.findByPk(req.params.id, {
+    include: [{ model: Category }],
+  });
+
   if (!post) return res.status(404).json({ message: "Not found" });
-const img = post.coverImage || post.image;
 
-res.json({
-  ...post.dataValues,
-  coverImage: normalizeImage(img),
-  image: normalizeImage(img),
-});
+  const img = post.coverImage || post.image;
+
+  res.json({
+    ...post.dataValues,
+    coverImage: normalizeImage(img),
+    image: normalizeImage(img),
+  });
 };
-
 
 
 export const updatePost = async (req, res) => {
