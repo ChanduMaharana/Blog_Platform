@@ -14,6 +14,15 @@ const normalizeImage = (img) => {
 
 export const createPost = async (req, res) => {
   try {
+    const { categoryId } = req.body;
+
+    // ✅ HARD VALIDATION
+    if (!categoryId) {
+      return res.status(400).json({
+        message: "categoryId is required"
+      });
+    }
+
     const imageUrl = req.file?.path || null;
 
     const post = await Post.create({
@@ -26,13 +35,14 @@ export const createPost = async (req, res) => {
       image: imageUrl,
       coverImage: imageUrl,
 
-      categoryId: req.body.categoryId || null,
+      // ✅ FORCE INTEGER
+      categoryId: Number(categoryId),
 
-      published: req.body.published ?? true,
-      featured: req.body.featured ?? false,
-      trending: req.body.trending ?? false,
-      popular: req.body.popular ?? false,
-      views: req.body.views ?? 0,
+      published: req.body.published === "true" || req.body.published === true,
+      featured: req.body.featured === "true" || false,
+      trending: req.body.trending === "true" || false,
+      popular: req.body.popular === "true" || false,
+      views: Number(req.body.views) || 0,
 
       excerpt: req.body.excerpt || "",
       metaDescription: req.body.metaDescription || "",
@@ -53,7 +63,7 @@ export const createPost = async (req, res) => {
 export const getPosts = async (req, res) => {
   try {
     const posts = await Post.findAll({
-      where: { published: true },
+      // where: { published: true },
       order: [["id", "DESC"]],
       include: [{ model: Category, as: "Category" }],
     });
