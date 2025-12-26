@@ -1,6 +1,17 @@
 import Post from "../models/post.model.js";
 import Category from "../models/category.model.js";
 
+const BASE_URL = process.env.BASE_URL || "https://blog-backend-biys.onrender.com";
+
+const normalizeImage = (img) => {
+  if (!img) return null;
+  return img.startsWith('http')
+    ? img
+    : `https://blog-backend-biys.onrender.com/uploads/${img}`;
+};
+
+
+
 export const createPost = async (req, res) => {
   try {
     const imageUrl = req.file?.path || null;
@@ -37,6 +48,8 @@ export const createPost = async (req, res) => {
   }
 };
 
+
+/* GET ALL */
 export const getPosts = async (req, res) => {
   try {
     const posts = await Post.findAll({
@@ -61,6 +74,8 @@ export const getPosts = async (req, res) => {
   }
 };
 
+
+/* GET BY ID */
 export const getPostById = async (req, res) => {
   try {
     const post = await Post.findByPk(req.params.id, {
@@ -82,6 +97,7 @@ export const getPostById = async (req, res) => {
   }
 };
 
+
 export const updatePost = async (req, res) => {
   try {
     const post = await Post.findByPk(req.params.id);
@@ -99,11 +115,10 @@ export const updatePost = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-
 export const deletePost = async (req, res) => {
   try {
     const deleted = await Post.destroy({
-      where: { id: req.params.id },
+      where: { id: req.params.id }
     });
 
     if (!deleted) {
@@ -113,5 +128,28 @@ export const deletePost = async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+};
+
+export const getPaginatedPosts = async (req, res) => {
+  try {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 6;
+    const offset = (page - 1) * limit;
+
+    const { rows, count } = await Post.findAndCountAll({
+      limit,
+      offset,
+      order: [["createdAt", "DESC"]],
+    });
+
+    res.json({
+      posts: rows, 
+      totalItems: count,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };
