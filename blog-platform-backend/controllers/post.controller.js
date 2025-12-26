@@ -17,40 +17,45 @@ export const createPost = async (req, res) => {
     const imageUrl = req.file?.path || null;
 
     const post = await Post.create({
-      ...req.body,
+      title: req.body.title,
+      description: req.body.description || "",
+      content: req.body.content || "",
+      author: req.body.author || "Admin",
+      date: req.body.date || new Date().toDateString(),
+
       image: imageUrl,
       coverImage: imageUrl,
+
+      categoryId: req.body.categoryId || null,
+
+      published: req.body.published ?? true,
+      featured: req.body.featured ?? false,
+      trending: req.body.trending ?? false,
+      popular: req.body.popular ?? false,
+      views: req.body.views ?? 0,
+
+      excerpt: req.body.excerpt || "",
+      metaDescription: req.body.metaDescription || "",
+      metaKeywords: req.body.metaKeywords || "",
+      ogTitle: req.body.ogTitle || "",
+      ogDescription: req.body.ogDescription || "",
     });
 
     res.status(201).json(post);
   } catch (err) {
+    console.error("CREATE POST ERROR 👉", err);
     res.status(500).json({ error: err.message });
   }
 };
+
 
 /* GET ALL */
-export const getPosts = async (req, res) => {
-  try {
-    const posts = await Post.findAll({
-      order: [["id", "DESC"]],
-      include: [{ model: Category, as: "Category" }],
-    });
+const posts = await Post.findAll({
+  where: { published: true },
+  order: [["id", "DESC"]],
+  include: [{ model: Category, as: "Category" }],
+});
 
-    res.json(
-      posts.map(p => {
-        const img = p.coverImage || p.image;
-        return {
-          ...p.dataValues,
-          coverImage: img,
-          image: img,
-        };
-      })
-    );
-  } catch (err) {
-    console.error("GET POSTS ERROR 👉", err);
-    res.status(500).json({ error: err.message });
-  }
-};
 
 
 /* GET BY ID */
