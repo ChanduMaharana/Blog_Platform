@@ -2,14 +2,17 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormsModule } from '@angular/forms';
 import { CategoryService, Category } from '../../../services/category-service';
-
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 @Component({
   selector: 'app-post-form',
   standalone: true,
-  imports: [CommonModule,FormsModule, ReactiveFormsModule],
+  imports: [CommonModule,FormsModule,CKEditorModule, ReactiveFormsModule],
   templateUrl: './post-form.html',
 })
 export class PostForm implements OnInit {
+   public Editor = ClassicEditor;
+
   @Input() form!: FormGroup;
   @Input() editMode = false;
 

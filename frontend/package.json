@@ -36,6 +36,8 @@
     "@angular/platform-server": "^20.3.13",
     "@angular/router": "^20.3.13",
     "@angular/ssr": "^20.3.13",
+    "@ckeditor/ckeditor5-angular": "^11.0.0",
+    "@ckeditor/ckeditor5-build-classic": "^41.4.2",
     "@fortawesome/fontawesome-free": "^7.1.0",
     "@fortawesome/fontawesome-svg-core": "^7.1.0",
     "@fortawesome/free-brands-svg-icons": "^7.1.0",
