@@ -11,7 +11,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
   templateUrl: './post-form.html',
 })
 export class PostForm implements OnInit {
-   public Editor = ClassicEditor;
+   public Editor: any = ClassicEditor;
 
   @Input() form!: FormGroup;
   @Input() editMode = false;
