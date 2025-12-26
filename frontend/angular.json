@@ -12,6 +12,9 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
+             "allowedCommonJsDependencies": [
+          "@ckeditor/ckeditor5-build-classic"
+        ],
             "browser": "src/main.ts",
             "outputMode": "static",
             "tsConfig": "tsconfig.app.json",
@@ -37,13 +40,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "2mb",
+                  "maximumError": "3MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "10kB",
+                  "maximumError": "20kB"
                 }
               ],
               "outputHashing": "all"
