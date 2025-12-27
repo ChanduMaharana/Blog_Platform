@@ -4,6 +4,7 @@ import {
   createPost,
   getPosts,
   updatePost,
+  getPostBySlug,
   deletePost,
   getPaginatedPosts,
 } from "../controllers/post.controller.js";
