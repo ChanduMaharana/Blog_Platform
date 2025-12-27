@@ -2,16 +2,14 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormsModule } from '@angular/forms';
 import { CategoryService, Category } from '../../../services/category-service';
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 @Component({
   selector: 'app-post-form',
   standalone: true,
-  imports: [CommonModule,FormsModule,CKEditorModule, ReactiveFormsModule],
+  imports: [CommonModule,FormsModule, ReactiveFormsModule],
   templateUrl: './post-form.html',
 })
 export class PostForm implements OnInit {
-   public Editor: any = ClassicEditor;
 
   @Input() form!: FormGroup;
   @Input() editMode = false;
@@ -35,6 +33,6 @@ export class PostForm implements OnInit {
 
   onFile(event: any) {
     const file = event.target.files?.[0] || null;
-    this.fileSelected.emit(file);     // <-- Correct usage
+    this.fileSelected.emit(file);   
   }
 }

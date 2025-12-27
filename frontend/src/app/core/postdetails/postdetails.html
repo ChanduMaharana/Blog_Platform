@@ -84,7 +84,7 @@
 
       <div
         *ngFor="let related of relatedPosts"
-        (click)="viewPost(related.id)"
+        (click)="viewPost(related.slug)"
         class="cursor-pointer bg-white border border-blue-200 rounded-lg shadow hover:shadow-lg transition overflow-hidden">
 
         <div class="relative">

@@ -29,14 +29,26 @@ export class Postdetails implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.paramMap.subscribe(params => {
-  const id = params.get('id');
-  if (id) {
-    this.loadPost(+id);
-  }
-});
+  this.route.paramMap.subscribe(params => {
+    const slug = params.get('slug');
+    if (slug) {
+      this.loading = true;
+      this.postService.getBySlug(slug).subscribe(post => {
+        this.post = {
+          ...post,
+          coverImage: this.postService.getFullImageUrl(post.coverImage),
+          image: this.postService.getFullImageUrl(post.image),
+          content: post.content || '',
+          canonicalUrl: `${this.SITE_URL}/post/${post.slug}`
+        };
+        this.updateSEO();
+        this.loadRelatedPosts();
+        this.loading = false;
+      });
+    }
+  });
+}
 
-  }
 
  goBack() {
   this.router.navigate(['/home']);
@@ -99,8 +111,9 @@ updateSEO() {
     this.post.coverImage ??
     'https://blog-backend-biys.onrender.com/uploads/default-og.jpg';
 
-  const url: string = `${this.SITE_URL}/post/${this.post.id}`;
+  const url: string = `${this.SITE_URL}/post/${this.post.slug}`;
 
+this.updateCanonicalLink(url);
   this.title.setTitle(title);
 
   this.meta.updateTag({ name: 'description', content: description });
@@ -166,15 +179,22 @@ updateSEO() {
     this.router.navigateByUrl('/home');
   }
 
-  viewPost(id?: number) {
-    if (id) {
-      this.router.navigate(['/posts', id]);
-    }
-  }
+  // viewPost(id?: number) {
+  //   if (id) {
+  //     this.router.navigate(['/posts', id]);
+  //   }
+  // }
 
-  private getShareUrl(): string {
-  return `https://blog-backend-biys.onrender.com/posts/${this.post.id}`;
+  viewPost(slug?: string) {
+  if (slug) {
+    this.router.navigate(['/post', slug]);
+  }
 }
+
+private getShareUrl(): string {
+  return `${this.SITE_URL}/post/${this.post.slug}?utm_source=copy&utm_medium=share&utm_campaign=post_share&utm_content=${this.post.slug}`;
+}
+
 
   shareOnFacebook() {
   const url = encodeURIComponent(this.getShareUrl());

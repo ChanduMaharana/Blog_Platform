@@ -7,6 +7,7 @@ export interface PostSummary {
   id: number;
   title: string;
   excerpt?: string;
+  slug?: string;  
   description?: string;
   content?: string;
   coverImage?: string;
@@ -27,6 +28,7 @@ export interface PostSummary {
 
 export interface PostDetail extends PostSummary {
   content: string;
+   slug?: string;  
   canonicalUrl?: string;
 }
 
@@ -43,6 +45,10 @@ export class PostService {
   getById(id: number): Observable<PostDetail> {
     return this.http.get<PostDetail>(`${this.api}/${id}`);
   }
+  getBySlug(slug: string): Observable<PostDetail> {
+  return this.http.get<PostDetail>(`${this.api}/slug/${slug}`);
+}
+
 
   create(post: PostSummary, file?: File): Observable<any> {
     const formData = new FormData();

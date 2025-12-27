@@ -26,7 +26,6 @@ export class PostComponent {
       id: [0],
       title: [''],
       excerpt: [''],
-      description: [''],
       content: [''],
       categoryId: [null, Validators.required],
       author: [''],

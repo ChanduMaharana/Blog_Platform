@@ -13,7 +13,9 @@ export const routes: Routes = [
 
   { path: 'posts', component: Postlist },
 
-  { path: 'posts/:id', component: Postdetails },
+  // { path: 'posts/:id', component: Postdetails },
+
+  { path: 'post/:slug', component: Postdetails },
 
   { path: 'login', component: Login },
 
