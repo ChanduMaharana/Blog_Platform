@@ -185,11 +185,11 @@ this.updateCanonicalLink(url);
   //   }
   // }
 
-  viewPost(slug?: string) {
-  if (slug) {
-    this.router.navigate(['/post', slug]);
-  }
+ viewPost(slug?: string) {
+  if (!slug) return;
+  this.router.navigate(['/post', slug]);
 }
+
 
 private getShareUrl(): string {
   return `${this.SITE_URL}/post/${this.post.slug}?utm_source=copy&utm_medium=share&utm_campaign=post_share&utm_content=${this.post.slug}`;

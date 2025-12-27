@@ -72,11 +72,17 @@ export class Postlist {
     this.viewportScroller.scrollToPosition([0, 0]); 
   }
 
-  viewPost(id: number | undefined) {
-    if (!id) return;
+  viewPost(slug?: string) {
+  if (!slug) return;
+  this.router.navigate(['/post', slug]);
+  this.viewportScroller.scrollToPosition([0, 0]);
+}
 
-    this.router.navigate(['/posts', id]).then(() => {
-      this.viewportScroller.scrollToPosition([0, 0]); 
-    });
-  }
+  // viewPost(id: number | undefined) {
+  //   if (!id) return;
+
+  //   this.router.navigate(['/posts', id]).then(() => {
+  //     this.viewportScroller.scrollToPosition([0, 0]); 
+  //   });
+  // }
 }
