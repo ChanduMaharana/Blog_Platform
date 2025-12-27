@@ -16,7 +16,7 @@ const router = express.Router();
 router.post("/", upload.single("image"), createPost);
 router.get("/paginated/list", getPaginatedPosts);
 router.get("/", getPosts);
-
+router.get("/slug/:slug", getPostBySlug);
 router.get("/:id", async (req, res) => {
   const post = await Post.findByPk(req.params.id);
   if (!post) return res.status(404).send("Not found");

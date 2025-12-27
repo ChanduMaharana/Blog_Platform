@@ -1,5 +1,6 @@
 import Post from "../models/post.model.js";
 import Category from "../models/category.model.js";
+import slugify from "slugify";
 
 const BASE_URL = process.env.BASE_URL || "https://blog-backend-biys.onrender.com";
 
@@ -16,7 +17,6 @@ export const createPost = async (req, res) => {
   try {
     const { categoryId } = req.body;
 
-    // ✅ HARD VALIDATION
     if (!categoryId) {
       return res.status(400).json({
         message: "categoryId is required"
@@ -25,13 +25,18 @@ export const createPost = async (req, res) => {
 
     const imageUrl = req.file?.path || null;
 
+    const slug = slugify(req.body.title, {
+    lower: true,
+    strict: true
+   });
+
     const post = await Post.create({
       title: req.body.title,
       description: req.body.description || "",
       content: req.body.content || "",
       author: req.body.author || "Admin",
       date: req.body.date || new Date().toDateString(),
-
+      slug,
       image: imageUrl,
       coverImage: imageUrl,
 
@@ -58,12 +63,42 @@ export const createPost = async (req, res) => {
   }
 };
 
+export const getPostBySlug = async (req, res) => {
+  try {
+    const post = await Post.findOne({
+      where: { slug: req.params.slug },
+      include: [{ model: Category, as: "Category" }],
+    });
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const img = post.coverImage || post.image;
+
+   res.json({
+  id: post.id,
+  title: post.title,
+  slug: post.slug,   
+  description: post.description,
+  content: post.content,
+  author: post.author,
+  date: post.date,
+  image: img,
+  coverImage: img,
+  Category: post.Category
+});
+
+  } catch (err) {
+    console.error("GET POST BY SLUG ERROR 👉", err);
+    res.status(500).json({ error: err.message });
+  }
+};
 
 /* GET ALL */
 export const getPosts = async (req, res) => {
   try {
     const posts = await Post.findAll({
-      // where: { published: true },
       order: [["id", "DESC"]],
       include: [{ model: Category, as: "Category" }],
     });
@@ -71,10 +106,23 @@ export const getPosts = async (req, res) => {
     res.json(
       posts.map(p => {
         const img = p.coverImage || p.image;
+
         return {
-          ...p.dataValues,
-          coverImage: img,
+          id: p.id,
+          title: p.title,
+          slug: p.slug,             
+          description: p.description,
+          excerpt: p.excerpt,
+          content: p.content,
+          author: p.author,
+          date: p.date,
           image: img,
+          coverImage: img,
+          views: p.views,
+          featured: p.featured,
+          trending: p.trending,
+          popular: p.popular,
+          Category: p.Category
         };
       })
     );
@@ -83,6 +131,7 @@ export const getPosts = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
 
 
 /* GET BY ID */
