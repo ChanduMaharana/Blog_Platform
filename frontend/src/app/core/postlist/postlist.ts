@@ -34,6 +34,7 @@ export class Postlist {
       this.postService.list().subscribe(posts => {
         let allPosts = posts.map(post => ({
        ...post,
+      slug: post.slug,
       image: post.image,
       coverImage: post.coverImage,
      category: (post as any).Category?.name
@@ -72,11 +73,16 @@ export class Postlist {
     this.viewportScroller.scrollToPosition([0, 0]); 
   }
 
-  viewPost(slug?: string) {
+
+
+viewPost(slug?: string) {
+  console.log('CLICKED SLUG:', slug);
   if (!slug) return;
   this.router.navigate(['/post', slug]);
   this.viewportScroller.scrollToPosition([0, 0]);
+
 }
+
 
   // viewPost(id: number | undefined) {
   //   if (!id) return;
