@@ -16,6 +16,11 @@ const Post = sequelize.define('Post', {
   published: DataTypes.BOOLEAN,
 
   views: DataTypes.BIGINT,
+  slug: {
+  type: DataTypes.STRING,
+  allowNull: false,
+  unique: true
+},
 
   excerpt: DataTypes.TEXT,
   metaDescription: DataTypes.TEXT,

@@ -5,7 +5,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 max-w-full">
       <div
         *ngFor="let post of trendingPosts"
-        (click)="viewPost(post.slug)"
+        (click)="viewPost(post.slug!)"
         class="cursor-pointer bg-white border border-blue-200 rounded-lg sm:rounded-xl shadow hover:shadow-lg transition-all duration-300 overflow-hidden post-card"
       >
         <div class="relative">
@@ -43,7 +43,7 @@
     <div class="grid grid-cols-1 gap-6 max-w-full">
       <div
         *ngFor="let post of popularPosts"
-        (click)="viewPost(post.slug)"
+        (click)="viewPost(post.slug!)"
         class="cursor-pointer bg-white border border-blue-200 rounded-lg shadow hover:shadow-lg transition-all duration-300 overflow-hidden post-card"
       >
         <div class="flex flex-col lg:flex-row">
@@ -96,7 +96,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 max-w-full">
       <div
         *ngFor="let post of paginatedPosts"
-        (click)="viewPost(post.slug)"
+       (click)="viewPost(post.slug!)"
         class="cursor-pointer bg-white border border-blue-200 rounded-lg sm:rounded-xl shadow hover:shadow-md transition-all duration-300 overflow-hidden post-card"
       >
         <div class="relative">

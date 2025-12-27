@@ -28,39 +28,22 @@ export class Postlist {
   ) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      const q = params['q']?.toLowerCase();
+  this.postService.list().subscribe(posts => {
+    console.log('RAW POSTS FROM API:', posts);
 
-      this.postService.list().subscribe(posts => {
-        let allPosts = posts.map(post => ({
-       ...post,
-      slug: post.slug,
-      image: post.image,
-      coverImage: post.coverImage,
-     category: (post as any).Category?.name
+    this.posts = posts.map(p => ({
+      ...p,
+      slug: p.slug // FORCE ATTACH
     }));
 
+    console.log('POSTS AFTER MAP:', this.posts);
 
+    this.trendingPosts = [...this.posts].slice(0, 4);
+    this.popularPosts = [...this.posts];
+    this.totalPages = Math.ceil(this.posts.length / this.itemsPerPage);
+  });
+}
 
-        this.posts = q
-          ? allPosts.filter(p =>
-              p.title?.toLowerCase().includes(q) ||
-              p.description?.toLowerCase().includes(q) ||
-              p.content?.toLowerCase().includes(q)
-            )
-          : allPosts;
-
-        this.trendingPosts = [...this.posts]
-          .sort((a, b) => (b.id ?? 0) - (a.id ?? 0))
-          .slice(0, 4);
-
-        this.popularPosts = this.posts.filter(p => (p as any).popular);
-
-        this.totalPages = Math.ceil(this.posts.length / this.itemsPerPage);
-        this.goToPage(1);
-      });
-    });
-  }
 
   get paginatedPosts() {
     const start = (this.currentPage - 1) * this.itemsPerPage;
