@@ -110,7 +110,7 @@ export const getPosts = async (req, res) => {
         return {
           id: p.id,
           title: p.title,
-          slug: p.slug,             
+          slug: p.slug,               // ✅ THIS WAS MISSING
           description: p.description,
           excerpt: p.excerpt,
           content: p.content,
@@ -127,7 +127,6 @@ export const getPosts = async (req, res) => {
       })
     );
   } catch (err) {
-    console.error("GET POSTS ERROR 👉", err);
     res.status(500).json({ error: err.message });
   }
 };
