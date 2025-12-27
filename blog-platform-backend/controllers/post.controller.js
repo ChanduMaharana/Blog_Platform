@@ -97,39 +97,31 @@ export const getPostBySlug = async (req, res) => {
 
 /* GET ALL */
 export const getPosts = async (req, res) => {
-  try {
-    const posts = await Post.findAll({
-      order: [["id", "DESC"]],
-      include: [{ model: Category, as: "Category" }],
-    });
+  const posts = await Post.findAll({
+    order: [["id", "DESC"]],
+    include: [{ model: Category, as: "Category" }],
+  });
 
-    res.json(
-      posts.map(p => {
-        const img = p.coverImage || p.image;
-
-        return {
-          id: p.id,
-          title: p.title,
-          slug: p.slug,               // ✅ THIS WAS MISSING
-          description: p.description,
-          excerpt: p.excerpt,
-          content: p.content,
-          author: p.author,
-          date: p.date,
-          image: img,
-          coverImage: img,
-          views: p.views,
-          featured: p.featured,
-          trending: p.trending,
-          popular: p.popular,
-          Category: p.Category
-        };
-      })
-    );
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  res.json(
+    posts.map(p => ({
+      id: p.id,
+      title: p.title,
+      slug: p.slug,  
+      description: p.description,
+      excerpt: p.excerpt,
+      content: p.content,
+      author: p.author,
+      date: p.date,
+      image: p.coverImage || p.image,
+      coverImage: p.coverImage || p.image,
+      popular: p.popular,
+      featured: p.featured,
+      trending: p.trending,
+      Category: p.Category
+    }))
+  );
 };
+
 
 
 
