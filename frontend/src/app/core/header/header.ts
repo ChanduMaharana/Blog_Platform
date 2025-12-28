@@ -14,9 +14,12 @@ export class Header {
   constructor(private router: Router) {}
 
   onSearch() {
-    if (!this.searchTerm.trim()) return;
-    this.router.navigate(['/posts'], {
-      queryParams: { q: this.searchTerm }
-    });
-  }
+  if (!this.searchTerm.trim()) return;
+
+  this.router.navigate(['/posts'], {
+    queryParams: { q: this.searchTerm.trim() },
+    queryParamsHandling: 'merge'
+  });
+}
+
 }
