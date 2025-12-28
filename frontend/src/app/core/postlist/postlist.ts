@@ -41,7 +41,7 @@ export class Postlist {
           .slice(0, 4);
     this.popularPosts = this.posts.filter(p => (p as any).popular);
     this.totalPages = Math.ceil(this.posts.length / this.itemsPerPage);
-    
+
   this.applySearchFromQuery();
     });
 
@@ -70,7 +70,7 @@ applySearchFromQuery() {
 
   get paginatedPosts() {
     const start = (this.currentPage - 1) * this.itemsPerPage;
-    return this.posts.slice(start, start + this.itemsPerPage);
+    return this.filteredPosts.slice(start, start + this.itemsPerPage);
   }
 
   goToPage(page: number) {
