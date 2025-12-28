@@ -13,7 +13,7 @@ import { PaginationComponent } from '../../shared/pagination/pagination';
 })
 export class Postlist {
   posts: PostSummary[] = [];
-  filteredPosts: PostSummary[] = []; 
+  filteredPosts: PostSummary[] = [];
 
   trendingPosts: PostSummary[] = [];
   popularPosts: PostSummary[] = [];
@@ -26,35 +26,31 @@ export class Postlist {
     private postService: PostService,
     private router: Router,
     private route: ActivatedRoute,
-    private viewportScroller: ViewportScroller 
+    private viewportScroller: ViewportScroller
   ) {}
 
   ngOnInit() {
     this.postService.list().subscribe(posts => {
-      console.log('RAW POSTS FROM API:', posts);
-
       this.posts = posts.map(p => ({
         ...p,
         slug: p.slug
       }));
-
-      console.log('POSTS AFTER MAP:', this.posts);
-
-      this.applySearchFilter(); 
 
       this.trendingPosts = [...this.posts]
         .sort((a, b) => (b.id ?? 0) - (a.id ?? 0))
         .slice(0, 4);
 
       this.popularPosts = this.posts.filter(p => (p as any).popular);
+
+      this.applySearchFromQuery();
     });
 
     this.route.queryParams.subscribe(() => {
-      this.applySearchFilter(); 
+      this.applySearchFromQuery();
     });
   }
 
-  applySearchFilter() {
+  applySearchFromQuery() {
     const q = this.route.snapshot.queryParamMap
       .get('q')
       ?.toLowerCase()
@@ -81,13 +77,11 @@ export class Postlist {
   goToPage(page: number) {
     if (page < 1 || page > this.totalPages) return;
     this.currentPage = page;
-    this.viewportScroller.scrollToPosition([0, 0]); 
+    this.viewportScroller.scrollToPosition([0, 0]);
   }
 
   viewPost(slug?: string) {
-    console.log('CLICKED SLUG:', slug);
     if (!slug) return;
     this.router.navigate(['/post', slug]);
-    this.viewportScroller.scrollToPosition([0, 0]);
   }
 }
