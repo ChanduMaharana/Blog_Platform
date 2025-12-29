@@ -50,23 +50,33 @@ export class Postlist {
     });
 }
 applySearchFromQuery() {
-    const q = this.route.snapshot.queryParamMap
-      .get('q')
-      ?.toLowerCase()
-      .trim();
+  const q = this.route.snapshot.queryParamMap
+    .get('q')
+    ?.toLowerCase()
+    .trim();
 
-    this.filteredPosts = q
-      ? this.posts.filter(p =>
-          p.title?.toLowerCase().includes(q) ||
-          p.description?.toLowerCase().includes(q) ||
-          p.content?.toLowerCase().includes(q)
-        )
-      : this.posts;
+  const category = this.route.snapshot.queryParamMap
+    .get('category')
+    ?.toUpperCase();
 
-    this.totalPages = Math.ceil(this.filteredPosts.length / this.itemsPerPage);
-    this.currentPage = 1;
-    this.viewportScroller.scrollToPosition([0, 0]);
-  }
+  this.filteredPosts = this.posts.filter(p => {
+    const matchesSearch = q
+      ? p.title?.toLowerCase().includes(q) ||
+        p.description?.toLowerCase().includes(q) ||
+        p.content?.toLowerCase().includes(q)
+      : true;
+
+    const matchesCategory = category
+      ? p.category?.toUpperCase() === category
+      : true;
+
+    return matchesSearch && matchesCategory;
+  });
+
+  this.totalPages = Math.ceil(this.filteredPosts.length / this.itemsPerPage);
+  this.currentPage = 1;
+  this.viewportScroller.scrollToPosition([0, 0]);
+}
 
   get paginatedPosts() {
     const start = (this.currentPage - 1) * this.itemsPerPage;
