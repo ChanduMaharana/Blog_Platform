@@ -1,59 +1,48 @@
-<div class="space-y-12 px-4 sm:px-6 lg:px-8">
+<!-- 🔍 SEARCH VIEW -->
+<div *ngIf="isSearchView" class="space-y-6 px-4 sm:px-6 lg:px-8">
+  <h1 class="text-3xl font-bold">
+    Search Results for "{{ searchQuery }}"
+  </h1>
 
-   <div *ngIf="isCategoryView" class="space-y-6 px-4 sm:px-6 lg:px-8">
+  <p class="text-gray-600">
+    {{ filteredPosts.length }} posts found
+  </p>
 
-  <div class="flex items-center gap-4">
-    <button
-      (click)="goHome()"
-      class="text-sm text-blue-600 hover:underline"
-    >
-      ← Back to Home
-    </button>
+  <app-post-card
+    [posts]="paginatedPosts"
+    (open)="viewPost($event)"
+  ></app-post-card>
 
-    <h1 class="text-4xl font-bold">
-      {{ activeCategory }}
-    </h1>
-    <p>Explore all post in this category!</p>
-  </div>
-
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div
-      *ngFor="let post of paginatedPosts"
-      (click)="viewPost(post.slug!)"
-        class="cursor-pointer bg-white border border-blue-200 rounded-lg sm:rounded-xl shadow hover:shadow-lg transition-all duration-300 overflow-hidden post-card"
-    >
-      <img
-        [src]="post.image"
-        class="w-full h-40 sm:h-48 object-cover transition-all duration-300"
-      />
-
-      <div class="p-4">
-        <span 
-            class="absolute top-4 left-3 px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800" >
-          {{ post.category }}
-        </span>
-
-          <h2 class="font-semibold text-base sm:text-lg text-gray-800 mb-2 leading-tight line-clamp-2">
-          {{ post.title }}
-        </h2>
-
-         <p class="text-gray-600 text-xs sm:text-sm mb-4 sm:mb-6 leading-relaxed line-clamp-2">
-            {{ post.description | slice: 0:100 }}...
-          </p>
-          <div class="border-b border-blue-200 mb-3 sm:mb-4"></div>
-          <div class="text-xs text-gray-500 flex justify-between items-center">
-            <span class="font-medium">{{ post.author }}</span>
-            <span>{{ post.date }}</span>
-          </div>
-      </div>
-    </div>
-  </div>
-<app-pagination
+  <app-pagination
     [currentPage]="currentPage"
     [totalPages]="totalPages"
     (pageChange)="goToPage($event)"
   ></app-pagination>
 </div>
+<!-- 📚 CATEGORY VIEW  -->
+<div class="space-y-12 px-4 sm:px-6 lg:px-8">
+
+  <div *ngIf="isCategoryView && !isSearchView" class="space-y-6 px-4 sm:px-6 lg:px-8">
+  <div class="flex items-center gap-4">
+    <button (click)="goHome()" class="text-blue-600 text-sm hover:underline">
+      ← Back to Home
+    </button>
+
+    <h1 class="text-3xl font-bold">{{ activeCategory }}</h1>
+  </div>
+
+  <app-post-card
+    [posts]="paginatedPosts"
+    (open)="viewPost($event)"
+  ></app-post-card>
+
+  <app-pagination
+    [currentPage]="currentPage"
+    [totalPages]="totalPages"
+    (pageChange)="goToPage($event)"
+  ></app-pagination>
+</div>
+
 
   <!-- Trending Now Section -->
   <section  *ngIf="!isCategoryView">

@@ -3,11 +3,12 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule, ViewportScroller } from '@angular/common';
 import { PostService, PostSummary } from '../../services/post-service';
 import { PaginationComponent } from '../../shared/pagination/pagination';
+import { PostCard } from '../../layout/post-card/post-card';
 
 @Component({
   selector: 'app-postlist',
   standalone: true,
-  imports: [CommonModule, PaginationComponent, RouterModule],
+  imports: [CommonModule, PaginationComponent, RouterModule, PostCard],
   templateUrl: './postlist.html',
   styleUrls: ['./postlist.css'],
 })
@@ -23,7 +24,10 @@ export class Postlist {
   totalPages = 0;
 
   activeCategory: string | null = null;
+  searchQuery: string | null = null;
+
   isCategoryView = false;
+    isSearchView = false; 
 
   constructor(
     private postService: PostService,
@@ -52,15 +56,14 @@ export class Postlist {
   }
 
   applyFilters() {
-    const q = this.route.snapshot.queryParamMap
-      .get('q')
-      ?.toLowerCase()
-      .trim();
-
+    const q = this.route.snapshot.queryParamMap.get('q')?.trim();
     const category = this.route.snapshot.queryParamMap.get('category');
 
+    this.searchQuery = q || null;
     this.activeCategory = category;
-    this.isCategoryView = !!category;
+
+    this.isSearchView = !!q;
+    this.isCategoryView = !!category && !q;
 
     this.filteredPosts = this.posts.filter(p => {
       const matchesCategory = category
@@ -68,9 +71,9 @@ export class Postlist {
         : true;
 
       const matchesSearch = q
-        ? p.title?.toLowerCase().includes(q) ||
-          p.description?.toLowerCase().includes(q) ||
-          p.content?.toLowerCase().includes(q)
+        ? p.title?.toLowerCase().includes(q.toLowerCase()) ||
+          p.description?.toLowerCase().includes(q.toLowerCase()) ||
+          p.content?.toLowerCase().includes(q.toLowerCase())
         : true;
 
       return matchesCategory && matchesSearch;
@@ -78,7 +81,6 @@ export class Postlist {
 
     this.totalPages = Math.ceil(this.filteredPosts.length / this.itemsPerPage);
     this.currentPage = 1;
-
     this.viewportScroller.scrollToPosition([0, 0]);
   }
 
