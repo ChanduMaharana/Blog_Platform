@@ -31,10 +31,11 @@ export class Postlist {
   ngOnInit() {
   this.postService.list().subscribe(posts => {
 
-    this.posts = posts.map(p => ({
-      ...p,
-      slug: p.slug 
-    }));
+    this.posts = posts.map((p: any) => ({
+        ...p,
+        slug: p.slug,
+        category: p.Category?.name || 'News'   
+      }));
 
      this.trendingPosts = [...this.posts]
           .sort((a, b) => (b.id ?? 0) - (a.id ?? 0))
