@@ -1,6 +1,6 @@
 <!-- 🔍 SEARCH VIEW -->
 <div *ngIf="isSearchView" class="space-y-6 px-4 sm:px-6 lg:px-8">
-  <h1 class="text-3xl font-bold">
+  <h1 class="text-2xl font-bold">
     Search Results for "{{ searchQuery }}"
   </h1>
 
@@ -12,23 +12,14 @@
     [posts]="paginatedPosts"
     (open)="viewPost($event)"
   ></app-post-card>
-
-  <app-pagination
-    [currentPage]="currentPage"
-    [totalPages]="totalPages"
-    (pageChange)="goToPage($event)"
-  ></app-pagination>
 </div>
 <!-- 📚 CATEGORY VIEW  -->
 <div class="space-y-12 px-4 sm:px-6 lg:px-8">
 
   <div *ngIf="isCategoryView && !isSearchView" class="space-y-6 px-4 sm:px-6 lg:px-8">
   <div class="flex items-center gap-4">
-    <button (click)="goHome()" class="text-blue-600 text-sm hover:underline">
-      ← Back to Home
-    </button>
 
-    <h1 class="text-3xl font-bold">{{ activeCategory }}</h1>
+    <h1 class="text-4xl font-bold">{{ activeCategory }}</h1>
   </div>
 
   <app-post-card
@@ -45,7 +36,7 @@
 
 
   <!-- Trending Now Section -->
-  <section  *ngIf="!isCategoryView">
+  <section  *ngIf="!isCategoryView && !isSearchView">
     <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">🔥 Trending News</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 max-w-full">
       <div
@@ -83,7 +74,7 @@
   </section>
   
   <!-- Most Popular Section -->
-  <section  *ngIf="!isCategoryView">
+  <section  *ngIf="!isCategoryView && !isSearchView">
     <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Most Popular</h2>
     <div class="grid grid-cols-1 gap-6 max-w-full">
       <div
@@ -136,7 +127,7 @@
   </section>
 
   <!-- Main Posts Grid -->
-  <section  *ngIf="!isCategoryView">
+  <section  *ngIf="!isCategoryView && !isSearchView">
     <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Latest Posts</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 max-w-full">
       <div
