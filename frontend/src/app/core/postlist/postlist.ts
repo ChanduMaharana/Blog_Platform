@@ -13,71 +13,59 @@ import { PaginationComponent } from '../../shared/pagination/pagination';
 })
 export class Postlist {
   posts: PostSummary[] = [];
-  trendingPosts: PostSummary[] = [];
   filteredPosts: PostSummary[] = [];
+
+  trendingPosts: PostSummary[] = [];
   popularPosts: PostSummary[] = [];
 
   currentPage = 1;
   itemsPerPage = 6;
   totalPages = 0;
 
+  activeCategory: string | null = null;
+  isCategoryView = false;
+
   constructor(
     private postService: PostService,
-    private router: Router,
     private route: ActivatedRoute,
-    private viewportScroller: ViewportScroller 
+    private router: Router,
+    private viewportScroller: ViewportScroller
   ) {}
 
   ngOnInit() {
-  this.postService.list().subscribe(posts => {
-
-    this.posts = posts.map((p: any) => ({
+    this.postService.list().subscribe((posts: any[]) => {
+      this.posts = posts.map(p => ({
         ...p,
         slug: p.slug,
-        category: p.Category?.name || 'News'   
+        category: p.Category?.name || 'News'
       }));
 
-     this.trendingPosts = [...this.posts]
-          .sort((a, b) => (b.id ?? 0) - (a.id ?? 0))
-          .slice(0, 4);
-    this.popularPosts = this.posts.filter(p => (p as any).popular);
-    this.totalPages = Math.ceil(this.posts.length / this.itemsPerPage);
+      this.trendingPosts = [...this.posts].slice(0, 4);
+      this.popularPosts = this.posts.filter(p => (p as any).popular);
 
-  this.applySearchFromQuery();
+      this.applyFilters();
     });
 
     this.route.queryParams.subscribe(() => {
-      this.applySearchFromQuery();
+      this.applyFilters();
     });
-}
-applySearchFromQuery() {
-  const q = this.route.snapshot.queryParamMap
-    .get('q')
-    ?.toLowerCase()
-    .trim();
+  }
 
-  const category = this.route.snapshot.queryParamMap
-    .get('category')
-    ?.toUpperCase();
+  applyFilters() {
+    const category = this.route.snapshot.queryParamMap.get('category');
+    this.activeCategory = category;
+    this.isCategoryView = !!category;
 
-  this.filteredPosts = this.posts.filter(p => {
-    const matchesSearch = q
-      ? p.title?.toLowerCase().includes(q) ||
-        p.description?.toLowerCase().includes(q) ||
-        p.content?.toLowerCase().includes(q)
-      : true;
+    this.filteredPosts = category
+      ? this.posts.filter(
+          p => p.category?.toLowerCase() === category.toLowerCase()
+        )
+      : this.posts;
 
-    const matchesCategory = category
-      ? p.category?.toUpperCase() === category
-      : true;
-
-    return matchesSearch && matchesCategory;
-  });
-
-  this.totalPages = Math.ceil(this.filteredPosts.length / this.itemsPerPage);
-  this.currentPage = 1;
-  this.viewportScroller.scrollToPosition([0, 0]);
-}
+    this.totalPages = Math.ceil(this.filteredPosts.length / this.itemsPerPage);
+    this.currentPage = 1;
+    this.viewportScroller.scrollToPosition([0, 0]);
+  }
 
   get paginatedPosts() {
     const start = (this.currentPage - 1) * this.itemsPerPage;
@@ -85,27 +73,16 @@ applySearchFromQuery() {
   }
 
   goToPage(page: number) {
-    if (page < 1 || page > this.totalPages) return;
     this.currentPage = page;
-    this.viewportScroller.scrollToPosition([0, 0]); 
+    this.viewportScroller.scrollToPosition([0, 0]);
   }
 
+  viewPost(slug?: string) {
+    if (!slug) return;
+    this.router.navigate(['/post', slug]);
+  }
 
-
-viewPost(slug?: string) {
-  console.log('CLICKED SLUG:', slug);
-  if (!slug) return;
-  this.router.navigate(['/post', slug]);
-  this.viewportScroller.scrollToPosition([0, 0]);
-
-}
-
-
-  // viewPost(id: number | undefined) {
-  //   if (!id) return;
-
-  //   this.router.navigate(['/posts', id]).then(() => {
-  //     this.viewportScroller.scrollToPosition([0, 0]); 
-  //   });
-  // }
+  goHome() {
+    this.router.navigate(['/home']);
+  }
 }

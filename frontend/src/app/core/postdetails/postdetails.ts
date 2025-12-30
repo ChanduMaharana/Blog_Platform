@@ -179,11 +179,6 @@ this.updateCanonicalLink(url);
     this.router.navigateByUrl('/home');
   }
 
-  // viewPost(id?: number) {
-  //   if (id) {
-  //     this.router.navigate(['/posts', id]);
-  //   }
-  // }
 
  viewPost(slug?: string) {
   if (!slug) return;
