@@ -18,13 +18,34 @@
 
     </div>
     <div>
-      <h3 class="font-semibold mb-2">Quick FAQ</h3>
-      <ul class="text-sm space-y-1 text-gray-600">
-        <li>How often is content updated?</li>
-        <li>How do I submit a comment?</li>
-        <li>Is there an RSS feed?</li>
-      </ul>
-    </div>
+  <h3 class="font-semibold mb-2">Quick FAQ</h3>
+
+  <ul class="text-sm space-y-2 text-gray-600">
+    <li
+      *ngFor="let faq of faqs; let i = index"
+      class="cursor-pointer"
+    >
+      <!-- Question -->
+      <div
+        class="flex items-center justify-between"
+        (click)="toggleFaq(i)"
+      >
+        <span>{{ faq.question }}</span>
+        <span class="text-gray-400">
+          {{ activeFaqIndex === i ? '−' : '+' }}
+        </span>
+      </div>
+
+      <div
+        *ngIf="activeFaqIndex === i"
+        class="mt-2 px-3 py-2 bg-gray-50 border-l-4 border-blue-500 text-gray-700 rounded"
+      >
+        {{ faq.answer }}
+      </div>
+    </li>
+  </ul>
+</div>
+
     <div>
       <h3 class="font-semibold mb-2">Links</h3>
       <ul class="text-sm space-y-1 text-gray-600">

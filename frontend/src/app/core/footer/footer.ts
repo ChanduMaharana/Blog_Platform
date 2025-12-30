@@ -12,6 +12,30 @@ import { RouterLink } from '@angular/router';
 })
 export class Footer {
 
+  activeFaqIndex: number | null = null;
+
+  faqs = [
+    {
+      question: 'How often is content updated?',
+      answer:
+        'We publish new articles regularly. Check back often for the latest insights and stories.',
+    },
+    {
+      question: 'How do I submit a comment?',
+      answer:
+        'You can leave comments directly on any blog post. Simply scroll to the comments section and share your thoughts.',
+    },
+    {
+      question: 'Is there an RSS feed?',
+      answer:
+        'Yes, you can subscribe to our RSS feed to get updates on new articles automatically.',
+    },
+  ];
+
+  toggleFaq(index: number) {
+    this.activeFaqIndex =
+      this.activeFaqIndex === index ? null : index;
+  }
   categories = ['News', 'Business', 'Politics','Sports', 'Entertainment', 'Tech'];
 
   constructor(private router: Router) {}
