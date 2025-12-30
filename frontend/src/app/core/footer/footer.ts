@@ -41,9 +41,11 @@ export class Footer {
       ? this.faqs[this.activeFaqIndex].answer
       : null;
   }
+  
   categories = ['News', 'Business', 'Politics','Sports', 'Entertainment', 'Tech'];
 
   constructor(private router: Router) {}
+
 
  filterByCategory(category: string) {
     this.router.navigate(['/home'], {
