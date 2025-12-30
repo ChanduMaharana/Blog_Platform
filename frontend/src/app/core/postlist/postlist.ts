@@ -52,18 +52,33 @@ export class Postlist {
   }
 
   applyFilters() {
+    const q = this.route.snapshot.queryParamMap
+      .get('q')
+      ?.toLowerCase()
+      .trim();
+
     const category = this.route.snapshot.queryParamMap.get('category');
+
     this.activeCategory = category;
     this.isCategoryView = !!category;
 
-    this.filteredPosts = category
-      ? this.posts.filter(
-          p => p.category?.toLowerCase() === category.toLowerCase()
-        )
-      : this.posts;
+    this.filteredPosts = this.posts.filter(p => {
+      const matchesCategory = category
+        ? p.category?.toLowerCase() === category.toLowerCase()
+        : true;
+
+      const matchesSearch = q
+        ? p.title?.toLowerCase().includes(q) ||
+          p.description?.toLowerCase().includes(q) ||
+          p.content?.toLowerCase().includes(q)
+        : true;
+
+      return matchesCategory && matchesSearch;
+    });
 
     this.totalPages = Math.ceil(this.filteredPosts.length / this.itemsPerPage);
     this.currentPage = 1;
+
     this.viewportScroller.scrollToPosition([0, 0]);
   }
 
@@ -73,6 +88,7 @@ export class Postlist {
   }
 
   goToPage(page: number) {
+    if (page < 1 || page > this.totalPages) return;
     this.currentPage = page;
     this.viewportScroller.scrollToPosition([0, 0]);
   }
@@ -86,3 +102,4 @@ export class Postlist {
     this.router.navigate(['/home']);
   }
 }
+
