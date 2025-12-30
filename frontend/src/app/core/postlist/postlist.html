@@ -10,9 +10,10 @@
       ← Back to Home
     </button>
 
-    <h1 class="text-2xl font-bold">
+    <h1 class="text-4xl font-bold">
       {{ activeCategory }}
     </h1>
+    <p>Explore all post in this category!</p>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -28,7 +29,7 @@
 
       <div class="p-4">
         <span 
-            class="absolute top-3 left-3 px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800" >
+            class="absolute top-4 left-3 px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800" >
           {{ post.category }}
         </span>
 
@@ -70,7 +71,7 @@
             class="w-full h-40 sm:h-48 object-cover transition-all duration-300"
           />
           <span
-            class="absolute top-3 left-3 px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800"
+            class="absolute top-4 left-2 px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800"
           >
             {{ post.category || 'News' }}
           </span>
