@@ -7,12 +7,15 @@
     <div>
       <h3 class="font-semibold mb-2">Categories</h3>
       <ul class="text-sm space-y-1 text-gray-600">
-        <li>News</li>
-        <li>Business</li>
-        <li>Politics</li>
-        <li>Entertainment</li>
-        <li>Tech</li>
-      </ul>
+  <li
+    *ngFor="let cat of categories"
+    class="cursor-pointer hover:text-blue-600"
+    (click)="filterByCategory(cat)"
+  >
+    {{ cat }}
+  </li>
+</ul>
+
     </div>
     <div>
       <h3 class="font-semibold mb-2">Quick FAQ</h3>
