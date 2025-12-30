@@ -36,6 +36,11 @@ export class Footer {
     this.activeFaqIndex =
       this.activeFaqIndex === index ? null : index;
   }
+    get activeAnswer() {
+    return this.activeFaqIndex !== null
+      ? this.faqs[this.activeFaqIndex].answer
+      : null;
+  }
   categories = ['News', 'Business', 'Politics','Sports', 'Entertainment', 'Tech'];
 
   constructor(private router: Router) {}

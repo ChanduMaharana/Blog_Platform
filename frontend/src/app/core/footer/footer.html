@@ -1,63 +1,64 @@
 <footer class="border-t mt-12 py-8 bg-white">
+  <!-- TOP GRID -->
   <div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 px-4">
+
     <div>
       <h3 class="font-semibold text-lg mb-2">Xybron Blog</h3>
-      <p class="text-gray-600 text-sm">Discover insights, stories, and updates from our team. Stay informed with quality content.</p>
+      <p class="text-gray-600 text-sm">
+        Discover insights, stories, and updates from our team.
+        Stay informed with quality content.
+      </p>
     </div>
+
     <div>
       <h3 class="font-semibold mb-2">Categories</h3>
       <ul class="text-sm space-y-1 text-gray-600">
-  <li
-    *ngFor="let cat of categories"
-    class="cursor-pointer hover:text-blue-600"
-    (click)="filterByCategory(cat)"
-  >
-    {{ cat }}
-  </li>
-</ul>
-
+        <li *ngFor="let cat of categories">{{ cat }}</li>
+      </ul>
     </div>
+
+    <!-- FAQ QUESTIONS -->
     <div>
-  <h3 class="font-semibold mb-2">Quick FAQ</h3>
+      <h3 class="font-semibold mb-2">Quick FAQ</h3>
 
-  <ul class="text-sm space-y-2 text-gray-600">
-    <li
-      *ngFor="let faq of faqs; let i = index"
-      class="cursor-pointer"
-    >
-      <!-- Question -->
-      <div
-        class="flex items-center justify-between"
-        (click)="toggleFaq(i)"
-      >
-        <span>{{ faq.question }}</span>
-        <span class="text-gray-400">
-          {{ activeFaqIndex === i ? '−' : '+' }}
-        </span>
-      </div>
-
-      <div
-        *ngIf="activeFaqIndex === i"
-        class="mt-2 px-3 py-2 bg-gray-50 border-l-4 border-blue-500 text-gray-700 rounded"
-      >
-        {{ faq.answer }}
-      </div>
-    </li>
-  </ul>
-</div>
+      <ul class="text-sm space-y-2 text-gray-600">
+        <li
+          *ngFor="let faq of faqs; let i = index"
+          class="cursor-pointer flex items-center justify-between hover:text-blue-600"
+          (click)="toggleFaq(i)"
+        >
+          <span>{{ faq.question }}</span>
+          <span class="text-gray-400">
+            {{ activeFaqIndex === i ? '−' : '+' }}
+          </span>
+        </li>
+      </ul>
+    </div>
 
     <div>
       <h3 class="font-semibold mb-2">Links</h3>
       <ul class="text-sm space-y-1 text-gray-600">
-      <li><a routerLink="/home">Home</a></li>
-      <li><a routerLink="/privacy-policy">Privacy Policy</a></li>
-      <li><a routerLink="/contact-us">Contact Us</a></li>
+        <li><a routerLink="/home">Home</a></li>
+        <li><a routerLink="/privacy-policy">Privacy Policy</a></li>
+        <li><a routerLink="/contact-us">Contact Us</a></li>
       </ul>
     </div>
   </div>
-  <div class="border-b border-gray-200 mb-4 mt-3"></div>
 
-  <div class="text-center text-gray-500 text-sm mt-8">
+  <!-- FAQ ANSWER (CENTERED, BELOW GRID) -->
+  <div
+    *ngIf="activeAnswer"
+    class="container mx-auto px-4 mt-6"
+  >
+    <div
+      class="max-w-3xl mx-auto bg-gray-50 border-l-4 border-blue-500 px-4 py-3 text-gray-700 text-sm rounded"
+    >
+      {{ activeAnswer }}
+    </div>
+  </div>
+
+  <!-- Footer bottom -->
+  <div class="border-t border-gray-200 mt-8 pt-4 text-center text-gray-500 text-sm">
     © 2025 Xybron Blog. All rights reserved.
   </div>
 </footer>
