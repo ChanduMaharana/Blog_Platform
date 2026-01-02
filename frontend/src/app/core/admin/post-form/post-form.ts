@@ -28,7 +28,13 @@ export class PostForm implements OnInit {
     });
   }
 
-  onSubmit() { this.submitForm.emit(); }
+  onSubmit() {
+  if (!this.form.get('categoryId')?.value) {
+    alert('Please select a category');
+    return;
+  }
+  this.submitForm.emit();
+ }
   onCancel() { this.cancelForm.emit(); }
 
   onFile(event: any) {
