@@ -5,11 +5,12 @@ import { Meta, Title } from '@angular/platform-browser';
 import { PostService, PostDetail, PostSummary } from '../../services/post-service';
 import { CommentSection } from '../../shared/comment-section/comment-section';
 import { environment } from '../../environments/environment';
+import { SafeHtmlPipe } from "../../shared/safe-html.pipe";
 
 @Component({
   selector: 'app-postdetails',
   standalone: true,
-  imports: [CommonModule, CommentSection,RouterModule],
+  imports: [CommonModule, CommentSection, RouterModule, SafeHtmlPipe],
   templateUrl: './postdetails.html',
 })
 export class Postdetails implements OnInit {

@@ -6,6 +6,8 @@
     ← Back to Posts
   </button>
 
+  <article class="prose prose-sm sm:prose-base lg:prose-lg max-w-none select-text">
+
   <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 text-gray-900 leading-tight">
     {{ post?.title }}
   </h1>
@@ -67,8 +69,10 @@
   <!-- CONTENT -->
 <div
   class="prose prose-sm sm:prose-base lg:prose-lg max-w-none mb-10 text-gray-800"
-  [innerHTML]="post?.content">
+  [innerHTML]="post.content | safeHtml">
 </div>
+
+</article>
 
   <!-- COMMENTS -->
   <div class="mb-10">
