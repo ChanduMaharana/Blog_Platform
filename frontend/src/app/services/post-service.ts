@@ -99,4 +99,11 @@ export class PostService {
     const backendBase = environment.apiUrl.replace('/api', '');
     return `${backendBase}/uploads/${img.replace(/^\/+/, '')}`;
   }
+
+  getTotalViews() {
+  return this.http.get<{ totalViews: number }>(
+    `${this.api}/posts/stats/total-views`
+  );
+}
+
 }

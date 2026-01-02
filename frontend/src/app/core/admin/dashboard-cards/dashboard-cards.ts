@@ -15,6 +15,7 @@ export class DashboardCards implements OnInit {
   postCount: number = 0;
   categoryCount: number = 0;
   bannerCount: number = 0;
+  
 
   constructor(
     private postService: PostService,
@@ -22,8 +23,12 @@ export class DashboardCards implements OnInit {
     private bannerService: BannerService
   ) {}
 
+  totalViews = 0;
   ngOnInit(): void {
     this.loadCounts();
+    this.postService.getTotalViews().subscribe(res => {
+    this.totalViews = res.totalViews;
+  });
   }
 
   loadCounts() {

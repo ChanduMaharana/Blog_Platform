@@ -40,14 +40,13 @@ export const createPost = async (req, res) => {
       image: imageUrl,
       coverImage: imageUrl,
 
-      // ✅ FORCE INTEGER
       categoryId: Number(categoryId),
 
       published: req.body.published === "true" || req.body.published === true,
       featured: req.body.featured === "true" || false,
       trending: req.body.trending === "true" || false,
-      popular: req.body.popular === "true" || false,
-      views: Number(req.body.views) || 0,
+      views: 0,
+      popular: false,
 
       excerpt: req.body.excerpt || "",
       metaDescription: req.body.metaDescription || "",
@@ -63,6 +62,26 @@ export const createPost = async (req, res) => {
   }
 };
 
+const updatePopularPosts = async () => {
+  const topPosts = await Post.findAll({
+    order: [['views', 'DESC']],
+    limit: 5,
+    attributes: ['id']
+  });
+
+  const topIds = topPosts.map(p => p.id);
+
+  await Post.update({ popular: false }, { where: {} });
+
+  if (topIds.length) {
+    await Post.update(
+      { popular: true },
+      { where: { id: topIds } }
+    );
+  }
+};
+
+
 export const getPostBySlug = async (req, res) => {
   try {
     const post = await Post.findOne({
@@ -74,26 +93,40 @@ export const getPostBySlug = async (req, res) => {
       return res.status(404).json({ message: "Post not found" });
     }
 
+    await post.increment('views', { by: 1 });
+
+    await updatePopularPosts();
+
     const img = post.coverImage || post.image;
 
-   res.json({
-  id: post.id,
-  title: post.title,
-  slug: post.slug,   
-  description: post.description,
-  content: post.content,
-  author: post.author,
-  date: post.date,
-  image: img,
-  coverImage: img,
-  Category: post.Category
-});
+    res.json({
+      id: post.id,
+      title: post.title,
+      slug: post.slug,
+      description: post.description,
+      content: post.content,
+      author: post.author,
+      date: post.date,
+      views: post.views + 1,
+      image: img,
+      coverImage: img,
+      Category: post.Category
+    });
 
   } catch (err) {
-    console.error("GET POST BY SLUG ERROR 👉", err);
     res.status(500).json({ error: err.message });
   }
 };
+
+export const getTotalViews = async (req, res) => {
+  try {
+    const totalViews = await Post.sum('views');
+    res.json({ totalViews: totalViews || 0 });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 
 /* GET ALL */
 export const getPosts = async (req, res) => {

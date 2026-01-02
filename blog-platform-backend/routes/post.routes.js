@@ -5,6 +5,7 @@ import {
   getPosts,
   updatePost,
   deletePost,
+  getTotalViews,
   getPaginatedPosts,
 } from "../controllers/post.controller.js";
 import { getComments, addComment } from "../controllers/comment.controller.js";
@@ -16,7 +17,7 @@ const router = express.Router();
 router.post("/", upload.single("image"), createPost);
 
 router.get("/paginated/list", getPaginatedPosts);
-
+router.get('/posts/stats/total-views', getTotalViews);
 router.get("/", getPosts);
 
 router.get("/slug/:slug", async (req, res) => {
