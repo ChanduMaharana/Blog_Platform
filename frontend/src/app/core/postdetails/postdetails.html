@@ -1,11 +1,12 @@
 <div *ngIf="!loading; else loadingTemplate"
-      class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-[200px_1fr_200px] gap-6">
+  class="max-w-7xl mx-auto px-4 py-6
+         grid grid-cols-1 lg:grid-cols-[220px_1fr_220px] gap-6">
 
-       <aside class="hidden lg:block">
+  <aside class="hidden lg:block">
     <app-google-ad adSlot="8528714288"></app-google-ad>
   </aside>
 
-
+<main class="min-w-0">
  <button (click)="goBack()"
     class="text-gray-500 cursor-pointer text-sm mb-6 inline-block hover:underline">
     ← Back to Posts
@@ -67,7 +68,7 @@
   <img
   *ngIf="post?.coverImage"
   [src]="post.coverImage"
-  class="rounded-xl shadow w-full mb-6 object-cover h-48 sm:h-64 lg:h-80"
+  class="w-full h-48 sm:h-64 lg:h-80 rounded-xl object-cover mb-6"
 />
 <!-- MOBILE AD -->
 <div class="block lg:hidden my-6">
@@ -84,11 +85,11 @@
 </article>
 
   <!-- COMMENTS -->
-  <div class="mb-10">
+  <div class="mt-10">
     <app-comment-section></app-comment-section>
   </div>
 
-  <div *ngIf="relatedPosts.length" class="mt-10">
+  <div *ngIf="relatedPosts.length" class="mt-12">
     <h2 class="text-lg sm:text-xl font-semibold mb-6">
       Related Posts
     </h2>
@@ -104,7 +105,7 @@
          <img
          [src]="related.image || 'assets/default.jpg'"
          [alt]="related.title"
-         class="w-full h-40 object-cover" />
+         class="w-full h-40 object-cover rounded-t-lg" />
 
           <span
             class="absolute top-2 left-2 px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
@@ -133,7 +134,8 @@
 
     </div>
   </div>
-  <aside class="hidden lg:block sticky top-24 h-fit">
+  </main>
+  <aside class="hidden lg:block">
     <app-google-ad adSlot="8528714288"></app-google-ad>
   </aside>
 
@@ -149,16 +151,14 @@
   </div>
 </ng-template>
 <style>
-  .ad-box {
-  min-height: 600px;          
-  background: #f3f4f6;      
+ .ad-box {
+  min-height: 600px;
+  background: #f3f4f6;
   border: 1px dashed #d1d5db;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: sticky;
-  top: 96px;
 }
 
 .ad-box::before {
@@ -166,5 +166,13 @@
   font-size: 12px;
   color: #6b7280;
 }
+
+.share-btn {
+  padding: 6px 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
 
 </style>
