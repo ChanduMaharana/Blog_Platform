@@ -1,7 +1,7 @@
 <div *ngIf="!loading; else loadingTemplate"
-      class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-[200px_1fr_200px] gap-6">
 
-       <aside class="hidden lg:block sticky top-24 h-fit">
+       <aside class="hidden lg:block">
     <app-google-ad adSlot="8528714288"></app-google-ad>
   </aside>
 
@@ -148,3 +148,23 @@
     </div>
   </div>
 </ng-template>
+<style>
+  .ad-box {
+  min-height: 600px;          
+  background: #f3f4f6;      
+  border: 1px dashed #d1d5db;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: sticky;
+  top: 96px;
+}
+
+.ad-box::before {
+  content: "Advertisement";
+  font-size: 12px;
+  color: #6b7280;
+}
+
+</style>
