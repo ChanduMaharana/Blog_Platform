@@ -3,7 +3,9 @@
          grid grid-cols-1 lg:grid-cols-[220px_1fr_220px] gap-6">
 
   <aside class="hidden lg:block">
+    <div class="ad-box">
     <app-google-ad adSlot="8528714288"></app-google-ad>
+    </div>
   </aside>
 
 <main class="min-w-0">
@@ -72,7 +74,9 @@
 />
 <!-- MOBILE AD -->
 <div class="block lg:hidden my-6">
+  <div class="ad-box">
   <app-google-ad adSlot="5066969660"></app-google-ad>
+  </div>
 </div>
 
 
@@ -136,7 +140,9 @@
   </div>
   </main>
   <aside class="hidden lg:block">
+       <div class="ad-box"> 
     <app-google-ad adSlot="8528714288"></app-google-ad>
+    </div>
   </aside>
 
 </div>
@@ -152,9 +158,9 @@
 </ng-template>
 <style>
  .ad-box {
-  min-height: 600px;
-  background: #f3f4f6;
-  border: 1px dashed #d1d5db;
+  min-height: 600px;              
+  background: #f3f4f6;            
+  border: 2px dashed #9ca3af; 
   border-radius: 8px;
   display: flex;
   align-items: center;
