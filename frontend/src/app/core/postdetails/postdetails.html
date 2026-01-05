@@ -1,5 +1,10 @@
 <div *ngIf="!loading; else loadingTemplate"
-     class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-[200px_1fr_200px] gap-6">
+
+      <aside class="hidden lg:block sticky top-24 h-fit">
+  <app-google-ad adSlot="8528714288"></app-google-ad>
+</aside>
+
 
  <button (click)="goBack()"
     class="text-gray-500 cursor-pointer text-sm mb-6 inline-block hover:underline">
@@ -64,6 +69,10 @@
   [src]="post.coverImage"
   class="rounded-xl shadow w-full mb-6 object-cover h-48 sm:h-64 lg:h-80"
 />
+<!-- MOBILE AD -->
+<div class="block lg:hidden my-6">
+  <app-google-ad adSlot="5066969660"></app-google-ad>
+</div>
 
 
   <!-- CONTENT -->
@@ -124,6 +133,9 @@
 
     </div>
   </div>
+<aside class="hidden lg:block sticky top-24 h-fit">
+  <app-google-ad adSlot="8528714288"></app-google-ad>
+</aside>
 
 </div>
 
