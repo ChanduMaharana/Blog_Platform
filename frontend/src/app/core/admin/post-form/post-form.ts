@@ -28,6 +28,34 @@ export class PostForm implements OnInit {
     });
   }
 
+  format(command: 'bold' | 'italic' | 'underline') {
+  document.execCommand(command, false);
+  this.syncContent();
+}
+
+  insertLink() {
+  const url = prompt('Enter URL');
+  if (!url) return;
+
+  document.execCommand('createLink', false, url);
+  this.syncContent();
+}
+
+insertImage() {
+  const url = prompt('Enter Image URL');
+  if (!url) return;
+
+  document.execCommand('insertImage', false, url);
+  this.syncContent();
+}
+
+syncContent() {
+  const editor = document.querySelector('[contenteditable="true"]') as HTMLElement;
+  if (editor) {
+    this.form.get('content')?.setValue(editor.innerHTML);
+  }
+}
+
   onSubmit() {
   if (!this.form.get('categoryId')?.value) {
     alert('Please select a category');

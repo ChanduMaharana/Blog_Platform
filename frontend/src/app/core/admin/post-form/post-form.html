@@ -37,6 +37,25 @@
 
   <!-- Content -->
 <div>
+  <!-- EDITOR TOOLBAR -->
+<div class="flex flex-wrap items-center gap-2 mb-2 border border-gray-300 rounded-lg p-2 bg-gray-50">
+
+  <button type="button" (click)="format('bold')" class="editor-btn font-bold">B</button>
+
+  <button type="button" (click)="format('italic')" class="editor-btn italic">I</button>
+
+  <button type="button" (click)="format('underline')" class="editor-btn underline">U</button>
+
+  <button type="button" (click)="insertLink()" class="editor-btn">
+    🔗 Link
+  </button>
+
+  <button type="button" (click)="insertImage()" class="editor-btn">
+    🖼 Image
+  </button>
+
+</div>
+
   <div
     contenteditable="true"
     class="w-full min-h-[170px] border border-gray-300 rounded-lg px-3 py-2
@@ -178,3 +197,18 @@
     </button>
   </div>
 </form>
+
+<style>
+  .editor-btn {
+    padding: 4px 8px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: white;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .editor-btn:hover {
+    background: #f3f4f6;
+  }
+</style>
