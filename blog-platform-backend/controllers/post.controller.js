@@ -12,6 +12,7 @@ const normalizeImage = (img) => {
 };
 
 
+const POPULAR_THRESHOLD = 100; 
 
 export const createPost = async (req, res) => {
   try {
@@ -62,25 +63,6 @@ export const createPost = async (req, res) => {
   }
 };
 
-const updatePopularPosts = async () => {
-  const topPosts = await Post.findAll({
-    order: [['views', 'DESC']],
-    limit: 5,
-    attributes: ['id']
-  });
-
-  const topIds = topPosts.map(p => p.id);
-
-  await Post.update({ popular: false }, { where: {} });
-
-  if (topIds.length) {
-    await Post.update(
-      { popular: true },
-      { where: { id: topIds } }
-    );
-  }
-};
-
 
 export const getPostBySlug = async (req, res) => {
   try {
@@ -95,7 +77,12 @@ export const getPostBySlug = async (req, res) => {
 
     await post.increment('views', { by: 1 });
 
-    await updatePopularPosts();
+    await post.reload();
+
+    const updatedViews = Number(post.views);
+    if (post.views >= POPULAR_THRESHOLD && !post.popular) {
+  await post.update({ popular: true });
+}
 
     const img = post.coverImage || post.image;
 
@@ -155,6 +142,20 @@ export const getPosts = async (req, res) => {
   );
 };
 
+export const getPopularPosts = async (req, res) => {
+  try {
+    const posts = await Post.findAll({
+      where: { popular: true },
+      order: [["views", "DESC"]],
+      limit: 5,
+      include: [{ model: Category, as: "Category" }],
+    });
+
+    res.json(posts);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 
 
 

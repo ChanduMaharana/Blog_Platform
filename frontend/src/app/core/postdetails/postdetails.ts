@@ -189,8 +189,9 @@ this.updateCanonicalLink(url);
 
 
 private getShareUrl(): string {
-  return `${this.SITE_URL}/share/${this.post.slug}`;
+  return `https://blog-backend-biys.onrender.com/share/${this.post.slug}`;
 }
+
 
 
   shareOnFacebook() {
