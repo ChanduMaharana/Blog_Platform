@@ -189,7 +189,7 @@ this.updateCanonicalLink(url);
 
 
 private getShareUrl(): string {
-  return `${this.SITE_URL}/share/${this.post.slug}`;
+  return `${this.SITE_URL}/post/${this.post.slug}`;
 }
 
 
