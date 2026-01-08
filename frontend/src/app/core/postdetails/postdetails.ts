@@ -19,7 +19,7 @@ export class Postdetails implements OnInit {
   loading = true;
   relatedPosts: PostSummary[] = [];
 
-  private readonly SITE_URL = 'https://blog-platform-xybron-git-master-220101120198s-projects.vercel.app';
+  private readonly SITE_URL = 'https://blog-platform-chi-three.vercel.app/home';
 
   constructor(
     private route: ActivatedRoute,
