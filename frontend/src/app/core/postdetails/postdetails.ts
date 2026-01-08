@@ -189,7 +189,7 @@ this.updateCanonicalLink(url);
 
 
 private getShareUrl(): string {
-  return `${this.SITE_URL}/post/${this.post.slug}?utm_source=copy&utm_medium=share&utm_campaign=post_share&utm_content=${this.post.slug}`;
+return `https://thexybron.com/post/${this.post.slug}`;
 }
 
 
