@@ -1,5 +1,9 @@
 import { Component, AfterViewInit, Input } from '@angular/core';
-
+declare global {
+  interface Window {
+    adsbygoogle: any[];
+  }
+}
 @Component({
   selector: 'app-google-ad',
   imports: [],
@@ -10,11 +14,14 @@ export class GoogleAd implements AfterViewInit {
   @Input() adSlot!: string;                 
 
   ngAfterViewInit(): void {
-    try {
-      // @ts-ignore
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (e) {
-      console.error('Adsense error', e);
-    }
+     setTimeout(() => {
+      try {
+        if (window.adsbygoogle) {
+          window.adsbygoogle.push({});
+        }
+      } catch (err) {
+        console.warn('Adsense not loaded yet');
+      }
+    }, 500);
   }
 }

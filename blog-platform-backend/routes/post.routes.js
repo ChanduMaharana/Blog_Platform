@@ -14,6 +14,61 @@ import Category from "../models/category.model.js";
 
 const router = express.Router();
 
+router.get("/share/:slug", async (req, res) => {
+  try {
+    const post = await Post.findOne({
+      where: { slug: req.params.slug },
+      include: [{ model: Category, as: "Category" }],
+    });
+
+    if (!post) return res.status(404).send("Not found");
+
+    const image =
+      post.coverImage?.startsWith("http")
+        ? post.coverImage
+        : post.coverImage
+        ? `https://blog-backend-biys.onrender.com/uploads/${post.coverImage}`
+        : "https://blog-backend-biys.onrender.com/uploads/default-og.jpg";
+
+    const url = `https://thexybron.com/post/${post.slug}`;
+
+    res.set("Content-Type", "text/html");
+
+    return res.send(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>${post.ogTitle || post.title}</title>
+
+  <meta name="description" content="${post.metaDescription || post.description || ""}">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="${post.ogTitle || post.title}">
+  <meta property="og:description" content="${post.metaDescription || post.description || ""}">
+  <meta property="og:image" content="${image}">
+  <meta property="og:image:secure_url" content="${image}">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="${url}">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${post.ogTitle || post.title}">
+  <meta name="twitter:description" content="${post.metaDescription || post.description || ""}">
+  <meta name="twitter:image" content="${image}">
+
+  <!-- Redirect humans -->
+  <meta http-equiv="refresh" content="0;url=${url}">
+</head>
+<body></body>
+</html>
+    `);
+  } catch (err) {
+    console.error("SHARE ROUTE ERROR 👉", err);
+    res.status(500).send("Server error");
+  }
+});
+
+
 router.post("/", upload.single("image"), createPost);
 
 router.get("/paginated/list", getPaginatedPosts);
