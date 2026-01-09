@@ -14,17 +14,6 @@ import Category from "../models/category.model.js";
 
 const router = express.Router();
 
-app.use((req, res, next) => {
-  const ua = req.headers['user-agent'] || '';
-
-  if (ua.includes('facebookexternalhit')) {
-    return next();
-  }
-
-  next();
-});
-
-
 router.get("/share/:slug", async (req, res) => {
   try {
     const post = await Post.findOne({ where: { slug: req.params.slug } });
@@ -90,22 +79,6 @@ router.get("/:id", async (req, res) => {
   res.json(post);
 });
 
-app.get('/robots.txt', (req, res) => {
-  res.type('text/plain');
-  res.send(`
-User-agent: *
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: LinkedInBot
-Allow: /
-`);
-});
 
 
 router.put("/:id", upload.single("image"), updatePost);

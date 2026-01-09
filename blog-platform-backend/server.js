@@ -26,6 +26,15 @@ const APP_ROOT = process.cwd();
 const UPLOADS_DIR = path.join(APP_ROOT, "uploads");
 const BANNERS_DIR = path.join(UPLOADS_DIR, "banners");
 
+app.use((req, res, next) => {
+  const ua = req.headers['user-agent'] || '';
+
+  if (ua.includes('facebookexternalhit')) {
+    return next();
+  }
+
+  next();
+});
 
 if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 if (!fs.existsSync(BANNERS_DIR)) fs.mkdirSync(BANNERS_DIR, { recursive: true });
@@ -71,6 +80,23 @@ Post.belongsTo(Category, {
 
 Category.hasMany(Post, {
   foreignKey: "categoryId",
+});
+
+app.get('/robots.txt', (req, res) => {
+  res.type('text/plain');
+  res.send(`
+User-agent: *
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+`);
 });
 
 app.get('/posts/:id', async (req, res) => {
