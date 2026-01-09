@@ -14,52 +14,62 @@ import Category from "../models/category.model.js";
 
 const router = express.Router();
 
-router.get("/share/:slug", async (req, res) => {
-  try {
-    const post = await Post.findOne({ where: { slug: req.params.slug } });
-    if (!post) return res.status(404).send("Not found");
+router.get('/share/:slug', async (req, res) => {
+  const post = await Post.findOne({ where: { slug: req.params.slug } });
+  if (!post) return res.sendStatus(404);
 
-    const image = post.coverImage
-      ? post.coverImage.startsWith("http")
-        ? post.coverImage
-        : `https://blog-backend-biys.onrender.com/uploads/${post.coverImage}`
-      : "https://blog-backend-biys.onrender.com/uploads/default-og.jpg";
+  const image = post.coverImage;
 
-    const frontendUrl = `https://blog-platform-chi-three.vercel.app/post/${post.slug}`;
+  const frontendUrl =
+    `https://blog-platform-chi-three.vercel.app/post/${post.slug}`;
 
-    res.status(200).send(`
-<!DOCTYPE html>
+  res.status(200).send(`
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>${post.ogTitle || post.title}</title>
+<meta charset="utf-8">
+<title>${post.ogTitle || post.title}</title>
 
-  <meta name="description" content="${post.metaDescription || post.description || ""}"/>
+<meta property="og:title" content="${post.ogTitle || post.title}">
+<meta property="og:description" content="${post.metaDescription || post.description || ''}">
+<meta property="og:image" content="${image}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="article">
+<meta property="og:url" content="${frontendUrl}">
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="${post.ogTitle || post.title}" />
-  <meta property="og:description" content="${post.metaDescription || post.description || ""}" />
-  <meta property="og:image" content="${image}" />
-  <meta property="og:image:secure_url" content="${image}" />
-  <meta property="og:type" content="article" />
-  <meta property="og:url" content="${frontendUrl}" />
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="${image}">
 
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="${post.ogTitle || post.title}" />
-  <meta name="twitter:description" content="${post.metaDescription || post.description || ""}" />
-  <meta name="twitter:image" content="${image}" />
-
-  <!-- Human redirect -->
-  <meta http-equiv="refresh" content="0;url=${frontendUrl}" />
+<meta http-equiv="refresh" content="0;url=${frontendUrl}">
 </head>
 <body></body>
 </html>
 `);
-  } catch (err) {
-    console.error("SHARE ROUTE ERROR", err);
-    res.status(500).send("Server error");
+});
+
+router.get('/slug/:slug', async (req, res) => {
+  const post = await Post.findOne({
+    where: { slug: req.params.slug },
+    include: [{ model: Category, as: 'Category' }]
+  });
+
+  if (!post) {
+    return res.status(404).json({ message: 'Post not found' });
   }
+
+  await post.increment('views');
+
+  res.json({
+    id: post.id,
+    title: post.title,
+    slug: post.slug,
+    description: post.description,
+    content: post.content,
+    image: post.coverImage || post.image,
+    coverImage: post.coverImage || post.image,
+    Category: post.Category
+  });
 });
 
 
