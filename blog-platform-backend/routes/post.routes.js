@@ -18,7 +18,12 @@ router.get('/share/:slug', async (req, res) => {
   const post = await Post.findOne({ where: { slug: req.params.slug } });
   if (!post) return res.sendStatus(404);
 
-  const image = post.coverImage;
+  // ✅ FORCE A PUBLIC HTTPS IMAGE
+  let image = post.coverImage || post.image;
+
+  if (!image || !image.startsWith('http')) {
+    image = 'https://res.cloudinary.com/<YOUR_CLOUD_NAME>/image/upload/v1/blog-platform/default-og.jpg';
+  }
 
   const frontendUrl =
     `https://blog-platform-chi-three.vercel.app/post/${post.slug}`;
@@ -28,25 +33,33 @@ router.get('/share/:slug', async (req, res) => {
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>${post.ogTitle || post.title}</title>
 
+<title>${post.ogTitle || post.title}</title>
+<meta name="description" content="${post.metaDescription || post.description || ''}">
+
+<!-- Open Graph -->
 <meta property="og:title" content="${post.ogTitle || post.title}">
 <meta property="og:description" content="${post.metaDescription || post.description || ''}">
 <meta property="og:image" content="${image}">
+<meta property="og:image:secure_url" content="${image}">
+<meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:type" content="article">
 <meta property="og:url" content="${frontendUrl}">
 
+<!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="${image}">
 
+<!-- Redirect humans -->
 <meta http-equiv="refresh" content="0;url=${frontendUrl}">
 </head>
 <body></body>
 </html>
 `);
 });
+
 
 router.get('/slug/:slug', async (req, res) => {
   const post = await Post.findOne({
