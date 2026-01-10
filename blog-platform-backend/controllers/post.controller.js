@@ -136,6 +136,7 @@ export const getPosts = async (req, res) => {
       coverImage: p.coverImage || p.image,
       popular: p.popular,
       featured: p.featured,
+      views: Number(p.views) || 0, 
       trending: p.trending,
       Category: p.Category
     }))

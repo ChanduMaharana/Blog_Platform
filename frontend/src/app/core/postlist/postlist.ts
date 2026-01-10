@@ -46,8 +46,9 @@ export class Postlist {
 
       this.trendingPosts = [...this.posts].slice(0, 4);
       this.popularPosts = [...this.posts]
-  .sort((a, b) => (b.views ?? 0) - (a.views ?? 0))
-  .slice(0, 5);
+    .sort((a, b) => (b.views ?? 0) - (a.views ?? 0))
+    .slice(0, 1);
+
 
 
       this.applyFilters();
