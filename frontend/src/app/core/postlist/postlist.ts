@@ -45,7 +45,10 @@ export class Postlist {
       }));
 
       this.trendingPosts = [...this.posts].slice(0, 4);
-      this.popularPosts = this.posts.filter(p => (p as any).popular);
+      this.popularPosts = [...this.posts]
+  .sort((a, b) => (b.views ?? 0) - (a.views ?? 0))
+  .slice(0, 5);
+
 
       this.applyFilters();
     });

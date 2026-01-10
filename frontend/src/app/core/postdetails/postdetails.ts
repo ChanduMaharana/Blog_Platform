@@ -193,8 +193,6 @@ private getShareUrl(): string {
 }
 
 
-
-
   shareOnFacebook() {
   const url = encodeURIComponent(this.getShareUrl());
   window.open(
