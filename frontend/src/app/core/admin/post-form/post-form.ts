@@ -110,4 +110,27 @@ textToHtml(text: string): string {
     .join('');
 }
 
+triggerImageUpload() {
+  const input = document.getElementById('editorImageInput') as HTMLInputElement;
+  input?.click();
+}
+
+onEditorImageSelected(event: Event) {
+  const input = event.target as HTMLInputElement;
+  if (!input.files || !input.files.length) return;
+
+  const file = input.files[0];
+
+  this.fileSelected.emit(file);
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    document.execCommand('insertImage', false, reader.result as string);
+    this.syncContent();
+  };
+  reader.readAsDataURL(file);
+
+  input.value = '';
+}
+
 }

@@ -51,20 +51,33 @@
   </button>
 
   <button type="button" (click)="insertImage()" class="editor-btn">
-    🖼 Image
+    🖼 Image link
   </button>
+
+  <button type="button" (click)="triggerImageUpload()" class="editor-btn">
+  📁 Upload Image
+ </button>
+
+<input
+  type="file"
+  id="editorImageInput"
+  accept="image/*"
+  hidden
+  (change)="onEditorImageSelected($event)"
+/>
+
 
 </div>
 
   <div
-    contenteditable="true"
-    class="w-full min-h-[170px] border border-gray-300 rounded-lg px-3 py-2
-           text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500
-           prose max-w-none"
-    (input)="onContentChange($event)"
-    (paste)="onPaste($event)"
-    [innerHTML]="form.get('content')?.value || ''"
-  ></div>
+  #editor
+  contenteditable="true"
+  class="w-full min-h-[170px] border border-gray-300 rounded-lg px-3 py-2
+         text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500
+         prose max-w-none"
+  (input)="onContentChange($event)"
+  (paste)="onPaste($event)"
+></div>
 
   <p class="text-xs text-gray-500 mt-1">
     Paste content — headings, lists & spacing are preserved (styles removed)
