@@ -19,4 +19,6 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
   }
 });
 
+console.log("DATABASE_URL:", process.env.DATABASE_URL);
+
 export default sequelize;
