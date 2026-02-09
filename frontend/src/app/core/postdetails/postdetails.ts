@@ -6,12 +6,12 @@ import { PostService, PostDetail, PostSummary } from '../../services/post-servic
 import { CommentSection } from '../../shared/comment-section/comment-section';
 import { environment } from '../../environments/environment';
 import { SafeHtmlPipe } from "../../shared/safe-html.pipe";
-import { GoogleAd } from "../../shared/google-ad/google-ad";
+import { Ad } from '../ad/ad';
 
 @Component({
   selector: 'app-postdetails',
   standalone: true,
-  imports: [CommonModule, CommentSection, RouterModule, SafeHtmlPipe, GoogleAd],
+  imports: [CommonModule, CommentSection, RouterModule, SafeHtmlPipe, Ad],
   templateUrl: './postdetails.html',
 })
 export class Postdetails implements OnInit {
