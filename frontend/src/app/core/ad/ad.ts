@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BannerService, Banner } from '../../services/banner-service';
 import { FormsModule } from '@angular/forms';
@@ -10,24 +10,16 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './ad.html',
   styleUrls: ['./ad.css'],
 })
-export class Ad implements OnInit {
-  ads: Banner[] = [];
+export class Ad  implements AfterViewInit {
+  @Input() zoneId!: string;   
+  @Input() width = 300;
+  @Input() height = 250;
 
-  constructor(private bannerService: BannerService) {}
-
-  ngOnInit() {
-    this.bannerService.getAll().subscribe({
-      next: (res) => {
-        this.ads = res;  
-      },
-      error: (err) => {
-        console.error('Failed to load banners', err);
-      },
-    });
+  ngAfterViewInit() {
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.async = true;
+    script.src = `https://www.topcreativeformat.com/${this.zoneId}/invoke.js`;
+    document.body.appendChild(script);
   }
-  open(url?: string) {
-  if (!url) return;
-  window.open(url, "_blank");
-}
-
 }
