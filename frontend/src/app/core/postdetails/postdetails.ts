@@ -6,12 +6,12 @@ import { PostService, PostDetail, PostSummary } from '../../services/post-servic
 import { CommentSection } from '../../shared/comment-section/comment-section';
 import { environment } from '../../environments/environment';
 import { SafeHtmlPipe } from "../../shared/safe-html.pipe";
-import { FreeAd } from '../../shared/free-ad/free-ad';
+import { FreeAdComponent } from '../../shared/free-ad/free-ad';
 
 @Component({
   selector: 'app-postdetails',
   standalone: true,
-  imports: [CommonModule, CommentSection, RouterModule, SafeHtmlPipe, FreeAd],
+  imports: [CommonModule, CommentSection, RouterModule, SafeHtmlPipe, FreeAdComponent],
   templateUrl: './postdetails.html',
 })
 export class Postdetails implements OnInit {

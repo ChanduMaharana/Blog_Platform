@@ -3,25 +3,30 @@ import { Component, Input, AfterViewInit, ElementRef } from '@angular/core';
 @Component({
   selector: 'app-free-ad',
   standalone: true,
-  template: `
-    <div class="ad-container" #adHost></div>
-  `,
+  template: `<div class="ad-container"></div>`,
 })
-export class FreeAd implements AfterViewInit {
-  @Input() zoneId!: string;
+export class FreeAdComponent implements AfterViewInit {
+
+  @Input() adKey!: string;
+  @Input() width = 728;
+  @Input() height = 90;
 
   constructor(private el: ElementRef) {}
 
-  ngAfterViewInit() {
-    const container = this.el.nativeElement.querySelector('.ad-container');
-
-    if (!container || container.childNodes.length) return;
+  ngAfterViewInit(): void {
+    // @ts-ignore
+    window.atOptions = {
+      key: this.adKey,
+      format: 'iframe',
+      height: this.height,
+      width: this.width,
+      params: {}
+    };
 
     const script = document.createElement('script');
-    script.type = 'text/javascript';
+    script.src = `https://www.highperformanceformat.com/${this.adKey}/invoke.js`;
     script.async = true;
-    script.src = `https://www.topcreativeformat.com/${this.zoneId}/invoke.js`;
 
-    container.appendChild(script);
+    this.el.nativeElement.querySelector('.ad-container')?.appendChild(script);
   }
 }
