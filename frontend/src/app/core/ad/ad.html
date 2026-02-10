@@ -1,7 +1,24 @@
+<div *ngIf="ads.length; else noAds" class="space-y-6 w-[400px]">
 <div
-  class="border-2 border-dashed border-gray-400 rounded-lg flex items-center justify-center text-xs text-gray-500"
-  [style.width.px]="width"
-  [style.height.px]="height"
->
-  Advertisement
+    *ngFor="let ad of ads"
+    class="relative rounded-xl overflow-hidden shadow-md hover:shadow-lg transition cursor-pointer"
+    (click)="open(ad.redirectUrl)"
+  >    
+    <img
+      [src]="ad.image"
+      alt="img"
+      class="w-full h-[180px] object-cover brightness-75"
+    >
+
+    <div class="absolute bottom-0 left-0 p-4 text-white bg-gradient-to-t from-black/70 to-transparent w-full">
+      <h3 class="text-lg font-semibold">{{ ad.title }}</h3>
+    </div>
+
+  </div>
 </div>
+
+<ng-template #noAds>
+  <div class="bg-white rounded-lg shadow p-4 text-center text-gray-500">
+    No advertisements available.
+  </div>
+</ng-template>

@@ -10,16 +10,24 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './ad.html',
   styleUrls: ['./ad.css'],
 })
-export class Ad  implements AfterViewInit {
-  @Input() zoneId!: string;   
-  @Input() width = 300;
-  @Input() height = 250;
+export class Ad implements OnInit {
+  ads: Banner[] = [];
 
-  ngAfterViewInit() {
-    const script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.async = true;
-    script.src = `https://www.topcreativeformat.com/${this.zoneId}/invoke.js`;
-    document.body.appendChild(script);
+  constructor(private bannerService: BannerService) {}
+
+  ngOnInit() {
+    this.bannerService.getAll().subscribe({
+      next: (res) => {
+        this.ads = res;  
+      },
+      error: (err) => {
+        console.error('Failed to load banners', err);
+      },
+    });
   }
+  open(url?: string) {
+  if (!url) return;
+  window.open(url, "_blank");
+}
+
 }
