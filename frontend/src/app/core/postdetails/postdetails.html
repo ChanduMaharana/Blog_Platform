@@ -4,9 +4,8 @@
 
   <aside class="hidden lg:block">
   <div class="ad-box">
-    <app-free-ad
-      scriptUrl="https://pl28679350.effectivegatecpm.com/35/cb/c9/35cbc91e348be76c3d59806e56e2a415.js">
-    </app-free-ad>
+    <app-free-ad zoneId="35cbc91e348be76c3d59806e56e2a415"></app-free-ad>
+
   </div>
 </aside>
 
@@ -76,10 +75,9 @@
 />
 <!-- MOBILE AD -->
 <div class="ad-horizontal">
-  <app-free-ad
-    scriptUrl="https://pl28679350.effectivegatecpm.com/35/cb/c9/35cbc91e348be76c3d59806e56e2a415.js">
-  </app-free-ad>
+  <app-free-ad zoneId="35cbc91e348be76c3d59806e56e2a415"></app-free-ad>
 </div>
+
 
 
   <!-- CONTENT -->
@@ -144,9 +142,7 @@
 
 <aside class="hidden lg:block">
   <div class="ad-box">
-    <app-free-ad
-      scriptUrl="https://pl28679350.effectivegatecpm.com/35/cb/c9/35cbc91e348be76c3d59806e56e2a415.js">
-    </app-free-ad>
+    <app-free-ad zoneId="35cbc91e348be76c3d59806e56e2a415"></app-free-ad>
   </div>
 </aside>
 
@@ -163,26 +159,30 @@
   </div>
 </ng-template>
 <style>
- .ad-box {
-  min-height: 600px;              
-  background: #f3f4f6;            
-  border: 2px dashed #9ca3af; 
-  border-radius: 8px;
+.ad-box {
+  min-height: 600px;
   display: flex;
-  margin-top: 350px;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  border: 2px dashed #9ca3af;
+  background: #f3f4f6;
+  border-radius: 8px;
+  position: sticky;
+  top: 100px;
 }
+
+
 .ad-horizontal {
   width: 100%;
-  min-height: 90px;          /* banner height */
-  margin: 24px 0;
+  min-height: 90px;
+  margin: 32px 0;
   display: flex;
   justify-content: center;
   align-items: center;
   border: 2px dashed #9ca3af;
   border-radius: 8px;
   background: #f9fafb;
+  position: relative;
 }
 
 .ad-horizontal::before {
@@ -190,26 +190,14 @@
   font-size: 12px;
   color: #6b7280;
   position: absolute;
-  margin-top: -70px;
+  top: -18px;
+  left: 12px;
+  background: #fff;
+  padding: 0 6px;
 }
 
 
 .ad-box::before {
-  content: "Advertisement";
-  font-size: 12px;
-  color: #6b7280;
-}
-.ad-b{
-  min-height: 600px;              
-  background: #f3f4f6;            
-  border: 2px dashed #9ca3af; 
-  border-radius: 8px;
-  display: flex;
-  margin-top: 5px;
-  align-items: center;
-  justify-content: center;
-}
-.ad-b::before {
   content: "Advertisement";
   font-size: 12px;
   color: #6b7280;
