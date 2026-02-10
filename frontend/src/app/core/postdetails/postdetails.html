@@ -3,10 +3,12 @@
          grid grid-cols-1 lg:grid-cols-[220px_1fr_220px] gap-6">
 
   <aside class="hidden lg:block mt-22">
-    <div class="ad-box">
-   <app-ad
+<div class="ad-horizontal">
+  <app-ad
     scriptUrl="https://pl28679350.effectivegatecpm.com/35/cb/c9/35cbc91e348be76c3d59806e56e2a415.js">
-  </app-ad>    </div>
+  </app-ad>
+</div>
+
   </aside>
 
 <main class="min-w-0">
@@ -142,7 +144,7 @@
   </div>
   </main>
   <aside class="hidden lg:block mt-22">
-  <div class="ad-b">
+  <div class=".ad-horizontal">
     <app-ad
       scriptUrl="https://pl28679350.effectivegatecpm.com/35/cb/c9/35cbc91e348be76c3d59806e56e2a415.js">
     </app-ad>
@@ -177,21 +179,26 @@
   font-size: 12px;
   color: #6b7280;
 }
-.ad-b{
-  min-height: 600px;              
-  background: #f3f4f6;            
-  border: 2px dashed #9ca3af; 
-  border-radius: 8px;
+.ad-horizontal {
+  width: 100%;
+  min-height: 90px;          /* banner height */
+  margin: 24px 0;
   display: flex;
-  margin-top: 5px;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  border: 2px dashed #9ca3af;
+  border-radius: 8px;
+  background: #f9fafb;
 }
-.ad-b::before {
+
+.ad-horizontal::before {
   content: "Advertisement";
   font-size: 12px;
   color: #6b7280;
+  position: absolute;
+  margin-top: -70px;
 }
+
 .share-btn {
   padding: 6px 10px;
   border: 1px solid #e5e7eb;
