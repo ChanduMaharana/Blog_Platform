@@ -1,38 +1,29 @@
 import { Component, Input } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-iframe-ad',
   standalone: true,
   template: `
-    <div class="iframe-ad-wrapper">
-      <iframe
-        [src]="src"
-        [width]="width"
-        [height]="height"
-        frameborder="0"
-        scrolling="no"
-        allowfullscreen
-        sandbox="allow-scripts allow-same-origin">
-      </iframe>
-    </div>
-  `,
-  styles: [`
-    .iframe-ad-wrapper {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      overflow: hidden;
-      margin: 20px 0;
-    }
-
-    iframe {
-      border: 0;
-      max-width: 100%;
-    }
-  `]
+    <iframe
+      [src]="safeSrc"
+      [width]="width"
+      [height]="height"
+      frameborder="0"
+      scrolling="no"
+      style="border:0; overflow:hidden;"
+    ></iframe>
+  `
 })
 export class IframeAdComponent {
-  @Input() src!: string;
   @Input() width = 728;
   @Input() height = 90;
+
+  safeSrc!: SafeResourceUrl;
+
+  constructor(private sanitizer: DomSanitizer) {}
+
+  @Input() set src(value: string) {
+    this.safeSrc = this.sanitizer.bypassSecurityTrustResourceUrl(value);
+  }
 }
