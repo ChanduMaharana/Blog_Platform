@@ -112,47 +112,38 @@ onFileSelect(file: File | null) {
     this.editMode = false;
   }
 
-  onSubmit() {
-  const payload = this.form.value as PostSummary;
+ onSubmit() {
+  const payload = this.form.value as any;
 
   payload.description = payload.description || payload.excerpt || '';
   payload.date = payload.date || new Date().toDateString();
   payload.author = payload.author || 'Unknown';
 
+  // 🔥 AUTO-SET MAIN IMAGE FROM CONTENT
+  const contentHtml = payload.content || '';
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = contentHtml;
+
+  const firstImage = tempDiv.querySelector('img');
+
+  if (firstImage && firstImage.getAttribute('src')) {
+    payload.image = firstImage.getAttribute('src');
+  }
+
   if (this.editMode) {
-
-    if (this.selectedFile) {
-      const fd = new FormData();
-
-      Object.entries(payload).forEach(([k, v]: any) => {
-        if (v !== undefined && v !== null) fd.append(k, v);
-      });
-
-      fd.append("image", this.selectedFile);
-
-      this.postService.updateWithFile(payload.id!, fd).subscribe({
-        next: () => { this.loadPosts(); this.cancel(); },
-        error: (err) => console.error("Update failed", err),
-      });
-
-      return; 
-    }
-
     this.postService.update(payload.id!, payload).subscribe({
       next: () => { this.loadPosts(); this.cancel(); },
       error: (err) => console.error("Update failed", err),
     });
-
     return;
   }
 
-  this.postService
-    .create(payload, this.selectedFile || undefined)
-    .subscribe({
-      next: () => { this.loadPosts(); this.cancel(); },
-      error: (err) => console.error("Create failed", err),
-    });
+  this.postService.create(payload).subscribe({
+    next: () => { this.loadPosts(); this.cancel(); },
+    error: (err) => console.error("Create failed", err),
+  });
 }
+
 
 
 
