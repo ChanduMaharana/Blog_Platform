@@ -171,24 +171,23 @@ export const getPostById = async (req, res) => {
 
     const img = post.coverImage || post.image;
 
-    res.json(
-    posts.map(p => ({
-      id: p.id,
-      title: p.title,
-      slug: p.slug,   // ✅ MUST EXIST
-      description: p.description,
-      excerpt: p.excerpt,
-      content: p.content,
-      author: p.author,
-      date: p.date,
-      image: p.coverImage || p.image,
-      coverImage: p.coverImage || p.image,
-      popular: p.popular,
-      trending: p.trending,
-      featured: p.featured,
-      Category: p.Category
-    }))
-  );
+    res.json({
+      id: post.id,
+      title: post.title,
+      slug: post.slug,
+      description: post.description,
+      excerpt: post.excerpt,
+      content: post.content,
+      author: post.author,
+      date: post.date,
+      image: img,
+      coverImage: img,
+      popular: post.popular,
+      trending: post.trending,
+      featured: post.featured,
+      Category: post.Category
+    });
+
   } catch (err) {
     console.error("GET POST BY ID ERROR 👉", err);
     res.status(500).json({ error: err.message });
