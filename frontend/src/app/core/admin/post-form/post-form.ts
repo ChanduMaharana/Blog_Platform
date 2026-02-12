@@ -144,7 +144,7 @@ onEditorImageSelected(event: Event) {
   const formData = new FormData();
   formData.append('image', file);
 
-  fetch(`${environment.apiUrl}/upload-image`, {
+ fetch(`${environment.apiUrl}/posts/upload-image`, {
     method: 'POST',
     body: formData
   })
