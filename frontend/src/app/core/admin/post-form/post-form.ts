@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormsModule } from '@angular/forms';
 import { CategoryService, Category } from '../../../services/category-service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-post-form',
@@ -115,22 +116,45 @@ triggerImageUpload() {
   input?.click();
 }
 
+// onEditorImageSelected(event: Event) {
+//   const input = event.target as HTMLInputElement;
+//   if (!input.files || !input.files.length) return;
+
+//   const file = input.files[0];
+
+//   this.fileSelected.emit(file);
+
+//   const reader = new FileReader();
+//   reader.onload = () => {
+//     document.execCommand('insertImage', false, reader.result as string);
+//     this.syncContent();
+//   };
+//   reader.readAsDataURL(file);
+
+//   input.value = '';
+// }
+
 onEditorImageSelected(event: Event) {
   const input = event.target as HTMLInputElement;
-  if (!input.files || !input.files.length) return;
+  if (!input.files?.length) return;
 
   const file = input.files[0];
 
-  this.fileSelected.emit(file);
+  // Upload file to backend first
+  const formData = new FormData();
+  formData.append('image', file);
 
-  const reader = new FileReader();
-  reader.onload = () => {
-    document.execCommand('insertImage', false, reader.result as string);
+  fetch(`${environment.apiUrl}/upload-image`, {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    const imageUrl = data.url;
+    document.execCommand('insertImage', false, imageUrl);
     this.syncContent();
-  };
-  reader.readAsDataURL(file);
-
-  input.value = '';
+  });
 }
+
 
 }

@@ -70,9 +70,24 @@ export class PostService {
     return this.http.put(`${this.api}/${id}`, formData);
   }
 
-  update(id: number | undefined, post: PostSummary): Observable<any> {
-    return this.http.put(`${this.api}/${id}`, post);
+  // update(id: number | undefined, post: PostSummary): Observable<any> {
+  //   return this.http.put(`${this.api}/${id}`, post);
+  // }
+  update(id: number, post: any, file?: File) {
+  const formData = new FormData();
+
+  Object.keys(post).forEach(key => {
+    if (post[key] !== undefined && post[key] !== null) {
+      formData.append(key, post[key]);
+    }
+  });
+
+  if (file) {
+    formData.append('image', file);
   }
+
+  return this.http.put(`${this.api}/${id}`, formData);
+}
 
   delete(id: number): Observable<any> {
     return this.http.delete(`${this.api}/${id}`);

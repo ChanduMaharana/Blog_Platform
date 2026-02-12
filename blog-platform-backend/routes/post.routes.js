@@ -18,7 +18,6 @@ router.get('/share/:slug', async (req, res) => {
   const post = await Post.findOne({ where: { slug: req.params.slug } });
   if (!post) return res.sendStatus(404);
 
-  // ✅ FORCE A PUBLIC HTTPS IMAGE
   let image = post.coverImage || post.image;
 
   if (!image || !image.startsWith('http')) {
@@ -110,5 +109,14 @@ router.delete("/:id", deletePost);
 
 router.get("/:id/comments", getComments);
 router.post("/:id/comments", addComment);
+
+router.post('/upload-image', upload.single('image'), (req, res) => {
+  if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
+
+  const imageUrl = `${BASE_URL}/${req.file.path}`;
+
+  res.json({ url: imageUrl });
+});
+
 
 export default router;
