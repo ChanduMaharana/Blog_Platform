@@ -96,12 +96,16 @@ onFileSelect(file: File | null) {
     });
   }
 
-  editPost(post: PostSummary) {
-    this.showForm = true;
-    this.editMode = true;
-    this.form.patchValue(post);
-    
-  }
+  editPost(post: any) {
+  this.showForm = true;
+  this.editMode = true;
+
+  this.form.patchValue({
+    ...post,
+    categoryId: post.categoryId || post.Category?.id
+  });
+}
+
 
   viewPost(post: PostSummary) {
     alert(`Viewing post:\n\n${post.title}\n\n${post.description ?? ''}`);
@@ -131,7 +135,7 @@ onFileSelect(file: File | null) {
   }
 
   if (this.editMode) {
-    this.postService.update(payload.id!, payload).subscribe({
+    this.postService.update(payload.id!, payload, this.selectedFile || undefined).subscribe({
       next: () => { this.loadPosts(); this.cancel(); },
       error: (err) => console.error("Update failed", err),
     });

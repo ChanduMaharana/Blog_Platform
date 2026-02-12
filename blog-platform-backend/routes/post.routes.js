@@ -85,6 +85,16 @@ router.get('/slug/:slug', async (req, res) => {
 });
 
 
+router.post('/upload-image', upload.single('image'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "No file uploaded" });
+  }
+
+  const imageUrl = `${process.env.BASE_URL || 'https://blog-backend-biys.onrender.com'}/${req.file.path}`;
+
+  res.json({ url: imageUrl });
+});
+
 router.post("/", upload.single("image"), createPost);
 
 router.get("/paginated/list", getPaginatedPosts);
@@ -110,15 +120,7 @@ router.delete("/:id", deletePost);
 router.get("/:id/comments", getComments);
 router.post("/:id/comments", addComment);
 
-router.post('/upload-image', upload.single('image'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: "No file uploaded" });
-  }
 
-  const imageUrl = `${process.env.BASE_URL || 'https://blog-backend-biys.onrender.com'}/${req.file.path}`;
-
-  res.json({ url: imageUrl });
-});
 
 
 

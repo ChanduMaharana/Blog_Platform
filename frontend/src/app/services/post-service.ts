@@ -11,6 +11,7 @@ export interface PostSummary {
   description?: string;
   content?: string;
   coverImage?: string;
+  categoryId: number;  
   category?: string;
   author?: string;
   date?: string;
