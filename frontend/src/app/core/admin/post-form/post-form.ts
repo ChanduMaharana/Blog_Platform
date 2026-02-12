@@ -140,20 +140,27 @@ onEditorImageSelected(event: Event) {
 
   const file = input.files[0];
 
-  // Upload file to backend first
   const formData = new FormData();
   formData.append('image', file);
 
  fetch(`${environment.apiUrl}/posts/upload-image`, {
-    method: 'POST',
-    body: formData
-  })
-  .then(res => res.json())
-  .then(data => {
-    const imageUrl = data.url;
-    document.execCommand('insertImage', false, imageUrl);
-    this.syncContent();
-  });
+  method: 'POST',
+  body: formData
+})
+.then(async res => {
+  const text = await res.text();
+  console.log("UPLOAD RESPONSE:", text);
+  return JSON.parse(text);
+})
+.then(data => {
+  const imageUrl = data.url;
+  document.execCommand('insertImage', false, imageUrl);
+  this.syncContent();
+})
+.catch(err => {
+  console.error("UPLOAD FAILED:", err);
+});
+
 }
 
 
