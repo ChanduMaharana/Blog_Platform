@@ -111,12 +111,15 @@ router.get("/:id/comments", getComments);
 router.post("/:id/comments", addComment);
 
 router.post('/upload-image', upload.single('image'), (req, res) => {
-  if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
+  if (!req.file) {
+    return res.status(400).json({ message: "No file uploaded" });
+  }
 
-  const imageUrl = `${BASE_URL}/${req.file.path}`;
+  const imageUrl = `${process.env.BASE_URL || 'https://blog-backend-biys.onrender.com'}/${req.file.path}`;
 
   res.json({ url: imageUrl });
 });
+
 
 
 export default router;
