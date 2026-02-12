@@ -123,7 +123,6 @@ onFileSelect(file: File | null) {
   payload.date = payload.date || new Date().toDateString();
   payload.author = payload.author || 'Unknown';
 
-  // 🔥 AUTO-SET MAIN IMAGE FROM CONTENT
   const contentHtml = payload.content || '';
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = contentHtml;

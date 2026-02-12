@@ -202,17 +202,34 @@ export const updatePost = async (req, res) => {
     if (!post) return res.status(404).json({ message: "Post not found" });
 
     const updatedData = { ...req.body };
+
+    if (updatedData.categoryId) {
+      updatedData.categoryId = Number(updatedData.categoryId);
+    }
+
+    updatedData.published =
+      updatedData.published === "true" || updatedData.published === true;
+
+    updatedData.featured =
+      updatedData.featured === "true" || updatedData.featured === true;
+
+    updatedData.trending =
+      updatedData.trending === "true" || updatedData.trending === true;
+
     if (req.file) {
       updatedData.coverImage = req.file.path;
       updatedData.image = req.file.path;
     }
 
     await post.update(updatedData);
+
     res.json(post);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error("UPDATE ERROR 👉", err);
+    res.status(500).json({ error: err.message });
   }
 };
+
 export const deletePost = async (req, res) => {
   try {
     const deleted = await Post.destroy({
