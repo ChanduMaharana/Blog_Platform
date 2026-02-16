@@ -141,7 +141,7 @@ onFileSelect(file: File | null) {
     return;
   }
 
-  this.postService.create(payload).subscribe({
+  this.postService.create(payload, this.selectedFile || undefined).subscribe({
     next: () => { this.loadPosts(); this.cancel(); },
     error: (err) => console.error("Create failed", err),
   });
