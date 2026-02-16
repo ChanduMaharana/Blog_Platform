@@ -107,6 +107,15 @@ export class PostService {
       `${this.api}/paginated/list?page=${page}&limit=${limit}`
     );
   }
+uploadEditorImage(file: File): Observable<{ url: string }> {
+  const formData = new FormData();
+  formData.append('image', file);
+
+  return this.http.post<{ url: string }>(
+    `${environment.apiUrl}/posts/upload-image`,
+    formData
+  );
+}
 
   getFullImageUrl(img?: string): string {
     if (!img) return 'assets/default.jpg';

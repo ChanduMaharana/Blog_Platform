@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormsModule } from '@angular/forms';
 import { CategoryService, Category } from '../../../services/category-service';
 import { environment } from '../../../environments/environment';
+import { PostService } from '../../../services/post-service';
 
 @Component({
   selector: 'app-post-form',
@@ -21,7 +22,10 @@ export class PostForm implements OnInit {
 
   categories: Category[] = [];
 
-  constructor(private categoryService: CategoryService) {}
+  constructor(
+    private categoryService: CategoryService,
+    private postService: PostService
+  ) {}
 
   ngOnInit() {
     this.categoryService.getAll().subscribe(res => {
@@ -140,28 +144,21 @@ onEditorImageSelected(event: Event) {
 
   const file = input.files[0];
 
-  const formData = new FormData();
-  formData.append('image', file);
+  this.postService.uploadEditorImage(file).subscribe({
+    next: (res) => {
+      const imageUrl = res.url;
 
- fetch(`${environment.apiUrl}/posts/upload-image`, {
-  method: 'POST',
-  body: formData
-})
-.then(async res => {
-  const text = await res.text();
-  console.log("UPLOAD RESPONSE:", text);
-  return JSON.parse(text);
-})
-.then(data => {
-  const imageUrl = data.url;
-  document.execCommand('insertImage', false, imageUrl);
-  this.syncContent();
-})
-.catch(err => {
-  console.error("UPLOAD FAILED:", err);
-});
+      document.execCommand('insertImage', false, imageUrl);
+      this.syncContent();
+    },
+    error: (err) => {
+      console.error('Editor image upload failed', err);
+    }
+  });
 
+  input.value = '';
 }
+
 
 
 }

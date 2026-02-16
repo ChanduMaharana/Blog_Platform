@@ -90,8 +90,9 @@ router.post('/upload-image', upload.single('image'), (req, res) => {
     return res.status(400).json({ message: "No file uploaded" });
   }
 
-  const imageUrl = `${process.env.BASE_URL || 'https://blog-backend-biys.onrender.com'}/${req.file.path}`;
 
+  const imageUrl = `${baseUrl}/${req.file.path}`;
+  
   res.json({ url: imageUrl });
 });
 
