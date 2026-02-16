@@ -86,15 +86,22 @@ router.get('/slug/:slug', async (req, res) => {
 
 
 router.post('/upload-image', upload.single('image'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: "No file uploaded" });
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    const imageUrl = req.file.path;
+
+    res.json({ url: imageUrl });
+
+  } catch (err) {
+    console.error("UPLOAD ERROR 👉", err);
+    res.status(500).json({ error: err.message });
   }
-
-
-  const imageUrl = `${baseUrl}/${req.file.path}`;
-  
-  res.json({ url: imageUrl });
 });
+
+
 
 router.post("/", upload.single("image"), createPost);
 
