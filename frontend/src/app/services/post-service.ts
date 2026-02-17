@@ -54,11 +54,12 @@ export class PostService {
   create(post: PostSummary, file?: File): Observable<any> {
     const formData = new FormData();
 
-    Object.entries(post).forEach(([key, value]) => {
-  if (value !== undefined && value !== null && key !== 'image') {
+   Object.entries(post).forEach(([key, value]) => {
+  if (value !== undefined && value !== null) {
     formData.append(key, value.toString());
   }
 });
+
 
 
     if (file) {

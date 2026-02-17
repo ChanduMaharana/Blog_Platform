@@ -127,11 +127,16 @@ onFileSelect(file: File | null) {
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = contentHtml;
 
-  const firstImage = tempDiv.querySelector('img');
+const firstImage = tempDiv.querySelector('img');
 
-  if (firstImage && firstImage.getAttribute('src')) {
-    payload.image = firstImage.getAttribute('src');
-  }
+if (!firstImage || !firstImage.getAttribute('src')) {
+  alert('Content must contain at least one valid image');
+  return;
+}
+
+payload.image = firstImage.getAttribute('src')!;
+
+
 
   if (this.editMode) {
     this.postService.update(payload.id!, payload, this.selectedFile || undefined).subscribe({
