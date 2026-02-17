@@ -19,17 +19,23 @@ export const createPost = async (req, res) => {
     const { categoryId } = req.body;
 
     if (!categoryId) {
-      return res.status(400).json({
-        message: "categoryId is required"
-      });
+      return res.status(400).json({ message: "categoryId is required" });
     }
 
-    const imageUrl = req.file?.path || null;
+    let imageUrl = null;
+
+    if (req.file) {
+      imageUrl = req.file.path;
+    }
+
+    if (!imageUrl && req.body.image) {
+      imageUrl = req.body.image;
+    }
 
     const slug = slugify(req.body.title, {
-    lower: true,
-    strict: true
-   });
+      lower: true,
+      strict: true
+    });
 
     const post = await Post.create({
       title: req.body.title,
@@ -40,15 +46,12 @@ export const createPost = async (req, res) => {
       slug,
       image: imageUrl,
       coverImage: imageUrl,
-
       categoryId: Number(categoryId),
-
       published: req.body.published === "true" || req.body.published === true,
-      featured: req.body.featured === "true" || false,
-      trending: req.body.trending === "true" || false,
+      featured: req.body.featured === "true",
+      trending: req.body.trending === "true",
       views: 0,
       popular: false,
-
       excerpt: req.body.excerpt || "",
       metaDescription: req.body.metaDescription || "",
       metaKeywords: req.body.metaKeywords || "",
@@ -57,11 +60,13 @@ export const createPost = async (req, res) => {
     });
 
     res.status(201).json(post);
+
   } catch (err) {
     console.error("CREATE POST ERROR 👉", err);
     res.status(500).json({ error: err.message });
   }
 };
+
 
 
 export const getPostBySlug = async (req, res) => {
