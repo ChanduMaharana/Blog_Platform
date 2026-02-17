@@ -144,26 +144,17 @@ onEditorImageSelected(event: Event) {
 
   const file = input.files[0];
 
-  const formData = new FormData();
-  formData.append('image', file);
-
-  fetch(`${environment.apiUrl}/posts/upload-image`, {
-    method: 'POST',
-    body: formData
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.url) {
-      document.execCommand('insertImage', false, data.url);
+  this.postService.uploadEditorImage(file).subscribe({
+    next: (res) => {
+      document.execCommand('insertImage', false, res.url);
       this.syncContent();
+    },
+    error: (err) => {
+      console.error('Editor image upload failed', err);
     }
-  })
-  .catch(err => console.error('Editor image upload failed', err));
+  });
 
   input.value = '';
 }
-
-
-
 
 }
