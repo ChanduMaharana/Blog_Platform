@@ -85,20 +85,19 @@ router.get('/slug/:slug', async (req, res) => {
 });
 
 
-router.post('/upload-image', upload.single('image'), (req, res) => {
-  try {
+router.post('/upload-image', (req, res, next) => {
+  upload.single('image')(req, res, function (err) {
+    if (err) {
+      console.error("UPLOAD ERROR 👉", err);
+      return res.status(500).json({ error: err.message });
+    }
+
     if (!req.file) {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
-    const imageUrl = req.file.path;
-
-    res.json({ url: imageUrl });
-
-  } catch (err) {
-    console.error("UPLOAD ERROR 👉", err);
-    res.status(500).json({ error: err.message });
-  }
+    return res.json({ url: req.file.path });
+  });
 });
 
 
