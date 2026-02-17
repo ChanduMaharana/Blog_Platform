@@ -55,10 +55,11 @@ export class PostService {
     const formData = new FormData();
 
     Object.entries(post).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
-        formData.append(key, value.toString());
-      }
-    });
+  if (value !== undefined && value !== null && key !== 'image') {
+    formData.append(key, value.toString());
+  }
+});
+
 
     if (file) {
       formData.append('image', file, file.name);
