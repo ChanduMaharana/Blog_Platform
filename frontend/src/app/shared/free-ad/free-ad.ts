@@ -12,14 +12,10 @@ export class FreeAd implements AfterViewInit {
   @Input() height = 90;
 
   constructor(private el: ElementRef) {}
-
-  ngAfterViewInit(): void {
-    const container = this.el.nativeElement.querySelector('.ad-container');
-
-    // Create atOptions script
-    const optionsScript = document.createElement('script');
-    optionsScript.type = 'text/javascript';
-    optionsScript.innerHTML = `
+  ngAfterViewInit() {
+  setTimeout(() => {
+    const script1 = document.createElement('script');
+    script1.innerHTML = `
       var atOptions = {
         'key' : '${this.adKey}',
         'format' : 'iframe',
@@ -29,14 +25,12 @@ export class FreeAd implements AfterViewInit {
       };
     `;
 
-    container.appendChild(optionsScript);
+    const script2 = document.createElement('script');
+    script2.src = `https://www.highperformanceformat.com/${this.adKey}/invoke.js`;
+    script2.async = true;
 
-    // Create invoke script
-    const invokeScript = document.createElement('script');
-    invokeScript.type = 'text/javascript';
-    invokeScript.src = `https://www.highperformanceformat.com/${this.adKey}/invoke.js`;
-    invokeScript.async = true;
-
-    container.appendChild(invokeScript);
-  }
+    this.el.nativeElement.appendChild(script1);
+    this.el.nativeElement.appendChild(script2);
+  }, 500);
+}
 }
