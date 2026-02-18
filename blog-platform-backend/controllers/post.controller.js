@@ -62,9 +62,12 @@ export const createPost = async (req, res) => {
     res.status(201).json(post);
 
   } catch (err) {
-    console.error("CREATE POST ERROR 👉", err);
-    res.status(500).json({ error: err.message });
-  }
+    console.error("FULL ERROR 👉", err);
+  res.status(500).json({
+    message: err.message,
+    details: err.errors || null
+  });
+}
 };
 
 

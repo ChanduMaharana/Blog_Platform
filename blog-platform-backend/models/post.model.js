@@ -28,10 +28,15 @@ const Post = sequelize.define('Post', {
   ogTitle: DataTypes.STRING,
   ogDescription: DataTypes.TEXT,
 
-  categoryId: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  }
+  title: {
+  type: DataTypes.STRING,
+  allowNull: false
+},
+categoryId: {
+  type: DataTypes.INTEGER,
+  allowNull: false
+}
+
 });
 
 export default Post;
