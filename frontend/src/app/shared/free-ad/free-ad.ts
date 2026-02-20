@@ -1,42 +1,38 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input} from '@angular/core';
 
 @Component({
   selector: 'app-free-ad',
   standalone: true,
-  template: `
-    <a 
-      [href]="link" 
-      target="_blank" 
-      rel="noopener noreferrer"
-      class="block w-full"
-    >
-      <div class="bg-gray-100 
-                  min-h-[500px] 
-                  flex flex-col 
-                  items-center 
-                  justify-center 
-                  rounded-xl 
-                  border 
-                  shadow 
-                  hover:shadow-lg 
-                  transition">
+ template: `
+  <a 
+    [href]="link" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    class="block w-full"
+  >
+    <div class="rounded-xl overflow-hidden shadow-md hover:shadow-lg transition bg-white border border-gray-200">
 
-        <div class="text-xs text-gray-400 mb-3">
-          Advertisement
-        </div>
+      <img 
+        src="https://picsum.photos/400/250" 
+        class="w-full h-48 object-cover"
+      />
 
-        <div class="text-2xl font-bold text-gray-700">
-          🔥 Sponsored Content
-        </div>
+      <div class="p-4">
+        <div class="text-xs text-gray-400 mb-1">Advertisement</div>
 
-        <div class="mt-4 text-gray-500 text-sm">
-          Click to discover more
-        </div>
+        <h3 class="font-semibold text-gray-800 text-sm">
+          🔥 You Won’t Believe This Offer!
+        </h3>
 
+        <p class="text-gray-500 text-xs mt-1">
+          Click to discover exclusive content.
+        </p>
       </div>
-    </a>
-  `
-})
+
+    </div>
+  </a>
+`})
 export class FreeAd {
+
   @Input() link!: string;
 }
