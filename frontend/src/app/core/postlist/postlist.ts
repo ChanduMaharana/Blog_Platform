@@ -4,11 +4,12 @@ import { CommonModule, ViewportScroller } from '@angular/common';
 import { PostService, PostSummary } from '../../services/post-service';
 import { PaginationComponent } from '../../shared/pagination/pagination';
 import { PostCard } from '../../layout/post-card/post-card';
+import { FreeAd } from "../../shared/free-ad/free-ad";
 
 @Component({
   selector: 'app-postlist',
   standalone: true,
-  imports: [CommonModule, PaginationComponent, RouterModule, PostCard],
+  imports: [CommonModule, PaginationComponent, RouterModule, PostCard, FreeAd],
   templateUrl: './postlist.html',
   styleUrls: ['./postlist.css'],
 })
