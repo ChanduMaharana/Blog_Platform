@@ -1,39 +1,26 @@
-import { Component, Input, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, Input} from '@angular/core';
 
 @Component({
   selector: 'app-free-ad',
   standalone: true,
-  template: `<div class="ad-container"></div>`
+  template: `
+    <a 
+      [href]="link" 
+      target="_blank" 
+      rel="noopener noreferrer"
+      class="ad-box block text-center cursor-pointer"
+    >
+      <div class="text-gray-500 text-sm mb-2">Advertisement</div>
+
+      <div class="bg-gray-100 h-[250px] flex items-center justify-center rounded-lg border-2 border-dashed border-gray-400 hover:bg-gray-200 transition">
+        <span class="text-gray-700 font-semibold">
+          🔥 Sponsored Content
+        </span>
+      </div>
+    </a>
+  `
 })
-export class FreeAd implements AfterViewInit {
+export class FreeAd {
 
-  @Input() adKey!: string;
-  @Input() width = 728;
-  @Input() height = 90;
-
-  constructor(private el: ElementRef) {}
-  ngAfterViewInit() {
-  setTimeout(() => {
-    const script1 = document.createElement('script');
-    script1.type = 'text/javascript';
-    script1.innerHTML = `
-      var atOptions = {
-        'key' : 'a88dfd6feba69be6dc45f290686fbebe',
-        'format' : 'iframe',
-        'height' : 90,
-        'width' : 728,
-        'params' : {}
-      };
-    `;
-
-    const script2 = document.createElement('script');
-    script2.type = 'text/javascript';
-    script2.src = 'https://www.highperformanceformat.com/a88dfd6feba69be6dc45f290686fbebe/invoke.js';
-    script2.async = true;
-
-    this.el.nativeElement.appendChild(script1);
-    this.el.nativeElement.appendChild(script2);
-  }, 500);
-}
-
+  @Input() link!: string;
 }
